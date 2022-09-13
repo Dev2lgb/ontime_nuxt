@@ -1,35 +1,103 @@
 <template>
-  <div class="login f_width">
-    <div class="flex j_end a_center pa-3 f_width">
-      <div class="t_width">
-        <v-select
-          outlined
-          dense
-          v-model="selectedLang"
-          hide-details="auto"
-          :items="langItems"
-        ></v-select>
+  <div class="register f_width">
+    <div class="flex j_start a_center">
+      <div>
+        <v-btn
+          fab
+          text
+          to="/auth/login"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
       </div>
+      <h3>회원가입</h3>
     </div>
-    <div class="pa-3">
-      <div class="flex j_center a_center pb-10">
-        <h3>로그인</h3>
-      </div>
-      <div class="flex d_col j_center a_center">
+    <div class="pa-8">
+      <div class="flex j_start a_center">
         <v-text-field
-          outlined
-          placeholder="이메일을 입력해주세요."
-          class="f_width mb-2"
-          hide-details="auto"
+          placeholder="이메일 (아이디)"
         ></v-text-field>
+        <v-btn small tile depressed class="ml-5">인증요청</v-btn>
+      </div>
+      <div class="flex j_start a_center">
         <v-text-field
-          outlined
-          placeholder="비밀번호를 입력해주세요."
-          class="f_width"
-          hide-details="auto"
+          placeholder="인증번호"
+        ></v-text-field>
+        <v-btn small tile depressed class="ml-5">인증확인</v-btn>
+      </div>
+      <div>
+        <v-text-field
+          placeholder="비밀번호 (8자리 이상)"
         ></v-text-field>
       </div>
-      <div class="pt-10">
+      <div>
+        <v-text-field
+          placeholder="비밀번호 확인"
+        ></v-text-field>
+      </div>
+      <div>
+        <v-text-field
+          placeholder="이름"
+        ></v-text-field>
+      </div>
+      <div>
+        <v-text-field
+          placeholder="연락처"
+        ></v-text-field>
+      </div>
+      <div>
+        <v-text-field
+          placeholder="출생연도 4자리"
+        ></v-text-field>
+      </div>
+      <div class="flex j_space a_center border_b">
+        <p class="ma-0">성별</p>
+        <v-radio-group
+          v-model="row"
+          row
+        >
+          <v-radio
+            label="남성"
+            value="radio-1"
+            class="mr-5"
+          ></v-radio>
+          <v-radio
+            label="여성"
+            value="radio-2"
+          ></v-radio>
+        </v-radio-group>
+      </div>
+      <div class="flex j_space a_center border_b">
+        <p class="ma-0">국적</p>
+        <div class="h_width">
+          <v-select
+            :items="['대한민국','미국']"
+          ></v-select>
+        </div>
+      </div>
+      <div class="flex j_space a_center border_b">
+        <p class="ma-0">시간대</p>
+        <div class="h_width">
+          <v-select
+            :items="['Asian/Soeul','USA']"
+          ></v-select>
+        </div>
+      </div>
+      <div class="py-10">
+        <div class="flex j_space a_center">
+          <v-checkbox label="이용약관 동의"></v-checkbox>
+          <v-btn fab small text>
+            <v-icon>mdi-information-outline</v-icon>
+          </v-btn>
+        </div>
+        <div class="flex j_space a_center">
+          <v-checkbox label="개인정보처리방침 동의"></v-checkbox>
+          <v-btn fab small text>
+            <v-icon>mdi-information-outline</v-icon>
+          </v-btn>
+        </div>
+      </div>
+      <div>
         <v-btn
           block
           depressed
@@ -37,23 +105,13 @@
           large
           dark
           color="#4455ff"
-        >로그인</v-btn>
-      </div>
-      <div class="flex j_space a_center">
-        <router-link to="">아이디 &middot; 비밀번호 찾기</router-link>
-        <router-link to="/auth/register.vue">회원가입</router-link>
-      </div>
-      <div class="flex j_center a_center absolute_bottom py-4">
-        <router-link to="">이용약관</router-link>
-        <span class="mx-1">|</span>
-        <router-link to="">개인정보처리방침</router-link>
+        >회원가입</v-btn>
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'login',
   layout: 'guest',
   data: () => ({
     selectedLang: 'Korean',

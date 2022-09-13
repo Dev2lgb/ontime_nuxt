@@ -37,11 +37,12 @@
           large
           dark
           color="#4455ff"
+          to="/user/dashboard"
         >로그인</v-btn>
       </div>
-      <div class="flex j_space a_center">
-        <router-link to="">아이디 &middot; 비밀번호 찾기</router-link>
-        <router-link to="/auth/register.vue">회원가입</router-link>
+      <div class="flex j_space a_center py-3">
+        <router-link to="/auth/findID">아이디 &middot; 비밀번호 찾기</router-link>
+        <router-link to="/auth/register">회원가입</router-link>
       </div>
       <div class="flex j_center a_center absolute_bottom py-4">
         <router-link to="">이용약관</router-link>

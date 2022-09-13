@@ -17,6 +17,7 @@
 .f_width { width:100%; }
 .h_width { width:50%; }
 .t_width { width:33.3333333%; }
+.q_width { width:25%; }
 
 /* shadow preset */
 .shadow1 { box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;  }
@@ -47,6 +48,6 @@
 
 /* layouts */
 .global_wrap { display:flex; justify-content: center; align-items: flex-start; background-color:#f1f1f1; min-height:100vh; }
-.phone_size_wrap { width:100%; max-width:680px; background-color:#fff; min-height: 100vh; }
-
+.phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 100vh; }
+.full_height { min-height:90vh; }
 /* form tag style */
