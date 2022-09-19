@@ -19,6 +19,8 @@
 .t_width { width:33.3333333%; }
 .q_width { width:25%; }
 
+.hide_input { position:absolute; left:-10000px; }
+
 /* shadow preset */
 .shadow1 { box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;  }
 

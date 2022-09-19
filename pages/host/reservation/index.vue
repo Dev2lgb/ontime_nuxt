@@ -308,5 +308,5 @@ export default {
 .active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
 .deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
-.hide_input { position:absolute; left:-10000px; }
+
 </style>

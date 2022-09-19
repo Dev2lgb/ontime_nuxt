@@ -1,6 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  server : {
+    port: 3000,
+    host: 'client.ontimeworld.kr',
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -43,12 +47,41 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/i18n',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
   ],
   i18n: {
     locales: ['ko', 'en'],
     defaultLocale: 'ko',
     vueI18n: {
       fallbackLocale: 'ko',
+    }
+  },
+  axios: {
+    baseUrl: 'http://v2.ontimeworld.kr',
+    credentials: true
+  },
+
+  auth: {
+    redirect: {
+      login: '/auth/login',
+      logout: '/auth/login',
+      callback: '/auth/login',
+      home: '/user/dashboard'
+    },
+    strategies : {
+      'laravelSanctum' : {
+        provider : 'laravel/sanctum',
+        url : 'http://v2.ontimeworld.kr',
+        endpoints: {
+          login: {
+            url: '/api/auth/login',
+          },
+          logout: {
+            url: '/api/auth/logout',
+          },
+        }
+      }
     }
   },
 

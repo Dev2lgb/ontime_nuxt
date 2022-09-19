@@ -29,7 +29,7 @@
         <p class="font-weight-bold ma-0 mb-5">리마인드 메일을 발송할까요?</p>
         <div>
           <v-btn-toggle
-            v-model="selectedApprove"
+            v-model="selectedMail"
             color="primary"
             group
             outlined
@@ -55,146 +55,64 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">공개 여부를 선택해주세요.</p>
+        <p class="font-weight-bold ma-0">예약자로부터 수집할 정보를 선택해주세요. (선택)</p>
+        <p class="font_small_text mt-1">이름, 성별, 이메일주소, 휴대폰연락는 기본으로 수집됩니다.</p>
+        <div class="border_a pa-3">
+          <v-btn-toggle
+            v-model="selectedInfos"
+            multiple
+            color="primary"
+            group
+            outlined
+            dense
+            class="d-flex flex-wrap justify-start align-center"
+          >
+            <v-btn
+              v-for="(item, i) in getInfoItems" :key="i"
+              style="border:1px solid #ccc; border-radius:10px"
+              class="ma-1"
+              :value="item.text"
+            >
+              {{ item.text }}
+            </v-btn>
+          </v-btn-toggle>
+        </div>
+      </div>
+      <div class="mb-7">
+        <p class="font-weight-bold ma-0">원하는 수집항목이 없다면, 질문을 추가 할 수 있습니다. (선택)</p>
+        <p class="font_small_text mt-1">
+          개인의 기밀 정보(예: 신용카드 정보 또는 주민등록번호 등)는 반드시 필요한 경우에 한해 요청하셔야 합니다.
+          개인정보가 유출, 오용, 남용되는 경우 개인정보 보호법이 적용될 수 있으며, 이에 대한 법적 책임은 개인정보수집 및 처리자인 예약관리자에게 있습니다.
+        </p>
+        <div class="mb-5">
+          <v-text-field outlined hide-details="auto" class="mb-3" placeholder="질문 직접 입력" v-for="(item, i) in questionItems" :key="i"></v-text-field>
+          <v-btn text block large @click="addQuestion">+ 질문추가</v-btn>
+        </div>
+      </div>
+      <div class="mb-7">
+        <p class="font-weight-bold ma-0">예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
+        <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
+        <div class="flex j_center a_center border_a pa-3">
+          <v-file-input
+            v-model="files"
+            label="파일명"
+            multiple
+            id="ImageFileUpload"
+            @change="vistaPrevia"
+            accept="image/png, image/jpeg"
+            prepend-icon=""
+            append-icon=""
+            class="hide_input"
+          >
+          </v-file-input>
+          <v-btn depressed @click="handleFileImport">+ 파일 첨부하기</v-btn>
+        </div>
         <div>
-          <v-btn-toggle
-            v-model="selectedOpen"
-            color="primary"
-            group
-            outlined
-            mandatory
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="N"
-            >
-              <span class="font-weight-bold mr-3">전체공개</span>
-              온타임의 모든 접속자가 이 예약에 신청할 수 있어요.
-            </v-btn>
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="Y"
-            >
-              <span class="font-weight-bold mr-3">부분공개</span>
-              별도의 코드를 전달받은 예약자만 신청할 수 있어요.
-            </v-btn>
-          </v-btn-toggle>
-        </div>
-      </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">예약 신청 가능한 기간이 따로 있나요?</p>
-        <div class="mb-5">
-          <v-btn-toggle
-            v-model="selectedTerm"
-            color="primary"
-            group
-            outlined
-            mandatory
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="N"
-            >
-              아니요, 없어요
-            </v-btn>
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="Y"
-            >
-              네, 있어요
-            </v-btn>
-          </v-btn-toggle>
-        </div>
-        <div class="mb-1" v-show="selectedTerm == 'Y'">
-          <p class="font_small_text mb-1">예약 신청 가능일자 선택</p>
-          <div class="flex j_start a_center">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :return-value.sync="date"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="dates"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="dates"
-                no-title
-                locale="ko"
-                range
-                scrollable
-              >
-                <v-spacer></v-spacer>
-                <v-btn
-                  text
-                  color="primary"
-                  @click="menu = false"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  text
-                  color="primary"
-                  @click="$refs.menu.save(date)"
-                >
-                  OK
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
+          <div v-for="(file, i) in filesNames" :key="i" class="pa-3">
+            <v-icon>mdi-paperclip</v-icon>
+            <span>{{ file.name }}</span>
+            <v-btn fab small text @click="deleteFile(i)"><v-icon>mdi-close-circle</v-icon></v-btn>
           </div>
-        </div>
-      </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">예약 신청 가능한 최소 시간이 따로 있나요?</p>
-        <div class="mb-5">
-          <v-btn-toggle
-            v-model="selectedMinTime"
-            color="primary"
-            group
-            outlined
-            mandatory
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="N"
-            >
-              아니요, 없어요
-            </v-btn>
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
-              value="Y"
-            >
-              네, 있어요
-            </v-btn>
-          </v-btn-toggle>
-        </div>
-        <div class="mb-1" v-show="selectedMinTime == 'Y'">
-          <v-select
-            v-model="min_time" :items="minTimeItems" outlined
-            item-text="text"
-            item-value="value"
-          ></v-select>
         </div>
       </div>
       <div class="pt-10">
@@ -215,23 +133,50 @@
 export default {
   layout: 'host',
   data: () => ({
-    selectedMinTime: 'N',
-    selectedTerm: 'N',
-    selectedOpen: 'N',
-    selectedApprove: 'N',
-    dates: [],
-    menu: false,
-    min_time: '1',
-    minTimeItems: [
-      {text: '예약시간 1시간 전', value: '1'},
-      {text: '예약시간 2시간 전', value: '2'},
-      {text: '예약시간 3시간 전', value: '3'},
-      {text: '예약시간 4시간 전', value: '4'},
-      {text: '예약시간 5시간 전', value: '5'},
+    selectedMail: 'N',
+    selectedInfos: [],
+    questionItems: [
+      {id: ''},
     ],
+    getInfoItems: [
+      { text: '영문 이름' },
+      { text: '영문 성' },
+      { text: '소속' },
+      { text: '직함' },
+      { text: '전화번호' },
+      { text: '주소' },
+      { text: '우편번호' },
+      { text: '주/도' },
+    ],
+    files: [],
+    filesNames: [],
   }),
   methods: {
-
+    handleFileImport() { //파일업로드 버튼
+      let fileUpload = document.getElementById('ImageFileUpload')
+      if (fileUpload != null) {
+        fileUpload.click()
+      }
+    },
+    addQuestion(){
+      this.questionItems.push(
+        { id: '' }
+      );
+    },
+    vistaPrevia(file) {
+      try{
+        this.files.forEach(element => {
+          console.log(element);
+          this.filesNames.push({'name':element.name})
+          // this.createImage(element);
+        });
+      } catch(e) {}
+    },
+    deleteFile(index) {
+      console.log(index);
+      this.files.splice(index, 1);
+      this.filesNames.splice(index, 1);
+    },
   },
 }
 </script>
