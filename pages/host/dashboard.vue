@@ -10,13 +10,14 @@
         dark
         color="#4455ff"
         class="my-5"
-        to="/host/reservation"
+        to="/host/booking"
       >+ 새로운 예약 만들기</v-btn>
     </div>
     <div class="f_width">
       <h3 class="mb-3">내 예약 목록 (2)</h3>
       <div class="f_width">
         <div class="reservation_item border_a pa-3 mb-3" v-for="item in reservationItems" :key="item.id">
+          <router-link :to="'/host/booking/' + item.id + '/dashboard'" class="non-deco">
           <div class="flex j_space a_center">
             <div>
               <v-chip>{{ item.division }}</v-chip>
@@ -49,6 +50,7 @@
               <p class="ma-0">저장</p>
             </div>
           </div>
+          </router-link>
         </div>
       </div>
     </div>

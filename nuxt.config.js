@@ -67,7 +67,7 @@ export default {
       login: '/auth/login',
       logout: '/auth/login',
       callback: '/auth/login',
-      home: '/user/dashboard'
+      home: '/home'
     },
     strategies : {
       'laravelSanctum' : {
