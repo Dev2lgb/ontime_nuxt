@@ -20,11 +20,11 @@
     </div>
     <div class="pa-5">
       <v-tabs>
-        <v-tab :link="true" to="/host/booking/125/dashboard">대시보드</v-tab>
-        <v-tab :link="true" to="/host/booking/125/members">예약현황</v-tab>
-        <v-tab :link="true" to="/host/booking/125/message">메시지</v-tab>
-        <v-tab :link="true" to="/host/booking/125/statistics">통계</v-tab>
-        <v-tab :link="true" to="/host/booking/125/items/">예약상품</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
       </v-tabs>
     </div>
     <div class="pa-5">
@@ -110,8 +110,62 @@
         </div>
       </div>
       <div>
-        <div class="rounded_item" v-for="memberItem in memberItems" :key="memberItem.id">
-
+        <div class="rounded_item px-5 py-2 mb-4" v-for="memberItem in memberItems" :key="memberItem.id">
+          <div>
+            <v-checkbox value="memberItem.id" hide-details="auto"></v-checkbox>
+          </div>
+          <div class="flex j_start a_center">
+            <span class="status_circle">{{ memberItem.status }}</span>
+            <h3 class="ml-3">{{ memberItem.name }} <v-icon>mdi-message-text</v-icon></h3>
+          </div>
+          <div class="mt-5">
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">연락처</span>
+              <p class="ma-0">{{ memberItem.phone }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">이메일</span>
+              <p class="ma-0">{{ memberItem.email }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">출생연도</span>
+              <p class="ma-0">{{ memberItem.birth }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">성별</span>
+              <p class="ma-0">{{ memberItem.gender }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">국적</span>
+              <p class="ma-0">{{ memberItem.nation }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">예약인원</span>
+              <p class="ma-0">{{ memberItem.reservation_count }} 명</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">예약옵션</span>
+              <div>
+                <div v-for="option in memberItem.options" :key="option.id" class="mb-3">
+                  <p class="mb-1">{{ option.name }}</p>
+                  <v-chip small>{{ option.stime }}</v-chip>
+                  <v-chip small>{{ option.etime }}</v-chip>
+                </div>
+              </div>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">신청시간</span>
+              <p class="ma-0">{{ memberItem.time }}</p>
+            </div>
+            <div class="flex j_start a_start mb-1">
+              <span class="sub_title">요청사항</span>
+              <p class="ma-0">{{ memberItem.memo }}</p>
+            </div>
+            <div class="flex j_start a_start mt-3">
+              <v-btn small depressed>예약취소</v-btn>
+              <v-btn small depressed class="ml-3">이용완료</v-btn>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -134,7 +188,24 @@ export default {
       { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
     ],
     memberItems: [
-      { status: '확정', name: '홍길동', phone:'010-1234-5678', email: 'test@test.com' }
+      {
+        id:'12', status: '확정', name: '홍길동', phone:'010-1234-5678', email: 'test@test.com', birth:'1976', gender:'남성', nation:'Canada', reservation_count:'3',
+        time: '2022-08-15 18:00',
+        memo: '비가오면 못갈수도 있어요.',
+        options: [
+          { name: '템플 스테이 예절교육 집중 1', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'},
+          { name: '템플 스테이 예절교육 집중 2', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'}
+        ],
+      },
+      {
+        id:'13', status: '확정', name: '홍길동', phone:'010-1234-5678', email: 'test@test.com', birth:'1976', gender:'남성', nation:'Canada', reservation_count:'3',
+        time: '2022-08-15 18:00',
+        memo: '비가오면 못갈수도 있어요.',
+        options: [
+          { name: '템플 스테이 예절교육 집중 1', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'},
+          { name: '템플 스테이 예절교육 집중 2', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'}
+        ],
+      }
     ],
   }),
   methods: {
@@ -144,8 +215,6 @@ export default {
 </script>
 
 <style scoped>
-.active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
-.deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
-.absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
-
+.sub_title { width:150px; }
+.rounded_item { border:1px solid #ddd; border-radius:20px; }
 </style>

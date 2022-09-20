@@ -20,25 +20,16 @@
     </div>
     <div class="pa-5">
       <v-tabs>
-        <v-tab :link="true" to="/host/booking/125/dashboard">대시보드</v-tab>
-        <v-tab :link="true" to="/host/booking/125/members">예약현황</v-tab>
-        <v-tab :link="true" to="/host/booking/125/message">메시지</v-tab>
-        <v-tab :link="true" to="/host/booking/125/statistics">통계</v-tab>
-        <v-tab :link="true" to="/host/booking/125/items/">예약상품</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
+        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
       </v-tabs>
     </div>
     <div class="pa-5">
-      <div class="pt-10">
-        <v-btn
-          block
-          depressed
-          tile
-          large
-          dark
-          color="#4455ff"
-          to="/host/reservation/second"
-        >다음 단계로 이동</v-btn>
-      </div>
+      <h3>진행중인 메세지만 표시됩니다.</h3>
+      <v-btn text color="blue" class="pa-0">메세지창 편집</v-btn>
     </div>
   </div>
 </template>
@@ -54,35 +45,11 @@ export default {
     ],
   }),
   methods: {
-    handleFileImport() { //파일업로드 버튼
-      let fileUpload = document.getElementById('ImageFileUpload')
-      if (fileUpload != null) {
-        fileUpload.click()
-      }
-    },
-    vistaPrevia(file) {
-      if (this.images.length > 10) {
-        alert('이미지는 최대 10장까지만 등록 가능합니다.');
-        return false;
-      }
-      try{
-        this.images.forEach(element => {
-          this.urls.push({'src':URL.createObjectURL(element)})
-          // this.createImage(element);
-        });
-      } catch(e) {}
-    },
-    deleteFile(index) {
-      this.urls.splice(dashboard, 1)
-      this.images.splice(dashboard, 1)
-    },
+
   },
 }
 </script>
 
 <style scoped>
-.active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
-.deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
-.absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
 
 </style>

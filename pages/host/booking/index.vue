@@ -169,6 +169,7 @@
             v-model="selectedMethod"
             group
             outlined
+            mandatory
             dense
             class="d-flex flex-wrap justify-start align-center"
           >
@@ -248,7 +249,7 @@
           large
           dark
           color="#4455ff"
-          to="/host/reservation/second"
+          to="/host/booking/second"
         >다음 단계로 이동</v-btn>
       </div>
     </div>

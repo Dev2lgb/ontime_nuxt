@@ -6,7 +6,7 @@
           fab
           text
           exact
-          to="/host/reservation/second"
+          to="/host/booking/second"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -207,7 +207,7 @@
           large
           dark
           color="#4455ff"
-          to="/host/reservation/fourth"
+          to="/host/booking/fourth"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
