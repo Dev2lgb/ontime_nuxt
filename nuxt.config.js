@@ -107,6 +107,7 @@ export default {
   },
 
   echo: {
+    plugins: [ '~/plugins/echo.client.js' ],
     broadcaster: 'pusher',
     key: 'c9b99dbda5c8e42c8793',
     cluster: 'ap3',
