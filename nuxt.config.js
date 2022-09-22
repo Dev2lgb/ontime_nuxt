@@ -42,6 +42,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/laravel-echo',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -103,6 +104,18 @@ export default {
         }
       }
     }
+  },
+
+  echo: {
+    broadcaster: 'pusher',
+    key: 'c9b99dbda5c8e42c8793',
+    cluster: 'ap3',
+    authEndpoint: process.env.BASEURL + '/api/broadcasting/auth',
+    /*encrypted: true,
+    authModule: true,
+    connectOnLogin: true,
+    disconnectOnLogout: true,*/
+    optionsPath: '~/plugins/laravel-echo.options.js'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
