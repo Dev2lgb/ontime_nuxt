@@ -126,7 +126,70 @@
             hide-details="auto"
             placeholder="단위 선택"
           ></v-select>
-          <v-text-field v-show="selectedTimeUnit == '0'"></v-text-field>
+          <v-text-field v-show="selectedTimeUnit == '0'" type="number" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+        </div>
+      </div>
+      <div class="mb-7">
+        <p class="font-weight-bold ma-0 mb-3">시간 당 예약가능 수량(인원)을 입력해주세요.</p>
+        <div>
+          <v-select
+            v-model="selectedQuantity"
+            :items="QuantityItems"
+            item-text="text"
+            item-value="value"
+            outlined
+            dense
+            hide-details="auto"
+            placeholder="단위 선택"
+          ></v-select>
+          <v-text-field v-show="selectedQuantity == 'Y'" type="number" suffix="명" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+        </div>
+      </div>
+      <div class="mb-7">
+        <p class="font-weight-bold ma-0 mb-3">예약가능한 최소-최대 시간을 설정해주세요.</p>
+        <div>
+          <v-select
+            v-model="selectedMaxMinTime"
+            :items="MaxMinTimeItems"
+            item-text="text"
+            item-value="value"
+            outlined
+            dense
+            hide-details="auto"
+            placeholder="최소/최대 시간 선택"
+          ></v-select>
+          <div class="flex j_space a_center" v-show="selectedMaxMinTime == 'Y'">
+            <div class="h_width">
+              <v-text-field type="number" prefix="최소" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+            </div>
+            <div class="h_width ml-2">
+              <v-text-field type="number" prefix="최대" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-7">
+        <p class="font-weight-bold ma-0 mb-3">하나의 계정으로 최대 몇 명을 예약할 수 있나요?</p>
+        <div>
+          <v-select
+            v-model="selectedMaxMinTime"
+            :items="MaxMinTimeItems"
+            item-text="text"
+            item-value="value"
+            outlined
+            dense
+            hide-details="auto"
+            placeholder="최소/최대 시간 선택"
+          ></v-select>
+          <div class="flex j_space a_center" v-show="selectedMaxMinTime == 'Y'">
+            <div class="h_width">
+              <v-text-field type="number" prefix="최소" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+            </div>
+            <div class="h_width ml-2">
+              <v-text-field type="number" prefix="최대" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -151,11 +214,21 @@ export default {
     selectedTimeUnit: '30',
     selectedType: 'option1',
     selectedRest: 'Y',
+    selectedQuantity: 'N',
+    selectedMaxMinTime: 'N',
     timeUnitItems: [
       { text:'30분', value:'30' },
       { text:'60분', value:'60' },
       { text:'120분', value:'120' },
       { text:'직접입력', value:'0' },
+    ],
+    QuantityItems: [
+      { text:'제한 없어요.', value:'N' },
+      { text:'가능인원설정', value:'Y' },
+    ],
+    MaxMinTimeItems: [
+      { text:'제한 없어요.', value:'N' },
+      { text:'직접입력', value:'Y' },
     ],
   }),
   methods: {
