@@ -24,7 +24,7 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "@nuxtjs/laravel-echo": "^1.1.0",
+    "@nuxtjs/laravel-echo": "^2.0.0-alpha.5",
     "@nuxtjs/vuetify": "^1.12.3"
   }
 }
