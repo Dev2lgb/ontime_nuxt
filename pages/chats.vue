@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
 import ChatList from "../components/chat/ChatList";
 
 export default {
@@ -15,6 +16,23 @@ export default {
   components: {ChatList},
   mounted() {
     console.log(this.$auth);
+    if (this.$auth.loggedIn) {
+      this.init();
+    }
+  },
+  methods: {
+    ...mapActions('chat', ['setChats']),
+    async init() {
+      /*this.$echo.private('chat-unreads.' + this.$auth.user.id).listen('ChatUnread', e => {
+        //console.log('chat-unreads', e.unreads, this.$auth.user.id);
+        if (e.unreads) {
+          //e.unreads.forEach(e => this.setUnreadChat(e));
+          this.setChats(e.unreads);
+        }
+      });*/
+      const data = await this.$axios.$get('/api/chats');
+      this.setChats(data.chats);
+    }
   }
 }
 </script>

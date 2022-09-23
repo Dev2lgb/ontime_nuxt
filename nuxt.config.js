@@ -51,13 +51,14 @@ export default {
     '@nuxtjs/i18n',
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/dayjs'
   ],
   i18n: {
     locales: ['ko', 'en'],
     defaultLocale: 'ko',
     vueI18n: {
-      fallbackLocale: 'ko',
+      fallbackLocale: 'ko'
     }
   },
   axios: {
@@ -118,6 +119,14 @@ export default {
     connectOnLogin: true,
     disconnectOnLogout: true,*/
     optionsPath: '~/plugins/laravel-echo.options.js'
+  },
+
+  dayjs: {
+    locales: ['en', 'ko'], defaultLocale: 'ko', defaultTimeZone: 'Asia/Seoul',
+    plugins: [
+      'utc', // import 'dayjs/plugin/utc'
+      'timezone', // import 'dayjs/plugin/timezone'
+    ] // Your Day.js plugin
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

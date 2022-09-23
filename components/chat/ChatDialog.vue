@@ -1,69 +1,67 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="500" scrollable>
+  <v-dialog v-model="dialog" persistent max-width="500" scrollable>
+    <template v-if="isButton" v-slot:activator="{ on, attrs }">
+      <!--v-btn color="primary" dark v-bind="attrs" v-on="on">메시지</v-btn-->
+      <v-badge bordered icon="mdi-bell" overlap class="dashBtn" :content="unreadCount" :value="unreadCount > 0">
+        <v-btn v-bind="attrs" v-on="on" small elevation="0" dark color="#d39046" class="snsFont2"><span>메시지</span></v-btn>
+      </v-badge>
+    </template>
 
-      <template v-if="isButton" v-slot:activator="{ on, attrs }">
-        <!--v-btn color="primary" dark v-bind="attrs" v-on="on">메시지</v-btn-->
-        <v-badge bordered icon="mdi-bell" overlap class="dashBtn" :content="unreadCount" :value="unreadCount > 0">
-          <v-btn v-bind="attrs" v-on="on" small elevation="0" dark color="#d39046" class="snsFont2"><span>메시지</span> </v-btn>
-        </v-badge>
-      </template>
+    <v-card class="chat-dialog" elevation="0">
+      <div class="chat-close-box">
+        <v-btn color="#3076ff" text @click="dialog = false">Close</v-btn>
+      </div>
 
-      <v-card class="chat-dialog" elevation="0">
-        <div class="chat-close-box">
-          <v-btn color="#3076ff" text @click="dialog = false">Close</v-btn>
-        </div>
+      <div class="chat-title-info">
+        <v-avatar class="profile" color="grey">
+          <v-img :alt="`${partner.company_name} avatar`" :src="partner.logo_url"/>
+        </v-avatar>
+        <h3>{{ partner.company_name }}</h3>
+      </div>
 
-        <div class="chat-title-info">
-          <v-avatar class="profile" color="grey">
-            <v-img :alt="`${partner.company_name} avatar`" :src="partner.logo_url"/>
-          </v-avatar>
-          <h3>{{ partner.company_name }}</h3>
-        </div>
-
-        <v-card-text ref="container" style="height: 500px;">
-          <template v-for="(item, i) in chats">
-            <v-list-item :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
-              <!-- <v-list-item-avatar v-if="item.type === 'partner'"> <v-img :src="item.avatar"/> </v-list-item-avatar> -->
-              <v-list-item-content >
-                <v-list-item-title :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
-                  <div :class="`message message-${item.type === 'me'? 'right' : 'left'}`">
-                  {{item.message}}
-                  </div>
-                </v-list-item-title>
-                <v-list-item-subtitle :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
-                  {{ item.type === 'partner' ? partner.name : '' }}<br />
-                  {{ $dayjsFormat(item.created_at, 'YY.MM.DD HH:mm') }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <!-- <v-list-item-avatar v-if="item.type === 'me'"> <v-img :src="item.avatar"/> </v-list-item-avatar> -->
-            </v-list-item>
+      <v-card-text ref="container" style="height: 500px;">
+        <template v-for="(item, i) in chats">
+          <v-list-item :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
+            <!-- <v-list-item-avatar v-if="item.type === 'partner'"> <v-img :src="item.avatar"/> </v-list-item-avatar> -->
+            <v-list-item-content>
+              <v-list-item-title :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
+                <div :class="`message message-${item.type === 'me'? 'right' : 'left'}`">
+                  {{ item.message }}
+                </div>
+              </v-list-item-title>
+              <v-list-item-subtitle :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
+                {{ item.type === 'partner' ? partner.name : '' }}<br/>
+<!--                {{ $dayjsFormat(item.created_at, 'YY.MM.DD HH:mm') }}-->
+                {{ item.created_at }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <!-- <v-list-item-avatar v-if="item.type === 'me'"> <v-img :src="item.avatar"/> </v-list-item-avatar> -->
+          </v-list-item>
+        </template>
+      </v-card-text>
+      <v-card-actions class="py-2">
+        <!--          @keyup.enter="send"-->
+        <v-textarea v-model="message"
+                    id="chat-message-textarea"
+                    class="asd"
+                    :counter="counter" :rules="[rules.length(counter)]"
+                    auto-grow rows="2"
+                    filled label="메시지를 입력해주세요." placehoder="메시지를 입력해주세요."
+                    :hide-details="false"
+                    persistent-hint hint="Enter: 전송, Ctrl+Enter: 줄바꿈"
+                    @keydown.enter.prevent.exact="send"
+                    @keyup.ctrl.enter.prevent="newLine">
+          <!--append-outer-icon="mdi-send" @click:append-outer="send"-->
+          <template v-slot:append-outer>
+            <v-btn icon :disabled="disabledSend" @click="send">
+              <v-icon :color="(disabledSend) ? 'gray': 'primary'"> mdi-send</v-icon>
+            </v-btn>
           </template>
-        </v-card-text>
-        <v-card-actions class="py-2">
-<!--          @keyup.enter="send"-->
-          <v-textarea v-model="message"
-                      id="chat-message-textarea"
-                      class="asd"
-                      :counter="counter" :rules="[rules.length(counter)]"
-                      auto-grow rows="2"
-                      filled label="메시지를 입력해주세요." placehoder="메시지를 입력해주세요."
-                      :hide-details="false"
-                      persistent-hint hint="Enter: 전송, Ctrl+Enter: 줄바꿈"
-                      @keydown.enter.prevent.exact="send"
-                      @keyup.ctrl.enter.prevent="newLine">
-            <!--append-outer-icon="mdi-send" @click:append-outer="send"-->
-            <template v-slot:append-outer>
-              <v-btn icon :disabled="disabledSend" @click="send">
-                <v-icon :color="(disabledSend) ? 'gray': 'primary'" > mdi-send </v-icon>
-              </v-btn>
-            </template>
-          </v-textarea>
-        </v-card-actions>
+        </v-textarea>
+      </v-card-actions>
 
-      </v-card>
-    </v-dialog>
-  </v-row>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -128,7 +126,7 @@ export default {
       console.log('test');
     }*/
     async init() {
-      this.$echo.private('chat.' + this.channelName).listen('ChatSent', e => {
+      /*this.$echo.private('chat.' + this.channelName).listen('ChatSent', e => {
         //console.log(e.chat, this.$auth.user.id);
         if (e.chat.from_user_id !== this.$auth.user.id) {
           e.chat.type = 'partner';
@@ -139,14 +137,12 @@ export default {
           //읽음처리
           this.$axios.put('/chats/' + e.chat.id + '/read');
         }
-      });
+      });*/
 
-      //TODO
-      //const response = await this.$axios.get('/chats/' + this.partnerId + '/' + this.contractId);
-      const response = await this.$axios.get('/api/chats/1/1');
-      this.partner = response.data.partner;
-      this.chats = response.data.chats;
-      this.contract = response.data.contract;
+      const data = await this.$axios.$get('/api/chats/' + this.partnerId + '/' + this.contractId);
+      this.partner = data.partner;
+      this.chats = data.chats;
+      this.contract = data.contract;
 
       //this.$nextTick(() => this.scrollToEnd());
       setTimeout(() => {
@@ -169,7 +165,7 @@ export default {
         this.chats.push(chat);
         this.message = '';
         this.$nextTick(() => this.scrollToEnd());
-        const response = await this.$axios.post('/chats', chat);
+        const response = await this.$axios.post('/api/chats', chat);
       }
     },
     scrollToEnd() {
