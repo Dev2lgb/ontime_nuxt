@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="$auth.loggedIn"> {{ $auth.user.name }} </div>
+    <div v-if="$auth.loggedIn">
+      {{ $auth.user.name }}
+      <v-btn @click="$auth.logout()">logout</v-btn>
+    </div>
     <div v-else> <v-btn to="/auth/login">login</v-btn> </div>
     <hr/>
     <chat-list/>
@@ -23,13 +26,13 @@ export default {
   methods: {
     ...mapActions('chat', ['setChats']),
     async init() {
-      /*this.$echo.private('chat-unreads.' + this.$auth.user.id).listen('ChatUnread', e => {
+      this.$echo.private('chat-unreads.' + this.$auth.user.id).listen('ChatUnread', e => {
         //console.log('chat-unreads', e.unreads, this.$auth.user.id);
         if (e.unreads) {
           //e.unreads.forEach(e => this.setUnreadChat(e));
           this.setChats(e.unreads);
         }
-      });*/
+      });
       const data = await this.$axios.$get('/api/chats');
       this.setChats(data.chats);
     }

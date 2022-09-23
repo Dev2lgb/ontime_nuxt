@@ -126,7 +126,7 @@ export default {
       console.log('test');
     }*/
     async init() {
-      /*this.$echo.private('chat.' + this.channelName).listen('ChatSent', e => {
+      this.$echo.private('chat.' + this.channelName).listen('ChatSent', e => {
         //console.log(e.chat, this.$auth.user.id);
         if (e.chat.from_user_id !== this.$auth.user.id) {
           e.chat.type = 'partner';
@@ -137,7 +137,7 @@ export default {
           //읽음처리
           this.$axios.put('/chats/' + e.chat.id + '/read');
         }
-      });*/
+      });
 
       const data = await this.$axios.$get('/api/chats/' + this.partnerId + '/' + this.contractId);
       this.partner = data.partner;
