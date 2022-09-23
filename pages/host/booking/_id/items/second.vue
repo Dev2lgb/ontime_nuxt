@@ -6,7 +6,7 @@
           fab
           text
           exact
-          :to="'/host/booking/' + + this.$route.params.id + '/items/create'"
+          :to="'/host/booking/' + this.$route.params.id + '/items/create'"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>

@@ -5,6 +5,7 @@
         <v-btn
           fab
           text
+          exact
           to="/home"
         >
           <v-icon>mdi-chevron-left</v-icon>
@@ -39,18 +40,18 @@
           class="img_radius"
         ></v-img>
       </div>
-      <div class="res_content_width ml-3">
+      <router-link to="/bookings/13" class="non-deco res_content_width ml-3">
         <div>
           <v-chip dark color="#0057FF" label x-small>Online</v-chip>
           <v-chip dark color="#000" label x-small>New</v-chip>
           <v-chip dark color="#000" label x-small>마감임박</v-chip>
         </div>
         <h3>[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
-        <p class="tag">#자연휴식형 #친환경 #힐링</p>
+        <p class="color_main font_small_text">#자연휴식형 #친환경 #힐링</p>
         <p class="desc">
           온전한 나만의 시간 + 간단한 티타임(선택가능) + 자유일정의 휴식형 프로그램을 경험하실 수 있습니 ...
         </p>
-      </div>
+      </router-link>
 
       <div class="bookmark_width flex j_center a_center">
         <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
@@ -65,18 +66,18 @@
           class="img_radius"
         ></v-img>
       </div>
-      <div class="res_content_width ml-3">
+      <router-link to="/bookings/13" class="non-deco res_content_width ml-3">
         <div>
           <v-chip dark color="#0057FF" label x-small>Online</v-chip>
           <v-chip dark color="#000" label x-small>New</v-chip>
           <v-chip dark color="#000" label x-small>마감임박</v-chip>
         </div>
         <h3>[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
-        <p class="tag">#자연휴식형 #친환경 #힐링</p>
+        <p class="color_main font_small_text">#자연휴식형 #친환경 #힐링</p>
         <p class="desc">
           온전한 나만의 시간 + 간단한 티타임(선택가능) + 자유일정의 휴식형 프로그램을 경험하실 수 있습니 ...
         </p>
-      </div>
+      </router-link>
 
       <div class="bookmark_width flex j_center a_center">
         <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
