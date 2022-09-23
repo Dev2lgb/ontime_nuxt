@@ -52,7 +52,7 @@
                 active-class="deep-purple--text text--accent-4"
               >
                 <v-list-item
-                  to="/user/dashboard"
+                  to="/home"
                 >
                   <v-list-item-title>예약자로 전환</v-list-item-title>
                 </v-list-item>

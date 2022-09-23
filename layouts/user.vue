@@ -52,7 +52,7 @@
                 active-class="deep-purple--text text--accent-4"
               >
                 <v-list-item
-                  to="/host/dashboard"
+                  to="/host/home"
                 >
                   <v-list-item-title>관리자로 전환</v-list-item-title>
                 </v-list-item>

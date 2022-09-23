@@ -10,6 +10,7 @@
         dark
         color="#4455ff"
         class="mt-5"
+        to="/bookings"
       >+ 새로운 예약 참여하기</v-btn>
     </div>
   </div>

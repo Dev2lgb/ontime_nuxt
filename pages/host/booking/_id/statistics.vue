@@ -5,7 +5,7 @@
         <v-btn
           fab
           text
-          to="/host/dashboard"
+          to="/host/home"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>

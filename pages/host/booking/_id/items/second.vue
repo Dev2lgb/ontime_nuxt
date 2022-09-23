@@ -173,21 +173,29 @@
         <p class="font-weight-bold ma-0 mb-3">하나의 계정으로 최대 몇 명을 예약할 수 있나요?</p>
         <div>
           <v-select
-            v-model="selectedMaxMinTime"
-            :items="MaxMinTimeItems"
+            v-model="selectedMaxMinMan"
+            :items="MaxMinManItems"
             item-text="text"
             item-value="value"
             outlined
             dense
             hide-details="auto"
-            placeholder="최소/최대 시간 선택"
+            placeholder="예약인원설정 선택"
           ></v-select>
-          <div class="flex j_space a_center" v-show="selectedMaxMinTime == 'Y'">
+          <div class="flex j_space a_center mt-3" v-show="selectedMaxMinMan == '0'">
             <div class="h_width">
-              <v-text-field type="number" prefix="최소" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+              <v-select
+                item-text="text"
+                item-value="value"
+                outlined
+                dense
+                hide-details="auto"
+                v-model="selectedMaxMinOption"
+                :items="MaxMinOptionItems"
+              ></v-select>
             </div>
-            <div class="h_width ml-2">
-              <v-text-field type="number" prefix="최대" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+            <div class="h_width ml-2" v-show="selectedMaxMinOption == 0">
+              <v-text-field type="number" prefix="최대" suffix="명" outlined hide-details="auto" dense></v-text-field>
             </div>
           </div>
         </div>
@@ -201,7 +209,7 @@
           large
           dark
           color="#4455ff"
-          to="/host/booking/125/items/second"
+          to="/host/booking/125/items/third"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
@@ -216,6 +224,8 @@ export default {
     selectedRest: 'Y',
     selectedQuantity: 'N',
     selectedMaxMinTime: 'N',
+    selectedMaxMinMan: '1',
+    selectedMaxMinOption: '1',
     timeUnitItems: [
       { text:'30분', value:'30' },
       { text:'60분', value:'60' },
@@ -229,6 +239,14 @@ export default {
     MaxMinTimeItems: [
       { text:'제한 없어요.', value:'N' },
       { text:'직접입력', value:'Y' },
+    ],
+    MaxMinManItems: [
+      { text:'한 계정당 한명씩만 받을게요.', value:'1' },
+      { text:'한 계정으로 여려명 예약이 가능해요.', value:'0' },
+    ],
+    MaxMinOptionItems: [
+      { text:'제한없음', value:'1' },
+      { text:'최대인원설정', value:'0' },
     ],
   }),
   methods: {
