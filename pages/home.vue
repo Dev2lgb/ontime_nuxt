@@ -1,7 +1,7 @@
 <template>
   <div class="user_dashboard flex full_height j_start a_center pa-5">
     <div>
-      <h3>새로운 프로그램을 시작하세요.</h3>
+      <h2>새로운 프로그램을 시작하세요.</h2>
       <v-btn
         block
         depressed

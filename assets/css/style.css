@@ -51,7 +51,9 @@
 /* layouts */
 .global_wrap {display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
 .global_login_wrap {background: #eff2f6; display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
-.phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 100vh; }
+.global_user_wrap {background: #eff2f6; display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
+.user_size_wrap { min-height: 100vh;align-items: center;justify-content: center;width: 100%;padding: 1.25rem;max-width: 580px;background: #fff;border-radius: 40px; }
+.phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 90vh; }
 .full_height { min-height:90vh; }
 /* form tag style */
 
