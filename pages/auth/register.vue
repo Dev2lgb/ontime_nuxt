@@ -23,12 +23,12 @@
                   </div>
 
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="이메일 (아이디)" outlined  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" >인증요청</v-btn>
+                  <v-text-field label="이메일 (아이디)" outlined v-model="email"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56" >인증요청</v-btn>
                 </v-card>
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="인증번호" outlined  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" >인증확인</v-btn>
+                  <v-text-field label="인증번호" outlined v-model="code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" >인증확인</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
                               autocomplete="new-password" persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
@@ -133,7 +133,6 @@ export default {
           }
         });
 
-      console.log(response);
       this.callingCodeItems = response.data.callingCodeItems;
       this.countryItems = response.data.countryItems;
       this.sexItems = response.data.sexItems;
@@ -150,7 +149,54 @@ export default {
     loading: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
+    callingCodeItems: [],
+    countryItems: [],
+    sexItems: [],
+    timezoneItems: [],
+    show1: false,
+    show2: false,
+    sex: '24',
+    email: '',
   }),
+  methods: {
+    async sendVerifyCode() {
+      this.loading = true;
+      try {
+        let url = '/auth/verify-code';
+        const response = await this.$axios.post(url, {email : this.email},
+          {
+            headers: {
+              "Accept-Language" : "ko"
+            }
+          });
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          //this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+
+    async verifyCode() {
+      this.loading = true;
+      try {
+        let url = '/auth/verify';
+        const response = await this.$axios.post(url, {email : this.email, code: this.code},
+          {
+            headers: {
+              "Accept-Language" : "ko"
+            }
+          });
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          //this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+  },
 }
 </script>
 
