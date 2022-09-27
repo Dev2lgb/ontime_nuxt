@@ -10,13 +10,13 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-spacer></v-spacer>
             <v-btn icon>
-              <v-icon>mdi-magnify</v-icon>
+              <v-icon>mdi-bookmark-plus</v-icon>
             </v-btn>
             <v-btn icon>
               <v-icon>mdi-filter</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon>mdi-dots-vertical</v-icon>
+              <v-icon>mdi-tooltip-text</v-icon>
             </v-btn>
           </v-app-bar>
           <v-navigation-drawer
