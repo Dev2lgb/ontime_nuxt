@@ -1,65 +1,55 @@
 <template>
-  <div class="login f_width">
-    <div class="flex j_end a_center pa-3 f_width">
-      <div class="t_width">
-        <v-select
-          outlined
-          dense
-          v-model="selectedLang"
-          hide-details="auto"
-          :items="langItems"
-        ></v-select>
+  <v-container class="mypageBg" fluid>
+    <v-row class="justify-center content-center">
+      <div class="vCardLoginBg">
+        <v-col class="pa-0">
+          <v-card flat>
+            <NuxtLink to="/">
+              <div class="loginLogo">
+                <img src="/images/logo.png" alt="logo" />
+              </div>
+            </NuxtLink>
+          </v-card>
+          <v-card flat>
+            <div class="loginTextB">
+              <p class="firstTextTitle">ONTIME에 오신것을 환영합니다!</p>
+              <p class="lastTextTitle">서비스 이용을 위해 계정 로그인을 진행해주세요</p>
+            </div>
+            <v-card-text class="pa-0">
+              <v-select outlined dense v-model="selectedLang" hide-details="auto" :items="langItems" class="language"></v-select>
+              <v-text-field v-model="form.email" outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="이메일을 입력해주세요."></v-text-field>
+              <v-text-field v-model="form.password" hide-details="auto" class="inpBottom vinpuT" outlined label="Password" placeholder="비밀번호를 입력해주세요." @keyup.enter="login" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1" ></v-text-field>
+            </v-card-text>
+            <div class="settingBox">
+                <router-link to="/auth/findID">아이디/비밀번호를 잊으셨나요?</router-link>
+            </div>
+            <v-card-actions class="pa-0">
+              <v-btn color="primary" block x-large @click="login">LOGIN</v-btn>
+            </v-card-actions>
+            <div class="settingBox2">
+              <span>아직 회원이 아니신가요?</span>&emsp;<router-link to="/auth/register">회원가입하기</router-link>
+            </div>
+          </v-card>
+          <div class="snsform">
+            <span>or</span>
+          </div>
+          <div class="snsSetting">
+            <router-link to="">이용약관</router-link>
+            <span class="mx-1">&nbsp;I&nbsp;</span>
+            <router-link to="">개인정보처리방침</router-link>
+          </div>
+        </v-col>
       </div>
-    </div>
-    <div class="pa-3">
-      <div class="flex j_center a_center pb-10">
-        <h3>로그인</h3>
-      </div>
-      <div class="flex d_col j_center a_center">
-        <v-text-field
-          outlined
-          v-model="form.email"
-          placeholder="이메일을 입력해주세요."
-          class="f_width mb-2"
-          hide-details="auto"
-        ></v-text-field>
-        <v-text-field
-          outlined
-          type="password"
-          v-model="form.password"
-          placeholder="비밀번호를 입력해주세요."
-          class="f_width"
-          hide-details="auto"
-        ></v-text-field>
-      </div>
-      <div class="pt-10">
-        <v-btn
-          block
-          depressed
-          tile
-          large
-          dark
-          color="#4455ff"
-          @click="login"
-        >로그인</v-btn>
-      </div>
-      <div class="flex j_space a_center py-3">
-        <router-link to="/auth/findID">아이디 &middot; 비밀번호 찾기</router-link>
-        <router-link to="/auth/register">회원가입</router-link>
-      </div>
-      <div class="flex j_center a_center absolute_bottom py-4">
-        <router-link to="">이용약관</router-link>
-        <span class="mx-1">|</span>
-        <router-link to="">개인정보처리방침</router-link>
-      </div>
-    </div>
-  </div>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
   name: 'login',
   layout: 'guest',
   data: () => ({
+    show1: false,
+    password: 'Password',
     form: {
       email: '',
       password: '',
@@ -94,4 +84,31 @@ export default {
 
 <style scoped>
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
+.language {margin-bottom: 10px; font-size: 12px;}
+::v-deep .vinpuT .v-label {color: #969696;}
+::v-deep .vinpuT .v-input__slot {padding: 0 18px!important;}
+::v-deep .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {border: 1px solid #d4d3d5;}
+::v-deep .fText .v-label {font-size: 14px;}
+.loginLogo {margin-bottom: 2rem;display: flex;-webkit-box-align: center;align-items: center;-webkit-box-pack: center;justify-content: center;}
+.loginLogo img {height: 30px;}
+.firstTextTitle {margin: 0px 0px 0.375rem;font-size: 1.25rem;line-height: 1.334;color: rgba(58, 53, 65, 0.87);font-weight: 600;}
+.lastTextTitle {font-weight: 400; font-size: 0.875rem; line-height: 1.5; letter-spacing: 0.15px; color: rgba(58, 53, 65, 0.68);}
+.loginTextB {margin-bottom: 1.5rem; text-align: center;}
+.inpBottom {margin-bottom: 16px;}
+.settingBox {font-size: 14px; margin-bottom: 28px; display: flex; -webkit-box-align: center; align-items: center; flex-wrap: wrap; -webkit-box-pack: justify; justify-content: flex-end;}
+.settingBox2 {margin: 28px 0; text-align: center; font-size: 14px; color: rgba(58, 53, 65, 0.68);}
+.snsform {flex-shrink: 0; display: flex; white-space: nowrap; text-align: center; border: 0px;  margin-bottom: 14px;}
+.snsform span {display: inline-block; padding-left: calc(0.3rem); padding-right: calc(0.3rem);}
+.snsform::before {position: relative; width: 100%; border-top: thin solid rgba(58, 53, 65, 0.12); top: 50%; content: ""; transform: translateY(50%);}
+.snsform::after {position: relative;  width: 100%; border-top: thin solid rgba(58, 53, 65, 0.12); top: 50%; content: ""; transform: translateY(50%);}
+.snsSetting {display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; color: #888;}
+.firstTextTitle img {height: 28px;}
+.snsSetting a {text-decoration: none; color: rgba(58, 53, 65, 0.87); font-size: 14px;}
+
+@media (min-width: 600px){
+  .vCardLoginBg {
+      width: 448px;
+  }
+
+}
 </style>

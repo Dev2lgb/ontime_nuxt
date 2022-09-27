@@ -49,7 +49,8 @@
 
 
 /* layouts */
-.global_wrap { display:flex; justify-content: center; align-items: flex-start; background-color:#f1f1f1; min-height:100vh; }
+.global_wrap {display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
+.global_login_wrap {background: #eff2f6; display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
 .phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 100vh; }
 .full_height { min-height:90vh; }
 /* form tag style */
@@ -59,3 +60,13 @@
 .outlined_btn_group button { border:1px solid #222!important; width:calc(20% - 8px); padding:5px 10px !important; border-radius: 5px !important; }
 .outlined_btn_group button.active { background-color:#111 !important; color:#fff !important; }
 .outlined_btn_group button.active:before { background-color:#111 !important; opacity: 1; color:#fff !important; }
+
+/* login */
+.mypageBg{background: #eff2f6;}
+.content-center {display: flex; min-height: 100vh; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; padding: 1.25rem;}
+.vCardLoginBg {width: 100%; background: #fff; border-radius: 10px; padding: 48px 46px 28px;}
+
+
+
+
+
