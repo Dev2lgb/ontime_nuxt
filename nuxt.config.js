@@ -62,7 +62,7 @@ export default {
     }
   },
   axios: {
-    baseUrl: process.env.BASEURL,
+    baseUrl: process.env.BASEURL + '/api',
     credentials: true
   },
 

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div class="global_wrap">
+    <div class="global_login_wrap">
       <div class="phone_size_wrap">
         <Nuxt />
       </div>
