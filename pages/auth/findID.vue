@@ -6,29 +6,24 @@
           <v-card flat>
             <NuxtLink to="/">
               <div class="loginLogo">
-                <img src="/images/logo.png" alt="logo" />
+                <img src="~/assets/images/logo.png" alt="logo" />
               </div>
             </NuxtLink>
           </v-card>
           <v-card flat>
             <div class="loginTextB">
-              <p class="firstTextTitle">아이디/비밀번호를 잊으셨나요? <img src="/images/padlock.png" alt="padlock" /></p>
-              <p class="lastTextTitle">가입시 등록하신 정보를 입력해주세요.</p>
+              <p class="firstTextTitle">아이디찾기 <img src="~/assets/images/padlock.png" alt="padlock" /></p>
+              <p class="lastTextTitle">가입시 등록하신 이메일 정보를 입력해주세요.</p>
             </div>
-            <v-card-text class="pa-0">
-
-            </v-card-text>
 
             <v-card-text class="pa-0">
-              <v-text-field  outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="가입하신 이름을 입력해주세요."></v-text-field>
-              <v-text-field  hide-details="auto" class="inpBottom vinpuT" outlined label="Password" placeholder="핸드폰 번호를 입력해주세요."></v-text-field>
+              <v-text-field  outlined  hide-details="auto" class="inpBottom vinpuT" placeholder="가입하신 이름을 입력해주세요."></v-text-field>
+              <v-text-field  hide-details="auto" class="inpBottom vinpuT" outlined placeholder="핸드폰 번호를 입력해주세요."></v-text-field>
             </v-card-text>
 
             <v-btn color="primary" block large class="btn-size">아이디 찾기</v-btn>
-            <v-btn to="/auth/findPassword" color="primary" block large>비밀번호 찾기</v-btn>
 
             <div class="settingBox2">
-              <v-btn to="/auth/login">돌아가기</v-btn>
               <router-link to="/auth/login"><v-icon color="primary" class="iconMa3">mdi-chevron-left</v-icon>로그인 돌아가기</router-link>
             </div>
           </v-card>

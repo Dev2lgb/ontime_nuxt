@@ -10,13 +10,13 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-spacer></v-spacer>
             <v-btn icon>
-              <v-icon>mdi-magnify</v-icon>
+              <v-icon>mdi-bookmark-plus</v-icon>
             </v-btn>
             <v-btn icon>
               <v-icon>mdi-filter</v-icon>
             </v-btn>
-            <v-btn icon to="/chats">
-              <v-icon>mdi-message</v-icon>
+            <v-btn icon>
+              <v-icon>mdi-tooltip-text</v-icon>
             </v-btn>
           </v-app-bar>
           <v-navigation-drawer
@@ -37,9 +37,7 @@
                   <v-list-item-title>내 예약</v-list-item-title>
                 </v-list-item>
 
-                <v-list-item
-                  to="/auth/modify"
-                >
+                <v-list-item>
                   <v-list-item-title>프로필 관리</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
@@ -65,7 +63,7 @@
                 <v-list-item>
                   <v-list-item-title>고객센터</v-list-item-title>
                 </v-list-item>
-                <v-list-item @click="logout">
+                <v-list-item>
                   <v-list-item-title>로그아웃</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
@@ -81,7 +79,6 @@
 
 <script>
 export default {
-  middleware: ['auth'],
   data: () => ({
     drawer: false,
     group: null,
@@ -91,11 +88,6 @@ export default {
     group () {
       this.drawer = false
     },
-  },
-  methods: {
-    async logout() {
-      await this.$auth.logout();
-    }
   },
 }
 </script>
