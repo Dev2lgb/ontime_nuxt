@@ -6,18 +6,15 @@
           <v-card flat>
             <NuxtLink to="/">
               <div class="loginLogo">
-                <img src="/images/logo.png" alt="logo" />
+                <img src="~/assets/images/logo.png" alt="logo" />
               </div>
             </NuxtLink>
           </v-card>
           <v-card flat>
             <div class="loginTextB">
-              <p class="firstTextTitle">아이디/비밀번호를 잊으셨나요? <img src="/images/padlock.png" alt="padlock" /></p>
+              <p class="firstTextTitle">아이디/비밀번호를 잊으셨나요? <img src="~/assets/images/padlock.png" alt="padlock" /></p>
               <p class="lastTextTitle">가입시 등록하신 정보를 입력해주세요.</p>
             </div>
-            <v-card-text class="pa-0">
-              <verification-phone ref="verification" type="P" @update="updateForm"></verification-phone>
-            </v-card-text>
 
             <v-card-text class="pa-0">
               <v-text-field  outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="가입하신 이름을 입력해주세요."></v-text-field>

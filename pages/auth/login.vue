@@ -6,7 +6,7 @@
           <v-card flat>
             <NuxtLink to="/">
               <div class="loginLogo">
-                <img src="/images/logo.png" alt="logo" />
+                <img src="~/assets/images/logo.png" alt="logo" />
               </div>
             </NuxtLink>
           </v-card>
