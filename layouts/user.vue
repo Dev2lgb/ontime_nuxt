@@ -37,7 +37,9 @@
                   <v-list-item-title>내 예약</v-list-item-title>
                 </v-list-item>
 
-                <v-list-item>
+                <v-list-item
+                  to="/auth/modify"
+                >
                   <v-list-item-title>프로필 관리</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
@@ -79,6 +81,7 @@
 
 <script>
 export default {
+  middleware: ['auth'],
   data: () => ({
     drawer: false,
     group: null,

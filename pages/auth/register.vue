@@ -45,24 +45,33 @@
                   <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>회원정보</span>
                 </div>
                 <v-text-field prepend-inner-icon="mdi-account" label="이름" outlined hide-details="auto" class="inpBottom vinpuT"/>
-                <v-text-field prepend-inner-icon="mdi-phone" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <div>
+                  <v-select
+                    :items="callingCodeItems"
+                    outlined hide-details="auto"
+                    item-text="text"
+                    item-value="value"
+                    class="inpBottom vinpuT"
+                    label="국가코드"
+                  ></v-select>
+                  <v-text-field prepend-inner-icon="mdi-phone" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                </div>
                 <v-text-field prepend-inner-icon="mdi-account-settings" label="출생연도 4자리" outlined hide-details="auto" class="inpBottom vinpuT"/>
 
                 <div class="flex j_space a_center ㅡ">
                   <p class="ma-0">성별</p>
                   <v-radio-group
-                    v-model="row"
+                    v-model="sex"
                     row
                   >
                     <v-radio
-                      label="남성"
-                      value="radio-1"
+                      v-for="item in sexItems"
+                      :key="item.value"
+                      :label="item.text_ko"
+                      :value="item.value"
                       class="mr-5"
-                    ><v-btn>남성</v-btn></v-radio>
-                    <v-radio
-                      label="여성"
-                      value="radio-2"
-                    ></v-radio>
+                    ><v-btn>{{ item.text_ko }}</v-btn></v-radio>
+
                   </v-radio-group>
                 </div>
                 <v-select
@@ -71,7 +80,7 @@
                   label="국적선택"
                   outlined
                   hide-details="auto"
-                  :items="['대한민국','미국']"
+                  :items="countryItems"
                 ></v-select>
 
 
@@ -80,7 +89,7 @@
                   class="inpBottom vinpuT"
                   label="시간대선택"
                   outlined
-                  :items="['Asian/Soeul','USA']"
+                  :items="timezoneItems"
                 ></v-select>
               </v-card-text>
 
@@ -113,7 +122,32 @@
 <script>
 export default {
   layout: 'guest',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = 'auth/register';
+      const response = await this.$axios.get(url,
+        {
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        });
+
+      console.log(response);
+      this.callingCodeItems = response.data.callingCodeItems;
+      this.countryItems = response.data.countryItems;
+      this.sexItems = response.data.sexItems;
+      this.timezoneItems = response.data.timezoneItems;
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
+    loading: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
   }),
