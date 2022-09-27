@@ -18,7 +18,7 @@ export default {
   name: "index",
   components: {ChatList},
   mounted() {
-    console.log(this.$auth);
+    //console.log(this.$auth);
     if (this.$auth.loggedIn) {
       this.init();
     }
@@ -33,7 +33,7 @@ export default {
           this.setChats(e.unreads);
         }
       });
-      const data = await this.$axios.$get('/api/chats');
+      const data = await this.$axios.$get('/chats');
       this.setChats(data.chats);
     }
   }

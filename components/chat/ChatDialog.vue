@@ -139,7 +139,7 @@ export default {
         }
       });
 
-      const data = await this.$axios.$get('/api/chats/' + this.partnerId + '/' + this.contractId);
+      const data = await this.$axios.$get('/chats/' + this.partnerId + '/' + this.contractId);
       this.partner = data.partner;
       this.chats = data.chats;
       this.contract = data.contract;
@@ -165,7 +165,7 @@ export default {
         this.chats.push(chat);
         this.message = '';
         this.$nextTick(() => this.scrollToEnd());
-        const response = await this.$axios.post('/api/chats', chat);
+        const response = await this.$axios.post('/chats', chat);
       }
     },
     scrollToEnd() {
