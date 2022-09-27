@@ -23,12 +23,12 @@
                   </div>
 
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="이메일 (아이디)" outlined  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" >인증요청</v-btn>
+                  <v-text-field label="이메일 (아이디)" outlined v-model="email"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56" >인증요청</v-btn>
                 </v-card>
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="인증번호" outlined  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" >인증확인</v-btn>
+                  <v-text-field label="인증번호" outlined v-model="code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" >인증확인</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
                               autocomplete="new-password" persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
@@ -45,24 +45,33 @@
                   <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>회원정보</span>
                 </div>
                 <v-text-field prepend-inner-icon="mdi-account" label="이름" outlined hide-details="auto" class="inpBottom vinpuT"/>
-                <v-text-field prepend-inner-icon="mdi-phone" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <div>
+                  <v-select
+                    :items="callingCodeItems"
+                    outlined hide-details="auto"
+                    item-text="text"
+                    item-value="value"
+                    class="inpBottom vinpuT"
+                    label="국가코드"
+                  ></v-select>
+                  <v-text-field prepend-inner-icon="mdi-phone" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                </div>
                 <v-text-field prepend-inner-icon="mdi-account-settings" label="출생연도 4자리" outlined hide-details="auto" class="inpBottom vinpuT"/>
 
                 <div class="flex j_space a_center ㅡ">
                   <p class="ma-0">성별</p>
                   <v-radio-group
-                    v-model="row"
+                    v-model="sex"
                     row
                   >
                     <v-radio
-                      label="남성"
-                      value="radio-1"
+                      v-for="item in sexItems"
+                      :key="item.value"
+                      :label="item.text_ko"
+                      :value="item.value"
                       class="mr-5"
-                    ><v-btn>남성</v-btn></v-radio>
-                    <v-radio
-                      label="여성"
-                      value="radio-2"
-                    ></v-radio>
+                    ><v-btn>{{ item.text_ko }}</v-btn></v-radio>
+
                   </v-radio-group>
                 </div>
                 <v-select
@@ -71,7 +80,7 @@
                   label="국적선택"
                   outlined
                   hide-details="auto"
-                  :items="['대한민국','미국']"
+                  :items="countryItems"
                 ></v-select>
 
 
@@ -80,7 +89,7 @@
                   class="inpBottom vinpuT"
                   label="시간대선택"
                   outlined
-                  :items="['Asian/Soeul','USA']"
+                  :items="timezoneItems"
                 ></v-select>
               </v-card-text>
 
@@ -113,10 +122,81 @@
 <script>
 export default {
   layout: 'guest',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = 'auth/register';
+      const response = await this.$axios.get(url,
+        {
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        });
+
+      this.callingCodeItems = response.data.callingCodeItems;
+      this.countryItems = response.data.countryItems;
+      this.sexItems = response.data.sexItems;
+      this.timezoneItems = response.data.timezoneItems;
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
+    loading: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
+    callingCodeItems: [],
+    countryItems: [],
+    sexItems: [],
+    timezoneItems: [],
+    show1: false,
+    show2: false,
+    sex: '24',
+    email: '',
   }),
+  methods: {
+    async sendVerifyCode() {
+      this.loading = true;
+      try {
+        let url = '/auth/verify-code';
+        const response = await this.$axios.post(url, {email : this.email},
+          {
+            headers: {
+              "Accept-Language" : "ko"
+            }
+          });
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          //this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+
+    async verifyCode() {
+      this.loading = true;
+      try {
+        let url = '/auth/verify';
+        const response = await this.$axios.post(url, {email : this.email, code: this.code},
+          {
+            headers: {
+              "Accept-Language" : "ko"
+            }
+          });
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          //this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+  },
 }
 </script>
 
