@@ -16,7 +16,7 @@
               <p class="lastTextTitle">가입시 등록하신 정보를 입력해주세요.</p>
             </div>
             <v-card-text class="pa-0">
-              <verification-phone ref="verification" type="P" @update="updateForm"></verification-phone>
+
             </v-card-text>
 
             <v-card-text class="pa-0">
@@ -28,6 +28,7 @@
             <v-btn to="/auth/findPassword" color="primary" block large>비밀번호 찾기</v-btn>
 
             <div class="settingBox2">
+              <v-btn to="/auth/login">돌아가기</v-btn>
               <router-link to="/auth/login"><v-icon color="primary" class="iconMa3">mdi-chevron-left</v-icon>로그인 돌아가기</router-link>
             </div>
           </v-card>

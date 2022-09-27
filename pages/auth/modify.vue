@@ -1,43 +1,18 @@
 <template>
   <div class="register f_width">
-    <Loading :loading="loading" />
     <div class="flex j_start a_center">
       <div>
         <v-btn
           fab
           text
-          to="/auth/login"
+          to="/home"
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </div>
-      <h3>회원가입</h3>
+      <h3>프로필 관리</h3>
     </div>
     <div class="pa-8">
-      <div class="flex j_start a_center">
-        <v-text-field
-          placeholder="이메일 (아이디)"
-        ></v-text-field>
-        <v-btn small tile depressed class="ml-5">인증요청</v-btn>
-      </div>
-      <div class="flex j_start a_center">
-        <v-text-field
-          placeholder="인증번호"
-        ></v-text-field>
-        <v-btn small tile depressed class="ml-5">인증확인</v-btn>
-      </div>
-      <div>
-        <v-text-field
-          type="password"
-          placeholder="비밀번호 (8자리 이상)"
-        ></v-text-field>
-      </div>
-      <div>
-        <v-text-field
-          type="password"
-          placeholder="비밀번호 확인"
-        ></v-text-field>
-      </div>
       <div>
         <v-text-field
           placeholder="이름"
@@ -86,64 +61,64 @@
           ></v-select>
         </div>
       </div>
-      <div class="py-10">
-        <div class="flex j_space a_center">
-          <v-checkbox label="이용약관 동의"></v-checkbox>
-          <v-btn fab small text>
-            <v-icon>mdi-information-outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="flex j_space a_center">
-          <v-checkbox label="개인정보처리방침 동의"></v-checkbox>
-          <v-btn fab small text>
-            <v-icon>mdi-information-outline</v-icon>
-          </v-btn>
-        </div>
+      <div>
+        <v-text-field
+          type="password"
+          placeholder="새 비밀번호 (8자리 이상)"
+        ></v-text-field>
       </div>
       <div>
-        <v-btn
-          block
-          depressed
-          tile
-          large
-          dark
-          color="#4455ff"
-        >회원가입</v-btn>
+        <v-text-field
+          type="password"
+          placeholder="새 비밀번호 확인"
+        ></v-text-field>
+      </div>
+      <div class="py-10">
+        <div class="flex j_space a_center">
+          <v-checkbox label="메일 수신 동의"></v-checkbox>
+          <v-btn fab small text>
+            <v-icon>mdi-information-outline</v-icon>
+          </v-btn>
+        </div>
+        <div class="flex j_space a_center">
+          <v-checkbox label="PUSH 알림 동의"></v-checkbox>
+          <v-btn fab small text>
+            <v-icon>mdi-information-outline</v-icon>
+          </v-btn>
+        </div>
+      </div>
+      <div class="flex j_space a_center">
+        <div class="h_width">
+          <v-btn
+            block
+            depressed
+            tile
+            large
+            dark
+            color="#ccc"
+          >회원탈퇴</v-btn>
+        </div>
+        <div class="h_width ml-3">
+          <v-btn
+            block
+            depressed
+            tile
+            large
+            dark
+            color="#4455ff"
+          >정보수정</v-btn>
+        </div>
       </div>
     </div>
-    {{items}}
   </div>
 </template>
 <script>
 export default {
-  layout: 'guest',
+  layout: 'user',
   data: () => ({
-    loading: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
-    items: '',
   }),
-  async fetch() {
-    this.loading = true;
-    try {
-      let url = '/auth/register';
-      const response = await this.$axios.get(url,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept-Language' : 'ko'
-          }
-        });
-      console.log(response);
-      this.items = response.data.data.data;
-      this.loading = false;
-    } catch (e) {
-      if (e.response.status == '401') {
-        this.$toast.error(e.response.data.message);
-      }
-    }
-
-  },
 }
 </script>
 
