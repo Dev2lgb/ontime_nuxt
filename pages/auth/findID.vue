@@ -13,16 +13,28 @@
           <v-card flat>
             <div class="loginTextB">
               <p class="firstTextTitle">아이디찾기 <img src="~/assets/images/padlock.png" alt="padlock" /></p>
-              <p class="lastTextTitle">가입시 등록하신 이메일 정보를 입력해주세요.</p>
+              <p class="lastTextTitle">가입시 등록하신 이름을 입력해주세요.</p>
             </div>
 
             <v-card-text class="pa-0">
-              <v-text-field  outlined  hide-details="auto" class="inpBottom vinpuT" placeholder="가입하신 이름을 입력해주세요."></v-text-field>
-              <v-text-field  hide-details="auto" class="inpBottom vinpuT" outlined placeholder="핸드폰 번호를 입력해주세요."></v-text-field>
+              <v-text-field  outlined  hide-details="auto" v-model="form.name" :error-messages="errors.name" class="inpBottom vinpuT" placeholder="가입하신 이름을 입력해주세요."></v-text-field>
+              <v-select
+                :items="callingCodeItems"
+                v-model="form.mobile_country_calling_code"
+                :error-messages="errors.mobile_country_calling_code"
+                outlined hide-details="auto"
+                item-text="text"
+                item-value="value"
+                class="inpBottom vinpuT"
+                label="국가번호"
+              ></v-select>
+              <v-text-field  hide-details="auto" v-model="form.mobile" :error-messages="errors.mobile"  class="inpBottom vinpuT" outlined placeholder="핸드폰 번호를 입력해주세요."></v-text-field>
             </v-card-text>
+            <v-btn color="primary" block large class="btn-size" @click="findIdSubmit">아이디 찾기</v-btn>
 
-            <v-btn color="primary" block large class="btn-size">아이디 찾기</v-btn>
-
+            <div v-show="hidedEmail" class="text-center pa-5">
+              고객님의 아이디는 {{ hidedEmail }} 입니다.
+            </div>
             <div class="settingBox2">
               <router-link to="/auth/login"><v-icon color="primary" class="iconMa3">mdi-chevron-left</v-icon>로그인 돌아가기</router-link>
             </div>
@@ -35,8 +47,66 @@
 <script>
 export default {
   layout: 'guest',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = 'auth/register';
+      const response = await this.$axios.get(url,
+        {
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        });
+
+      this.callingCodeItems = response.data.callingCodeItems;
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
+    form: {
+      name: '',
+      mobile_country_calling_code: '',
+      mobile: '',
+    },
+    hidedEmail: '',
+    errors:[],
+    callingCodeItems: [],
   }),
+  methods: {
+    async findIdSubmit() {
+      this.loading = true;
+      try {
+        let url = '/auth/forgot-id';
+        let data = [];
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form,
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        })
+        if (response.data.result) {
+          this.hidedEmail = response.data.data;
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+  },
 }
 </script>
 
