@@ -52,8 +52,14 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
-    '@nuxtjs/dayjs'
+    '@nuxtjs/dayjs',
+    '@nuxtjs/toast'
   ],
+  //알러트 설정
+  toast: {
+    position: 'bottom-center',
+    duration : 3000,
+  },
   i18n: {
     locales: ['ko', 'en'],
     defaultLocale: 'ko',
