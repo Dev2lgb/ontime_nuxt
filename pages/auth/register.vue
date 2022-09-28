@@ -24,11 +24,13 @@
 
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
                   <v-text-field label="이메일 (아이디)" outlined v-model="form.email" :error-messages="errors.email" hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56" >인증요청</v-btn>
+                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56">인증요청</v-btn>
                 </v-card>
-                <v-card elevation="0" class="pa-0 ma-0 d-flex">
+                <v-card elevation="0" class="pa-0 ma-0 d-flex" v-if="isVerify">
+
                   <v-text-field label="인증번호" outlined v-model="form.code" :error-messages="errors.code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" >인증확인</v-btn>
+                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" v-if="!isVerifyCode">인증확인</v-btn>
+                  <v-btn large elevation="0" color="light grey" height="56" v-else>인증완료</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
                               autocomplete="new-password" v-model="form.password" :error-messages="errors.password"  persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
@@ -154,6 +156,8 @@ export default {
   },
   data: () => ({
     loading: false,
+    isVerify: false,
+    isVerifyCode: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
     callingCodeItems: [],
@@ -162,8 +166,6 @@ export default {
     timezoneItems: [],
     show1: false,
     show2: false,
-    sex: '24',
-    email: '',
     form: {
       email:'',
       name: '',
@@ -176,7 +178,7 @@ export default {
       is_agree_terms: false,
       is_agree_privacy: false,
       birthday_year: '',
-      sex_id: '',
+      sex_id: '24',
       country: '',
     },
     errors: [],
@@ -192,7 +194,14 @@ export default {
               "Accept-Language" : "ko"
             }
           });
-        this.$toast.success('메일로 인증코드가 발송되었습니다.');
+        if (response.data.result) {
+          this.$toast.success('인증코드 메일이 발송되었습니다.');
+          this.isVerify = true;
+        }
+
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
         this.loading = false;
       } catch (e) {
         if (e.response.status == '422') {
@@ -209,13 +218,20 @@ export default {
       try {
         let url = '/auth/verify';
         const response = await this.$axios.post(url, {email : this.form.email, code: this.form.code},
-          {
-            headers: {
-              "Accept-Language" : "ko"
-            }
-          });
-        this.$toast.success('인증되었습니다.');
-        this.loading = false;
+        {
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        });
+        if (response.data.result) {
+          this.$toast.success('인증이 완료되었습니다.');
+          this.isVerifyCode = true;
+        }
+
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
+
       } catch (e) {
         if (e.response.status == '422') {
           this.errors = e.response.data.errors;
