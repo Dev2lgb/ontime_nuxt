@@ -83,7 +83,7 @@
 </template>
 <script>
 export default {
-  layout: 'sub_common',
+  layout: 'user',
   data: () => ({
     searchCategory: '',
     searchCategoryItems: [
