@@ -57,7 +57,7 @@ export default {
   ],
   //알러트 설정
   toast: {
-    position: 'bottom-center',
+    position: 'top-center',
     duration : 3000,
   },
   i18n: {

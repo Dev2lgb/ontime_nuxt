@@ -33,7 +33,7 @@
                   <v-btn large elevation="0" color="#ddd" height="56" v-else>인증완료</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
-                              autocomplete="new-password" v-model="form.password" :error-messages="errors.password"  persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
+                              autocomplete="new-password" v-model="form.password" :error-messages="errors.password"  persistent-hint hint="비밀번호는 8자리이상 영문,숫자, 특수문자의 조합으로 입력해주세요."
                               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1"
                               />
                 <v-text-field class="vinpuT"
@@ -260,8 +260,10 @@ export default {
             "Accept-Language" : "ko"
           }
         })
-        this.$toast.success('회원가입이 완료됐습니다.');
-        this.$router.push('/auth/login');
+        if (response.data.result) {
+          this.$toast.success('회원가입이 완료됐습니다.');
+          this.$router.push('/auth/login');
+        }
         this.loading = false;
       } catch (e) {
         if (e.response.status == '422') {
