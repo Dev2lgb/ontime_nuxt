@@ -1,21 +1,21 @@
 <template>
   <v-app>
-    <div class="global_wrap">
-      <div class="phone_size_wrap">
+    <div class="global_user_wrap">
+      <div class="user_size_wrap">
         <div class="fixed_header">
           <v-app-bar
             elevation="0"
             color="#fff"
           >
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer" x-large></v-app-bar-nav-icon>
             <v-spacer></v-spacer>
-            <v-btn icon>
+            <v-btn icon large>
               <v-icon>mdi-bookmark-plus</v-icon>
             </v-btn>
-            <v-btn icon>
+            <v-btn icon large>
               <v-icon>mdi-filter</v-icon>
             </v-btn>
-            <v-btn icon>
+            <v-btn icon large>
               <v-icon>mdi-tooltip-text</v-icon>
             </v-btn>
           </v-app-bar>
