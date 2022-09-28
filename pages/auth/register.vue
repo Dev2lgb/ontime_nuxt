@@ -30,7 +30,7 @@
 
                   <v-text-field label="인증번호" outlined v-model="form.code" :error-messages="errors.code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
                   <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" v-if="!isVerifyCode">인증확인</v-btn>
-                  <v-btn large elevation="0" color="light grey" height="56" v-else>인증완료</v-btn>
+                  <v-btn large elevation="0" color="#ddd" height="56" v-else>인증완료</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
                               autocomplete="new-password" v-model="form.password" :error-messages="errors.password"  persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
@@ -49,18 +49,22 @@
                   <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>회원정보</span>
                 </div>
                 <v-text-field prepend-inner-icon="mdi-account" v-model="form.name" :error-messages="errors.name" label="이름" outlined hide-details="auto" class="inpBottom vinpuT"/>
-                <div>
-                  <v-select
-                    :items="callingCodeItems"
-                    v-model="form.mobile_country_calling_code"
-                    :error-messages="errors.mobile_country_calling_code"
-                    outlined hide-details="auto"
-                    item-text="text"
-                    item-value="value"
-                    class="inpBottom vinpuT"
-                    label="국가코드"
-                  ></v-select>
-                  <v-text-field prepend-inner-icon="mdi-phone" v-model="form.mobile" :error-messages="errors.mobile" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <div class="flex j_space a_center">
+                  <div style="width:35%">
+                    <v-select
+                      :items="callingCodeItems"
+                      v-model="form.mobile_country_calling_code"
+                      :error-messages="errors.mobile_country_calling_code"
+                      outlined hide-details="auto"
+                      item-text="text"
+                      item-value="value"
+                      class="inpBottom vinpuT"
+                      label="국가번호"
+                    ></v-select>
+                  </div>
+                  <div style="width:65%;" class="ml-2">
+                    <v-text-field prepend-inner-icon="mdi-phone" v-model="form.mobile" :error-messages="errors.mobile" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                  </div>
                 </div>
                 <v-text-field prepend-inner-icon="mdi-account-settings" v-model="form.birthday_year" :error-messages="errors.birthday_year" label="출생연도 4자리" outlined hide-details="auto" class="inpBottom vinpuT"/>
 
