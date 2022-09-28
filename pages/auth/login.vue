@@ -17,8 +17,8 @@
             </div>
             <v-card-text class="pa-0">
               <v-select outlined dense v-model="selectedLang" hide-details="auto" :items="langItems" class="language"></v-select>
-              <v-text-field v-model="form.email" outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="이메일을 입력해주세요."></v-text-field>
-              <v-text-field v-model="form.password" hide-details="auto" class="inpBottom vinpuT" outlined label="Password" placeholder="비밀번호를 입력해주세요." @keyup.enter="login" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1" ></v-text-field>
+              <v-text-field v-model="form.email" :error-messages="errors.email"  outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="이메일을 입력해주세요."></v-text-field>
+              <v-text-field v-model="form.password" :error-messages="errors.password"  hide-details="auto" class="inpBottom vinpuT" outlined label="Password" placeholder="비밀번호를 입력해주세요." @keyup.enter="login" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1" ></v-text-field>
             </v-card-text>
             <div class="settingBox">
               <router-link to="/auth/findID">아이디찾기</router-link>
@@ -55,6 +55,7 @@ export default {
       email: '',
       password: '',
     },
+    errors: [],
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
   }),
@@ -69,14 +70,10 @@ export default {
           }
         })
       } catch (e) {
-        console.log(e);
-        // if (e.response.status == '422') {
-        //   this.errors = e.response.data.errors;
-        // }
-        // if (e.response.status != '422') {
-        //   console.log(e.response.data.message);
-        //   // this.$toast.error(e.response.data.message);
-        // }
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+        }
+        this.$toast.error(e.response.data.message);
       }
     },
   },

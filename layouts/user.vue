@@ -65,14 +65,15 @@
                 <v-list-item>
                   <v-list-item-title>고객센터</v-list-item-title>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item
+                  @click="logout"
+                >
                   <v-list-item-title>로그아웃</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
         </div>
-
         <Nuxt />
       </div>
     </div>
@@ -91,6 +92,11 @@ export default {
     group () {
       this.drawer = false
     },
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout();
+    }
   },
 }
 </script>

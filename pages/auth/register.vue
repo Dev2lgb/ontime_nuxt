@@ -23,19 +23,23 @@
                   </div>
 
                 <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="이메일 (아이디)" outlined v-model="email"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56" >인증요청</v-btn>
+                  <v-text-field label="이메일 (아이디)" outlined v-model="form.email" :error-messages="errors.email" hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" @click="sendVerifyCode" height="56">인증요청</v-btn>
                 </v-card>
-                <v-card elevation="0" class="pa-0 ma-0 d-flex">
-                  <v-text-field label="인증번호" outlined v-model="code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
-                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" >인증확인</v-btn>
+                <v-card elevation="0" class="pa-0 ma-0 d-flex" v-if="isVerify">
+
+                  <v-text-field label="인증번호" outlined v-model="form.code" :error-messages="errors.code"  hide-details="auto" class="inpBottom vinpuT"/>&emsp;
+                  <v-btn large elevation="0" color="primary" height="56" @click="verifyCode" v-if="!isVerifyCode">인증확인</v-btn>
+                  <v-btn large elevation="0" color="#ddd" height="56" v-else>인증완료</v-btn>
                 </v-card>
                 <v-text-field  label="비밀번호" outlined class="vinpuT"
-                              autocomplete="new-password" persistent-hint hint="비밀번호는 8자리이상 입력해주세요."
+                              autocomplete="new-password" v-model="form.password" :error-messages="errors.password"  persistent-hint hint="비밀번호는 8자리이상 영문,숫자, 특수문자의 조합으로 입력해주세요."
                               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1"
                               />
                 <v-text-field class="vinpuT"
                               label="비밀번호 확인"  outlined autocomplete="new-password"
+                              v-model="form.password_confirmation"
+                              :error-messages="errors.password_confirmation"
                               :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" :type="show2 ? 'text' : 'password'"  @click:append="show2 = !show2"
                               />
               </v-card-text>
@@ -44,24 +48,31 @@
                 <div class="snsform">
                   <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>회원정보</span>
                 </div>
-                <v-text-field prepend-inner-icon="mdi-account" label="이름" outlined hide-details="auto" class="inpBottom vinpuT"/>
-                <div>
-                  <v-select
-                    :items="callingCodeItems"
-                    outlined hide-details="auto"
-                    item-text="text"
-                    item-value="value"
-                    class="inpBottom vinpuT"
-                    label="국가코드"
-                  ></v-select>
-                  <v-text-field prepend-inner-icon="mdi-phone" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <v-text-field prepend-inner-icon="mdi-account" v-model="form.name" :error-messages="errors.name" label="이름" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <div class="flex j_space a_center">
+                  <div style="width:35%">
+                    <v-select
+                      :items="callingCodeItems"
+                      v-model="form.mobile_country_calling_code"
+                      :error-messages="errors.mobile_country_calling_code"
+                      outlined hide-details="auto"
+                      item-text="text"
+                      item-value="value"
+                      class="inpBottom vinpuT"
+                      label="국가번호"
+                    ></v-select>
+                  </div>
+                  <div style="width:65%;" class="ml-2">
+                    <v-text-field prepend-inner-icon="mdi-phone" v-model="form.mobile" :error-messages="errors.mobile" label="연락처" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                  </div>
                 </div>
-                <v-text-field prepend-inner-icon="mdi-account-settings" label="출생연도 4자리" outlined hide-details="auto" class="inpBottom vinpuT"/>
+                <v-text-field prepend-inner-icon="mdi-account-settings" v-model="form.birthday_year" :error-messages="errors.birthday_year" label="출생연도 4자리" outlined hide-details="auto" class="inpBottom vinpuT"/>
 
                 <div class="flex j_space a_center ㅡ">
                   <p class="ma-0">성별</p>
                   <v-radio-group
-                    v-model="sex"
+                    v-model="form.sex_id"
+                    :error-messages="errors.sex_id"
                     row
                   >
                     <v-radio
@@ -79,6 +90,8 @@
                   class="inpBottom vinpuT"
                   label="국적선택"
                   outlined
+                  v-model="form.country"
+                  :error-messages="errors.country"
                   hide-details="auto"
                   :items="countryItems"
                 ></v-select>
@@ -88,6 +101,8 @@
                   prepend-inner-icon="mdi-alarm-check"
                   class="inpBottom vinpuT"
                   label="시간대선택"
+                  v-model="form.timezone"
+                  :error-messages="errors.timezone"
                   outlined
                   :items="timezoneItems"
                 ></v-select>
@@ -98,15 +113,13 @@
                     <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>약관정보</span>
                   </div>
                   <div class="checBox">
-                    <v-checkbox append-icon="mdi-magnify" label="(필수) 이용약관 동의" hide-details />
-                    <v-checkbox append-icon="mdi-magnify" label="(필수) 만 14세 이상입니다" hide-details />
-                    <v-checkbox append-icon="mdi-magnify" label="(필수) 개인정보 취급방침 동의" hide-details />
-                    <v-checkbox label="(선택) 마케팅 정보 수신 동의" hide-details />
+                    <v-checkbox append-icon="mdi-magnify" v-model="form.is_agree_terms" label="(필수) 이용약관 동의" hide-details />
+                    <v-checkbox append-icon="mdi-magnify" v-model="form.is_agree_privacy" required label="(필수) 개인정보 취급방침 동의" hide-details />
                   </div>
               </v-card-text>
 
               <v-card-actions class="pa-0 btnButton">
-                <v-btn :disabled="disabledSave" @click="save" color="primary" block x-large>회원가입</v-btn>
+                <v-btn @click="registerSubmit" color="primary" block x-large>회원가입</v-btn>
               </v-card-actions>
               <div class="settingBox2">
                 <span>이미 계정이 있으신가요?</span>&emsp;<router-link to="/auth/login">로그인하기</router-link>
@@ -127,11 +140,11 @@ export default {
     try {
       let url = 'auth/register';
       const response = await this.$axios.get(url,
-        {
-          headers: {
-            "Accept-Language" : "ko"
-          }
-        });
+      {
+        headers: {
+          "Accept-Language" : "ko"
+        }
+      });
 
       this.callingCodeItems = response.data.callingCodeItems;
       this.countryItems = response.data.countryItems;
@@ -147,6 +160,8 @@ export default {
   },
   data: () => ({
     loading: false,
+    isVerify: false,
+    isVerifyCode: false,
     selectedLang: 'Korean',
     langItems: ['Korean', 'english'],
     callingCodeItems: [],
@@ -155,44 +170,109 @@ export default {
     timezoneItems: [],
     show1: false,
     show2: false,
-    sex: '24',
-    email: '',
+    form: {
+      email:'',
+      name: '',
+      password: '',
+      password_confirmation: '',
+      mobile_country_calling_code: '',
+      mobile: '',
+      timezone: '',
+      code: '',
+      is_agree_terms: false,
+      is_agree_privacy: false,
+      birthday_year: '',
+      sex_id: '24',
+      country: '',
+    },
+    errors: [],
   }),
   methods: {
     async sendVerifyCode() {
       this.loading = true;
       try {
         let url = '/auth/verify-code';
-        const response = await this.$axios.post(url, {email : this.email},
+        const response = await this.$axios.post(url, {email : this.form.email},
           {
             headers: {
               "Accept-Language" : "ko"
             }
           });
+        if (response.data.result) {
+          this.$toast.success('인증코드 메일이 발송되었습니다.');
+          this.isVerify = true;
+        }
+
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
         this.loading = false;
       } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
         if (e.response.status == '401') {
-          console.log(e);
-          //this.$toast.error(e.response.data.message);
+          this.$toast.error(e.response.data.message);
         }
       }
     },
-
     async verifyCode() {
       this.loading = true;
       try {
         let url = '/auth/verify';
-        const response = await this.$axios.post(url, {email : this.email, code: this.code},
-          {
-            headers: {
-              "Accept-Language" : "ko"
-            }
-          });
+        const response = await this.$axios.post(url, {email : this.form.email, code: this.form.code},
+        {
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        });
+        if (response.data.result) {
+          this.$toast.success('인증이 완료되었습니다.');
+          this.isVerifyCode = true;
+        }
+
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
+
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    async registerSubmit() {
+      this.loading = true;
+      try {
+        let url = '/auth/register';
+        let data = [];
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form,
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        })
+        if (response.data.result) {
+          this.$toast.success('회원가입이 완료됐습니다.');
+          this.$router.push('/auth/login');
+        }
         this.loading = false;
       } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
         if (e.response.status == '401') {
-          console.log(e);
-          //this.$toast.error(e.response.data.message);
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
         }
       }
     },
