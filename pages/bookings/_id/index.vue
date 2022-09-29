@@ -72,12 +72,19 @@
         <h3 class="font_sub_title my-6"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
         <div class="border_a pa-3 mb-5"></div>
 
+<<<<<<< HEAD
+      <div class="flex j_space a_center mt-10 ">
+        <div class="flex j_start a_center">
+          <v-btn depressed outlined large>문의하기</v-btn>
+          <v-btn depressed dark class="ml-3" color="#28b487" to="/bookings/12/options" large>예약하기</v-btn>
+=======
         <div class="flex j_space a_center mt-10 ">
           <div class="flex j_start a_center">
             <v-btn depressed outlined large>문의하기</v-btn>
             <v-btn depressed dark class="ml-3" color="#4487fa" to="/bookings/12/options" large>예약하기</v-btn>
           </div>
           <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
+>>>>>>> f49a2a9fdad707c683ca9032530cd26c59c550d5
         </div>
       </div>
 
@@ -108,7 +115,6 @@ export default {
   .thumbnail_width { width:150px; }
   .res_content_width { width:calc(100% - 210px); }
   .bookmark_width { width:60px }
-  .area_line {width: 100%; height: 14px; background: #f7f8fa; margin: 0 auto 30px;}
   .img_radius { border-radius: 10px; }
   .progrma_subject h3 {margin: 30px 0 10px;}
   .progrma_subject>p {font-size: 14px;}
