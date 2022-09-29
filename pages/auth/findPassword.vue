@@ -17,10 +17,10 @@
             </div>
 
             <v-card-text class="pa-0">
-              <v-text-field  outlined hide-details="auto" class="inpBottom vinpuT" placeholder="가입하신 이메일을 입력해주세요."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="form.email" :error-messages="errors.name" class="inpBottom vinpuT" placeholder="가입하신 이메일을 입력해주세요."></v-text-field>
             </v-card-text>
 
-            <v-btn color="primary" block large class="btn-size">비밀번호 찾기</v-btn>
+            <v-btn color="primary" block large class="btn-size" @click="findPassWordSubmit">비밀번호 찾기</v-btn>
 
             <div class="settingBox2">
               <router-link to="/auth/login"><v-icon color="primary" class="iconMa3">mdi-chevron-left</v-icon>로그인 돌아가기</router-link>
@@ -35,9 +35,42 @@
 export default {
   layout: 'guest',
   data: () => ({
-    selectedLang: 'Korean',
-    langItems: ['Korean', 'english'],
+    form: {
+      email: '',
+    },
+    errors:[],
   }),
+  methods: {
+    async findPassWordSubmit() {
+      this.loading = true;
+      try {
+        let url = '/auth/forgot-password';
+        let data = [];
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form,
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        })
+        if (response.data.result) {
+          this.$toast.success('비밀번호 재설정 링크가 메일로 발송되었습니다.');
+          return false;
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+  },
 }
 </script>
 
