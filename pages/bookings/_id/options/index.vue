@@ -1,19 +1,6 @@
 <template>
   <div class="f_width">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          exact
-          to="/bookings"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </div>
-      <h3>예약하기</h3>
-    </div>
-
+    <SubHeader :link="'/bookings'" />
     <div class="pa-5">
       <div class="pb-7">
         <div>
