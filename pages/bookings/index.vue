@@ -23,9 +23,9 @@
 
     <div class="pa-3 border_b card_action">
       <div>
-        <v-chip dark color="#0057FF" label small>Online</v-chip>
-        <v-chip dark color="#000" label small>New</v-chip>
-        <v-chip dark color="#000" label small>마감임박</v-chip>
+        <v-chip dark color="#4487fa" label small>Online</v-chip>
+        <v-chip dark color="#28b487" label small>New</v-chip>
+        <v-chip dark color="#ff5722" label small>마감임박</v-chip>
       </div>
       <div class="flex j_space a_center">
         <div class="thumbnail_width">
@@ -52,9 +52,8 @@
     <!-- 카드반복 -->
       <div class="pa-3 border_b card_action">
         <div>
-          <v-chip dark color="#0057FF" label small>Online</v-chip>
-          <v-chip dark color="#000" label small>New</v-chip>
-          <v-chip dark color="#000" label small>마감임박</v-chip>
+          <v-chip dark color="#4487fa" label small>Online</v-chip>
+          <v-chip dark color="#28b487" label small>New</v-chip>
         </div>
         <div class="flex j_space a_center">
           <div class="thumbnail_width">
