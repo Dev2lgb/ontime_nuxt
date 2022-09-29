@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SubHeader :link="'/bookings'" />
+    <SubHeader :link="'/bookings'" :title="'예약하기'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
         <p>예약옵션을 선택해주세요.<br>해당 예약은 <span><span>1개의 옵션</span></span>만 선택 가능.</p>
@@ -40,7 +40,7 @@
           <div class="area_line"></div>
           <div class="pb-7">
             <div>
-              <h3><v-icon>mdi-map-marker-circle</v-icon> 날짜 선택하기</h3>
+              <h3><v-icon>mdi-calendar-clock</v-icon> 날짜 선택하기</h3>
             </div>
             <div class="f_width flex j_space a_center mb-5">
               <div class="flex j_center a_center mt-3">
