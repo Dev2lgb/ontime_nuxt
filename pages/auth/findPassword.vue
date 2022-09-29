@@ -58,6 +58,9 @@ export default {
           this.$toast.success('비밀번호 재설정 링크가 메일로 발송되었습니다.');
           return false;
         }
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
         this.loading = false;
       } catch (e) {
         if (e.response.status == '422') {
