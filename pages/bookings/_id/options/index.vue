@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="user_dashboard full_height j_start pa-5">
     <div class="user_nik">
       <p>예약옵션을 선택해주세요.<br>해당 예약은 <span><span>1개의 옵션</span></span>만 선택 가능.</p>
@@ -7,6 +8,18 @@
     <div class="progrma_area">
       <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">3개</span>의 예약 옵션이 대기중</p>
       <v-select
+=======
+  <div class="f_width">
+    <SubHeader :link="'/bookings'" />
+    <div class="pa-5">
+      <div class="pb-7">
+        <div>
+          <h3>예약옵션을 선택해주세요.</h3>
+          <p class="mt-2">해당 예약은 1개의 상품만 선택할 수 있어요.</p>
+        </div>
+
+        <v-select
+>>>>>>> f49a2a9fdad707c683ca9032530cd26c59c550d5
           outlined
           v-model="selectedReservationOption"
           hide-details="auto"

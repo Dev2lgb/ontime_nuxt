@@ -1,41 +1,44 @@
 <template>
-  <div class="user_dashboard full_height j_start pa-5">
-    <div class="user_form">
-      <div class="user_nik">
-        <p><span>홍길동</span> 님, 환영합니다.<br>어떤 프로그램을 찾고 계신가요?</p>
-      </div>
-      <div class="program_form">
-        <ul>
-          <li>예약검색</li>
-          <li>I</li>
-          <li><NuxtLink to="bookings">예약프로그램 보기</NuxtLink></li>
-        </ul>
-        <div class="progrma_search">
-          <input type="text" class="search_input" placeholder="프로그램명을 검색 해주세요.">
-          <input type="button" class="img_button" title="검색">
+  <div>
+    <Header />
+    <div class="user_dashboard full_height j_start pa-5">
+      <div class="user_form">
+        <div class="user_nik">
+          <p><span>홍길동</span> 님, 환영합니다.<br>어떤 프로그램을 찾고 계신가요?</p>
         </div>
-      </div>
-      <div class="area_line"></div>
-      <div class="reservation_form">
-        <div class="reservation_state">
-          <div class="reservation_title">
-            <ul>
-              <li>진행중인 예약</li>
-              <li>온타임에서 예약 진행중인 프로그램</li>
-            </ul>
+        <div class="program_form">
+          <ul>
+            <li>예약검색</li>
+            <li>I</li>
+            <li><NuxtLink to="bookings">예약프로그램 보기</NuxtLink></li>
+          </ul>
+          <div class="progrma_search">
+            <input type="text" class="search_input" placeholder="프로그램명을 검색 해주세요.">
+            <input type="button" class="img_button" title="검색">
           </div>
-          <div class="reservation_more">
-            <NuxtLink to="/">
-              전체보기
-            </NuxtLink>
+        </div>
+        <div class="area_line"></div>
+        <div class="reservation_form">
+          <div class="reservation_state">
+            <div class="reservation_title">
+              <ul>
+                <li>진행중인 예약</li>
+                <li>온타임에서 예약 진행중인 프로그램</li>
+              </ul>
+            </div>
+            <div class="reservation_more">
+              <NuxtLink to="/">
+                전체보기
+              </NuxtLink>
+            </div>
+          </div>
+
+          <div class="reservation_slid">
+              <!-- 진행중인예약 슬라이드 영역 -->
           </div>
         </div>
 
-        <div class="reservation_slid">
-            <!-- 진행중인예약 슬라이드 영역 -->
-        </div>
       </div>
-
     </div>
   </div>
 </template>
