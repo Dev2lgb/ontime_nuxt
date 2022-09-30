@@ -11,7 +11,6 @@
         </v-btn>
       </div>
       <h3>프로필 관리</h3>
-      {{ form }}
     </div>
     <div class="pa-8">
       <div>
@@ -53,7 +52,6 @@
         <p class="ma-0">국적</p>
         <div class="h_width">
           <v-select
-            outlined
             v-model="form.country"
             :error-messages="errors.country"
             hide-details="auto"
@@ -67,7 +65,7 @@
           <v-select
             v-model="form.timezone"
             :error-messages="errors.timezone"
-            outlined
+            hide-details="auto"
             :items="timezoneItems"
           ></v-select>
         </div>

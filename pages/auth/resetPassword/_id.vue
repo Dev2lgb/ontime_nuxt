@@ -17,11 +17,12 @@
             </div>
 
             <v-card-text class="pa-0">
-              <v-text-field  outlined hide-details="auto" class="inpBottom vinpuT" placeholder="새로운 비밀번호를 입력해주세요."></v-text-field>
-              <v-text-field  outlined hide-details="auto" class="inpBottom vinpuT" placeholder="비밀번호 확인."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="email" class="inpBottom vinpuT" placeholder="아이디(이메일)를 입력해주세요."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="password" class="inpBottom vinpuT" placeholder="새로운 비밀번호를 입력해주세요."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="password_confirmation" class="inpBottom vinpuT" placeholder="비밀번호 확인."></v-text-field>
             </v-card-text>
 
-            <v-btn color="primary" block large class="btn-size" @click="findPassWordSubmit">비밀번호 재설정</v-btn>
+            <v-btn color="primary" block large class="btn-size" @click="resetPasswordSubmit">비밀번호 재설정</v-btn>
 
             <div class="settingBox2">
               <router-link to="/auth/login"><v-icon color="primary" class="iconMa3">mdi-chevron-left</v-icon>로그인 돌아가기</router-link>
@@ -36,9 +37,51 @@
 export default {
   layout: 'guest',
   data: () => ({
-    selectedLang: 'Korean',
-    langItems: ['Korean', 'english'],
+    email: '',
+    password: '',
+    password_confirmation: '',
+    token: '',
   }),
+  methods: {
+    async resetPasswordSubmit() {
+      this.loading = true;
+      try {
+        let url = '/auth/reset-password';
+        let data = {
+          email : this.email,
+          password : this.password,
+          password_confirmation: this.password_confirmation,
+          token : this.$route.params.id,
+        };
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data:data,
+          headers: {
+            "Accept-Language" : "ko"
+          }
+        })
+        if (response.data.result) {
+          this.$toast.success('비밀번호가 변경되었습니다.');
+          this.$router.push('/auth/login');
+        }
+        if (!response.data.result) {
+          this.$toast.error(response.data.message);
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+  },
+
 }
 </script>
 
