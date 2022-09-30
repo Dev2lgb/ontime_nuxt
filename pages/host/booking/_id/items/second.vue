@@ -259,6 +259,6 @@ export default {
 .active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
 .deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
-/deep/.col_content_btn { height:auto !important; }
-/deep/.col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; }
+::v-deep .col_content_btn { height:auto !important; }
+::v-deep .col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; }
 </style>
