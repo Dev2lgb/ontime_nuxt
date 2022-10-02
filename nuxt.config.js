@@ -33,6 +33,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/vue-awesome-swiper', mode: 'client' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -53,7 +54,8 @@ export default {
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
     '@nuxtjs/dayjs',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+
   ],
   //알러트 설정
   toast: {
