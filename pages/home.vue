@@ -53,7 +53,7 @@ export default {
 
 <style scoped>
   .user_nik {margin: 60px 0 50px;}
-  .user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px;}
+  .user_nik p {font-size: 24px; font-weight: 500; letter-spacing: -1px;}
   .user_nik p span {font-weight: bold; color: #435689;}
   .program_form {margin: 10px 0;}
   .program_form ul {padding: 0; margin-bottom: 20px;}
@@ -61,7 +61,7 @@ export default {
   .program_form ul li:first-child {color: #435689; font-weight: 600;}
   .program_form ul li:last-child a {text-decoration: none; color: #888;}
   .progrma_search {position: relative;}
-  .search_input {width: 100%; height: 80px; border: 2px solid #435689; border-radius: 10px; padding: 20px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
+  .search_input {width: 100%; height: 60px; border: 2px solid #435689; border-radius: 10px; padding: 10px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
   .search_input::placeholder {color: #ccc;}
   .search_input:focus-within {outline: #435689}
   .img_button {background: url(/_nuxt/assets/images/search.png)no-repeat; border: none; width: 35px; height: 40px; cursor: pointer; background-size: 35px; position: absolute; right: 26px; top: 22px;}

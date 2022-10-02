@@ -20,6 +20,7 @@
           :items="searchCategoryItems"
           hide-details="auto"
           outlined
+          dense
         ></v-select>
       </div>
 
@@ -35,6 +36,7 @@
               :src="`https://picsum.photos/500/300?image=10`"
               :lazy-src="`https://picsum.photos/10/6?image=10`"
               aspect-ratio="1"
+              width="80"
               class="img_radius"
             ></v-img>
           </div>
@@ -63,6 +65,7 @@
                 :src="`https://picsum.photos/500/300?image=10`"
                 :lazy-src="`https://picsum.photos/10/6?image=10`"
                 aspect-ratio="1"
+                width="80"
                 class="img_radius"
               ></v-img>
             </div>
@@ -104,27 +107,27 @@ export default {
 </script>
 
 <style scoped>
-.thumbnail_width { width:150px; }
+.thumbnail_width { width:80px; }
 .res_content_width { width:calc(100% - 210px); }
 .bookmark_width {width:60px; position: absolute; right: 0; top: 7px;}
 .img_radius { border-radius: 10px; }
 
 .user_nik {margin: 60px 0 50px;}
-.user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px;}
+.user_nik p {font-size: 24px; font-weight: 500; letter-spacing: -1px;}
 .user_nik p span {font-weight: 800; color: #28b487;}
 .user_nik p span span {color: #4487fa;}
 .progrma_search {position: relative;}
-.search_input {width: 100%; height: 80px; border: 2px solid #435689; border-radius: 10px; padding: 20px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
+.search_input {width: 100%; height: 60px; border: 2px solid #435689; border-radius: 10px; padding: 10px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
 .search_input::placeholder {color: #ccc;}
 .search_input:focus-within {outline: #435689}
 .img_button {background: url(/_nuxt/assets/images/search.png)no-repeat; border: none; width: 35px; height: 40px; cursor: pointer; background-size: 35px; position: absolute; right: 26px; top: 22px;}
 .progrma_area {display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 20px;}
 .progrma_area p {margin: 0;}
-.select_reset {max-width: 160px;}
+.select_reset {max-width: 130px;}
 
 .card_action {position: relative;margin-top: 12px;}
-.text_title {font-size: 17px; margin-top: 10px;}
+.text_title {font-size: 15px; margin-top: 10px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .tag_text {margin: 5px 0;}
-.desc {font-size: 14px;}
-.card_subject {padding-left: 20px;}
+.desc {font-size: 13px; max-height:39px; overflow: hidden; }
+.card_subject {padding-left: 20px; display:block; width:calc(100% - 80px); }
 </style>

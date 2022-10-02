@@ -18,8 +18,8 @@
 
             <v-card-text class="pa-0">
               <v-text-field  outlined hide-details="auto" v-model="email" class="inpBottom vinpuT" placeholder="아이디(이메일)를 입력해주세요."></v-text-field>
-              <v-text-field  outlined hide-details="auto" v-model="password" class="inpBottom vinpuT" placeholder="새로운 비밀번호를 입력해주세요."></v-text-field>
-              <v-text-field  outlined hide-details="auto" v-model="password_confirmation" class="inpBottom vinpuT" placeholder="비밀번호 확인."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="password" type="password" class="inpBottom vinpuT" placeholder="새로운 비밀번호를 입력해주세요."></v-text-field>
+              <v-text-field  outlined hide-details="auto" v-model="password_confirmation" type="password" class="inpBottom vinpuT" placeholder="비밀번호 확인."></v-text-field>
             </v-card-text>
 
             <v-btn color="primary" block large class="btn-size" @click="resetPasswordSubmit">비밀번호 재설정</v-btn>

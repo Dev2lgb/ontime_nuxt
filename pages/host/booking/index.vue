@@ -27,20 +27,15 @@
       <div class="mb-7">
         <p class="font-weight-bold ma-0">국문과 별도로 영문 예약페이지가 필요하신 경우 아래 버튼을 클릭해주세요.</p>
         <div>
-          <v-checkbox
-          v-model="checkbox"
-          label="영문 예약 페이지 추가"
-          ></v-checkbox>
+          <v-switch v-model="is_en" true-value="Y" false-value="N" :label="$t('_host_booking_form1.label1')"></v-switch>
         </div>
       </div>
       <div class="mb-7">
         <p class="font-weight-bold ma-0">등록하시려는 예약의 상품명을 등록해주세요.</p>
         <p class="font_small_text mt-1">상품명은 예약을 희망하는 참가자들에게 보여집니다.</p>
         <div>
-          <v-text-field
-            placeholder="대표 상품명을 입력해주세요."
-            outlined
-          ></v-text-field>
+          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')"></v-text-field>
+          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')"></v-text-field>
         </div>
       </div>
       <div class="mb-7">
@@ -50,10 +45,8 @@
         </div>
         <p class="font_small_text mt-1">예약 프로그램을 다른 채널로 공유할 때 이미지와 함께 표시됩니다.</p>
         <div>
-          <v-text-field
-            placeholder="예약 시 궁금한점이 있으시다면 자유롭게 작성해주세요."
-            outlined
-          ></v-text-field>
+          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')"></v-text-field>
+          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')"></v-text-field>
         </div>
       </div>
       <div class="mb-7">
@@ -66,7 +59,20 @@
           <v-text-field
             placeholder="태그 입력 구분 최대 3개"
             outlined
+            v-model="tagInput"
+            @keydown.enter="updateTags"
           ></v-text-field>
+
+          <div>
+            <v-chip close v-for="(tag, keyIndex) in tags"
+                    :key="keyIndex"
+                    color="success"
+                    text-color="white"
+                    @click:close="deleteTag(keyIndex)"
+                    >
+              &nbsp; #{{tag}}
+            </v-chip>
+          </div>
         </div>
       </div>
       <div class="mb-7">
@@ -138,7 +144,6 @@
           >
             <v-btn
               v-for="(item, i) in keywordItems" :key="i"
-              width="calc(25% - 8px)"
               style="border:1px solid #ccc; border-radius:10px"
               class="ma-1"
               :value="item.text"
@@ -155,7 +160,8 @@
       <div class="mb-7">
         <p class="font-weight-bold ma-0 mb-3">등록하실 예약 상품에 대해 자세히 소개해주세요.</p>
         <div>
-          <v-textarea class="f_width" outlined placeholder="이곳에 행사 정보를 입력하세요."></v-textarea>
+          <v-textarea v-model="content" :error-messages="errors.content" outlined :label="$t('_host_booking_form1.label4')"></v-textarea>
+          <v-textarea v-model="content_en" :error-messages="errors.content_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label5')"></v-textarea>
         </div>
       </div>
       <div class="mb-7">
@@ -259,7 +265,10 @@
 export default {
   layout: 'host',
   data: () => ({
+    is_en: 'N',
     selectedMethod: 'offline', //예약방법
+    tagInput: '',
+    tags: [],
     errors: [],
     images: [],
     urls: [],
@@ -280,6 +289,14 @@ export default {
       { text: '레스토랑 예약' },
     ]
   }),
+  watch: {
+    isEngBookForm(val) {
+      if (val) {
+        let enInput = document.getElementsByClassName('en_input');
+
+      }
+    },
+  },
   methods: {
     handleFileImport() { //파일업로드 버튼
       let fileUpload = document.getElementById('ImageFileUpload')
@@ -303,6 +320,24 @@ export default {
       this.urls.splice(index, 1)
       this.images.splice(index, 1)
     },
+    classEnField() {
+      if(this.is_en == 'Y') {
+        return 'show_field';
+      } else {
+        return 'en_field';
+      }
+    },
+    updateTags() {
+      this.$nextTick(() => {
+        this.tags.push(this.tagInput);
+        this.$nextTick(() => {
+          this.tagInput = "";
+        });
+      });
+    },
+    deleteTag(index) {
+      this.tags.splice(index, 1);
+    },
   },
 }
 </script>
@@ -311,5 +346,5 @@ export default {
 .active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
 .deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
-
+.en_field { display:none !important; }
 </style>
