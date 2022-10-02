@@ -46,7 +46,7 @@ export default {
     async resetPasswordSubmit() {
       this.loading = true;
       try {
-        let url = '/auth/reset-password';
+        let url = '/auth/resetPassword';
         let data = {
           email : this.email,
           password : this.password,
@@ -56,10 +56,7 @@ export default {
         let method = 'post';
 
         const response = await this.$axios({
-          url: url, method: method, data:data,
-          headers: {
-            "Accept-Language" : "ko"
-          }
+          url: url, method: method, data:data
         })
         if (response.data.result) {
           this.$toast.success('비밀번호가 변경되었습니다.');

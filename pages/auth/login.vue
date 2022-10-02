@@ -10,25 +10,29 @@
               </div>
             </NuxtLink>
           </v-card>
+
           <v-card flat>
             <div class="loginTextB">
-              <p class="firstTextTitle">ONTIME에 오신것을 환영합니다!</p>
+              <p class="firstTextTitle">{{$t('_login.title')}}</p>
               <p class="lastTextTitle">서비스 이용을 위해 계정 로그인을 진행해주세요</p>
             </div>
             <v-card-text class="pa-0">
-              <v-select outlined dense v-model="selectedLang" hide-details="auto" :items="langItems" class="language"></v-select>
+              <v-select outlined dense v-model="selectedLang" hide-details="auto" :items="langItems" class="language"
+                item-text="text"
+                item-value="value" @change="changeLocale"
+              ></v-select>
               <v-text-field v-model="form.email" :error-messages="errors.email"  outlined label="E-Mail" hide-details="auto" class="inpBottom vinpuT" placeholder="이메일을 입력해주세요."></v-text-field>
               <v-text-field v-model="form.password" :error-messages="errors.password"  hide-details="auto" class="inpBottom vinpuT" outlined label="Password" placeholder="비밀번호를 입력해주세요." @keyup.enter="login" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"  :type="show1 ? 'text' : 'password'"  @click:append="show1 = !show1" ></v-text-field>
             </v-card-text>
             <div class="settingBox">
-              <router-link to="/auth/findID">아이디찾기</router-link>
-              <router-link to="/auth/findPassword">비밀번호를 잊으셨나요?</router-link>
+              <router-link to="/auth/findID">{{$t('_login.forgot_id')}}</router-link>
+              <router-link to="/auth/findPassword">{{$t('_login.forgot_password')}}</router-link>
             </div>
             <v-card-actions class="pa-0">
               <v-btn color="primary" block x-large @click="login">LOGIN</v-btn>
             </v-card-actions>
             <div class="settingBox2">
-              <span>아직 회원이 아니신가요?</span>&emsp;<router-link to="/auth/register">회원가입하기</router-link>
+              <span>아직 회원이 아니신가요?</span>&emsp;<router-link to="/auth/register">{{$t('_login.register')}}</router-link>
             </div>
           </v-card>
           <div class="snsform">
@@ -45,6 +49,7 @@
   </v-container>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: 'login',
   layout: 'guest',
@@ -56,8 +61,11 @@ export default {
       password: '',
     },
     errors: [],
-    selectedLang: 'Korean',
-    langItems: ['Korean', 'english'],
+    selectedLang: localStorage.getItem("locale") ?? 'ko',
+    langItems: [
+      { text:'Korean', value: 'ko' },
+      { text:'English', value: 'en' },
+    ],
   }),
   methods: {
     async login() {
@@ -76,6 +84,11 @@ export default {
         this.$toast.error(e.response.data.message);
       }
     },
+    changeLocale() {
+      this.$i18n.locale = this.selectedLang;
+      this.setLocale(this.selectedLang);
+    },
+    ...mapMutations("common",['setLocale']),
   },
 }
 </script>

@@ -13,7 +13,9 @@ export default {
   middleware: ['auth'],
   data: () => ({
   }),
-
+  mounted() {
+    this.$i18n.locale = localStorage.getItem("locale");
+  },
   watch: {
   },
   methods: {

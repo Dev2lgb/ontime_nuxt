@@ -10,8 +10,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - ontime_nuxt',
-    title: 'ontime_nuxt',
+    titleTemplate: '%s - ONTIMEWORLD',
+    title: 'ONTIMEWORLD',
     htmlAttrs: {
       lang: 'en'
     },
@@ -33,7 +33,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/vue-awesome-swiper', mode: 'client' }
+    { src: '@/plugins/vue-awesome-swiper', mode: 'client' },
+    { src: '@/plugins/api.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -63,11 +64,22 @@ export default {
     duration : 3000,
   },
   i18n: {
-    locales: ['ko', 'en'],
+    locales: [
+      {
+        code: 'en',
+        file: 'en.json'
+      },
+      {
+        code: 'ko',
+        file: 'ko.json'
+      }
+    ],
+    langDir: 'locales/',
     defaultLocale: 'ko',
     vueI18n: {
+     // Path: '~/locales/',
       fallbackLocale: 'ko'
-    }
+    },
   },
   axios: {
     baseUrl: process.env.BASEURL + '/api',
@@ -97,7 +109,7 @@ export default {
     }
   },
 
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+  // Vuetify modules configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
@@ -130,6 +142,7 @@ export default {
   },
 
   dayjs: {
+
     locales: ['en', 'ko'], defaultLocale: 'ko', defaultTimeZone: 'Asia/Seoul',
     plugins: [
       'utc', // import 'dayjs/plugin/utc'

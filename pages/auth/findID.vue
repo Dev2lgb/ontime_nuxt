@@ -86,10 +86,7 @@ export default {
         let method = 'post';
 
         const response = await this.$axios({
-          url: url, method: method, data:this.form,
-          headers: {
-            "Accept-Language" : "ko"
-          }
+          url: url, method: method, data:this.form
         })
         if (response.data.result) {
           this.hidedEmail = response.data.data;

@@ -182,10 +182,7 @@ export default {
         let method = 'post';
 
         const response = await this.$axios({
-          url: url, method: method, data:this.form,
-          headers: {
-            "Accept-Language" : "ko"
-          }
+          url: url, method: method, data:this.form
         })
         if (response.data.result) {
           this.$toast.success('회원정보 수정이 완료됐습니다.');

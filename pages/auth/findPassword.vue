@@ -49,10 +49,7 @@ export default {
         let method = 'post';
 
         const response = await this.$axios({
-          url: url, method: method, data:this.form,
-          headers: {
-            "Accept-Language" : "ko"
-          }
+          url: url, method: method, data:this.form
         })
         if (response.data.result) {
           this.$toast.success('비밀번호 재설정 링크가 메일로 발송되었습니다.');

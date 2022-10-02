@@ -35,7 +35,6 @@
 
           <div class="reservation_slid pb-10">
             <BookingSlider />
-              <!-- 진행중인예약 슬라이드 영역 -->
           </div>
         </div>
 
