@@ -1,9 +1,6 @@
 <template>
   <div>
     <label>
-      <!-- <GmapAutocomplete @place_changed="setPlace" class="add-v-field-text"></GmapAutocomplete>
-      <v-btn elevation="0" @click="usePlace">추가</v-btn>
-      append-icon="mdi-map-marker" @click:append="usePlace" -->
       <gmap-autocomplete @place_changed="setPlace">
         <template v-slot:input="slotProps">
           <v-text-field ref="input" label="" placeholder="(예) 서울시 강남구 압구정로 10-16" outlined hide-details v-on:listeners="slotProps.listeners" v-on:attrs="slotProps.attrs"> </v-text-field>
@@ -12,7 +9,6 @@
     </label>
     <br/>
     <gmap-map style="width:100%;height:400px;" :zoom="zoom" :center="center">
-      <!--GmapMarker v-for="(marker, index) in markers" :key="index" :position="marker.position"/-->
       <gmap-marker v-if="place" label="★" :position="place" :draggable="true" @dragend="updateCoordinate"/>
     </gmap-map>
   </div>
