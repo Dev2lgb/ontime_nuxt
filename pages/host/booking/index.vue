@@ -195,8 +195,8 @@
           예약프로그램이 진행되는 오프라인 장소를 알려주세요.
         </p>
         <div>
-          <v-text-field hide-details="auto" class="mb-3" readonly placeholder="(예) 서울시 강남구 압구정로 10-16" outlined></v-text-field>
-          <v-text-field placeholder="상세주소 입력" outlined></v-text-field>
+          <GoogleMap :coordinate="coordinate" class="mb-6" @update-coordinate="coordinate = $event"/>
+          <v-text-field placeholder="상세주소 입력"  v-model="address" :error-messages="errors.address" outlined></v-text-field>
         </div>
       </div>
       <div class="mb-7" v-show="selectedMethod == 'online'">
@@ -260,8 +260,10 @@ export default {
   layout: 'host',
   data: () => ({
     selectedMethod: 'offline', //예약방법
+    errors: [],
     images: [],
     urls: [],
+    address: '',
     selectedOnlinePlatform: [],
     plaformItems: [
       { text: '카카오톡', icon:'' },

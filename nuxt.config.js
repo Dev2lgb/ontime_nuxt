@@ -35,7 +35,9 @@ export default {
   plugins: [
     { src: '@/plugins/vue-awesome-swiper', mode: 'client' },
     { src: '@/plugins/api.js', mode: 'client' },
+    { src: '@/plugins/google-map.js', mode: 'client' },
   ],
+
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -56,8 +58,7 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/dayjs',
     '@nuxtjs/toast',
-
-  ],
+],
   //알러트 설정
   toast: {
     position: 'top-center',
@@ -152,5 +153,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: [/^vue2-google-maps($|\/)/]
   }
 }
