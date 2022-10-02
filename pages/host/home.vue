@@ -1,7 +1,11 @@
 <template>
   <div>
     <HostHeader />
-    <div class="host_dashboard flex d_col full_height j_center a_start pa-5">
+    <div class="user_dashboard full_height j_start pa-5">
+      <div class="user_nik">
+       <p><span>관리자</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
+      </div>
+        
       <div class="f_width">
         <h3>예약 관리자 페이지</h3>
         <v-btn
@@ -76,4 +80,8 @@ export default {
 <style scoped>
 .reservation_item { border-radius:10px; }
 .reservation_status_items > div { background-color:#ddd; width:calc(25% - 20px); border-radius: 10px}
+.user_nik {margin: 60px 0 50px;}
+.user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px;}
+.user_nik p span {font-weight: bold; color: #435689;}
+  
 </style>
