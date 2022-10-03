@@ -1,10 +1,10 @@
 <template>
   <div class="f_width">
-    <HostHeader />
+    <HostSubHeader />
     <div class="host_head pa-5">
       <div class="host_area">
         <div class="host_nik">
-        <p><span>관리자</span> 님, 예약내역.<br>프로그램을 확인해 주세요.</p>
+        <p><span>관리자</span> 님, 예약내역<br>프로그램을 확인해 주세요.</p>
         </div>
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
