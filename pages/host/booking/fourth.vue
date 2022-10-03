@@ -1,5 +1,5 @@
 <template>
-  <div class="f_width">
+  <div class="f_width user_padding">
     <div class="flex j_start a_center">
       <div>
         <v-btn
@@ -11,9 +11,15 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </div>
-      <h3>새 예약 만들기 (4/4)</h3>
+      <h3>새 예약 만들기</h3>
     </div>
-    <div class="px-5">
+
+    <div class="host_area">
+    <div class="user_nik">
+      <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (4/4)</p>
+    </div>
+
+    <div class="proceeding">
       <template>
         <v-progress-linear value="100"></v-progress-linear>
       </template>
@@ -24,9 +30,13 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+    <div class="">
+      <div class="titleform">
+        <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>예약설정</span>
+      </div>
+
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">리마인드 메일을 발송할까요?</p>
+        <p class="font-weight-bold ma-0 mb-5">1. 리마인드 메일을 발송할까요?</p>
         <div>
           <v-btn-toggle
             v-model="selectedMail"
@@ -38,15 +48,15 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+               large
+              class="input_pd"
               value="N"
             >
               <span class="font-weight-bold">발송</span>
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+               large
+              class="input_pd"
               value="Y"
             >
               <span class="font-weight-bold">발송 안함</span>
@@ -55,7 +65,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0">예약자로부터 수집할 정보를 선택해주세요. (선택)</p>
+        <p class="font-weight-bold ma-0">2. 예약자로부터 수집할 정보를 선택해주세요. (선택)</p>
         <p class="font_small_text mt-1">이름, 성별, 이메일주소, 휴대폰연락는 기본으로 수집됩니다.</p>
         <div class="border_a pa-3">
           <v-btn-toggle
@@ -69,7 +79,7 @@
           >
             <v-btn
               v-for="(item, i) in getInfoItems" :key="i"
-              style="border:1px solid #ccc; border-radius:10px"
+              style="border:1px solid #ccc;"
               class="ma-1"
               :value="item.text"
             >
@@ -79,7 +89,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0">원하는 수집항목이 없다면, 질문을 추가 할 수 있습니다. (선택)</p>
+        <p class="font-weight-bold ma-0">3. 원하는 수집항목이 없다면, 질문을 추가 할 수 있습니다. (선택)</p>
         <p class="font_small_text mt-1">
           개인의 기밀 정보(예: 신용카드 정보 또는 주민등록번호 등)는 반드시 필요한 경우에 한해 요청하셔야 합니다.
           개인정보가 유출, 오용, 남용되는 경우 개인정보 보호법이 적용될 수 있으며, 이에 대한 법적 책임은 개인정보수집 및 처리자인 예약관리자에게 있습니다.
@@ -90,7 +100,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0">예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
+        <p class="font-weight-bold ma-0">4. 예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
         <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
         <div class="flex j_center a_center border_a pa-3">
           <v-file-input
@@ -120,13 +130,14 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           to="/host/booking/fourth"
         >새 예약 등록완료</v-btn>
       </div>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -184,4 +195,5 @@ export default {
 <style scoped>
 .sns_logo { width:60px; }
 .sns_input { width:calc(100% - 70px); }
+.input_pd {padding: 24px 16px!important; border: 1px solid #ddd!important;}
 </style>

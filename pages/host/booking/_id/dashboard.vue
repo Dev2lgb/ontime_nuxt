@@ -1,59 +1,63 @@
 <template>
   <div class="f_width">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          to="/host/home"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
+    <HostHeader />
+    <div class="host_head pa-5">
+      <div class="host_area">
+        <div class="host_nik">
+        <p><span>관리자</span> 님, 예약내역.<br>프로그램을 확인해 주세요.</p>
+        </div>
+        <div class="host_create">
+          <p style="color:#5b7ade">예약관리 서비스</p>
+
+          <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
+            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
+            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
+            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
+            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
+            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
+          </v-tabs>
+          
+        </div>
       </div>
-      <h3>예약관리</h3>
     </div>
-    <div class="px-5">
+
+<div class="user_dashboard full_height j_start pa-5">
+    <div class="select-box">
       <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
         item-text="title"
         item-value="id"
       ></v-select>
     </div>
-    <div class="pa-5">
-      <v-tabs>
-        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
-        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
-        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
-        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
-        <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
-      </v-tabs>
-    </div>
+
     <div class="pa-5">
       <h3>[교육] 사찰예절 배움 템플스테이 해맞이</h3>
       <v-btn text small class="pa-0 mt-1">ontimewolrd.kr/b/d1a24a <v-icon small class="ml-1">mdi-content-copy</v-icon></v-btn>
       <div class="flex j_start a_center my-3">
-        <v-btn outlined small>예약 보기</v-btn>
-        <v-btn outlined small class="mx-2">예약코드 복사</v-btn>
-        <v-btn outlined small>예약 수정</v-btn>
-        <v-btn outlined small class="ml-2">노출중</v-btn>
+        <v-btn dark color="#4487fa" label small elevation="0">예약 보기</v-btn>
+        <v-btn dark color="#44acfa" label small class="mx-2" elevation="0">예약코드 복사</v-btn>
+        <v-btn dark color="#fb8c00" label small elevation="0">예약 수정</v-btn>
+        <v-btn dark color="#4caf50" label small class="ml-2" elevation="0">노출중</v-btn>
       </div>
-      <div class="flex j_space a_center reservation_status_items mt-5">
-        <div class="text-center py-3">
-          <p class="font_big_title ma-0">3</p>
-          <p class="ma-0">예약 확정</p>
+
+      <div class="flex j_space a_center mb-5 progrma_option">
+        <div class="q_width flex d_col j_center a_center py-3">
+          <img src="~/assets/images/list_icon01.png" height="30">
+          <p class="font_small_text">예약확정 (2)</p>
         </div>
-        <div class="text-center py-3">
-          <p class="font_big_title ma-0 ">4</p>
-          <p class="ma-0">예약 대기</p>
+        <div class="q_width flex d_col j_center a_center py-3">
+          <img src="~/assets/images/list_icon02.png" height="30">
+          <p class="font_small_text">예약대기 (4)</p>
         </div>
-        <div class="text-center py-3">
-          <p class="font_big_title ma-0 ">5</p>
-          <p class="ma-0">예약 취소</p>
+        <div class="q_width flex d_col j_center a_center py-3">
+          <img src="~/assets/images/list_icon03.png" height="30">
+          <p class="font_small_text">예약취소 (6)</p>
         </div>
-        <div class="text-center py-3">
-          <p class="font_big_title ma-0 ">6</p>
-          <p class="ma-0">저장</p>
+        <div class="q_width flex d_col j_center a_center py-3">
+          <img src="~/assets/images/list_icon04.png" height="30">
+          <p class="font_small_text">저장 (3)</p>
         </div>
       </div>
+
     </div>
 
     <div class="px-5">
@@ -100,6 +104,7 @@
       </v-sheet>
     </div>
   </div>
+  </div>
 </template>
 <script>
 export default {
@@ -142,5 +147,13 @@ export default {
 
 .reservation_item { border-radius:10px; }
 .reservation_status_items > div { background-color:#ddd; width:calc(25% - 20px); border-radius: 10px}
-
+.create_a {background: #4961e5; height: 60px; padding: 0 24px;}
+::v-deep .search_box .v-select__selection{color: #fff;}
+::v-deep .search_box .theme--light.v-icon{color: #fff;}
+::v-deep .search_box .v-input__slot:before {border-style: unset!important;}
+.progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 25px;}
+.progrma_option p {margin-top: 10px; margin-bottom: 0;}
+.sub_nav {margin-top: -7px;}
+::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
+.select-box {padding: 0 20px;}
 </style>

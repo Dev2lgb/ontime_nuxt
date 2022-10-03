@@ -1,5 +1,5 @@
 <template>
-  <div class="f_width">
+  <div class="f_width user_padding">
     <div class="flex j_start a_center">
       <div>
         <v-btn
@@ -10,9 +10,15 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </div>
-      <h3>새 예약 만들기 (1/4)</h3>
+      <h3>새 예약 만들기</h3>
     </div>
-    <div class="px-5">
+
+<div class="host_area">
+    <div class="user_nik">
+      <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (1/4)</p>
+    </div>
+
+    <div class="proceeding">
       <template>
         <v-progress-linear value="25"></v-progress-linear>
       </template>
@@ -23,46 +29,53 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+    <div class="">
       <div class="mb-7">
         <p class="font-weight-bold ma-0">국문과 별도로 영문 예약페이지가 필요하신 경우 아래 버튼을 클릭해주세요.</p>
         <div>
-          <v-switch v-model="is_en" true-value="Y" false-value="N" :label="$t('_host_booking_form1.label1')"></v-switch>
+          <v-switch v-model="is_en" true-value="Y" false-value="N" :label="$t('_host_booking_form1.label1')" ></v-switch>
         </div>
       </div>
+
+      <div class="titleform">
+        <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>기본정보</span>
+      </div>
+
       <div class="mb-7">
-        <p class="font-weight-bold ma-0">등록하시려는 예약의 상품명을 등록해주세요.</p>
-        <p class="font_small_text mt-1">상품명은 예약을 희망하는 참가자들에게 보여집니다.</p>
+        <p class="font-weight-bold">1. 등록하시려는 예약의 상품명을 등록해주세요.</p>
         <div>
-          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')"></v-text-field>
-          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')"></v-text-field>
+          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')" placeholder="대표 상품명을 입력해주세요." hide-details="auto"></v-text-field>
+          <div class="sized_box_h"></div>
+          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')" hide-details="auto"></v-text-field>
+          <p class="font_small_text mt-1">상품명은 예약을 희망하는 참가자들에게 보여집니다.</p>
         </div>
       </div>
       <div class="mb-7">
-        <div class="font-weight-bold ma-0 flex j_start a_center">
-          <span>예약 상품에 대한 간단한 소개를 입력해주세요.</span>
+        <div class="font-weight-bold flex j_start a_center">
+          <span>2. 예약 상품에 대한 간단한 소개를 입력해주세요.</span>
           <v-btn fab text small><v-icon>mdi-information</v-icon></v-btn>
         </div>
-        <p class="font_small_text mt-1">예약 프로그램을 다른 채널로 공유할 때 이미지와 함께 표시됩니다.</p>
         <div>
-          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')"></v-text-field>
-          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')"></v-text-field>
+          <v-text-field v-model="title" :error-messages="errors.title" outlined :label="$t('_host_booking_form1.label2')" hide-details="auto"></v-text-field>
+          <div class="sized_box_h"></div>
+          <v-text-field v-model="title_en" :error-messages="errors.title_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label3')" hide-details="auto"></v-text-field>
+          <p class="font_small_text mt-1">예약 프로그램을 다른 채널로 공유할 때 이미지와 함께 표시됩니다.</p>
         </div>
       </div>
       <div class="mb-7">
-        <div class="font-weight-bold ma-0 flex j_start a_center">
-          <span>예약 프로그램 해쉬태그를 입력해주세요.</span>
+        <div class="font-weight-bold flex j_start a_center">
+          <span>3. 예약 프로그램 해쉬태그를 입력해주세요.</span>
           <v-btn fab text small><v-icon>mdi-information</v-icon></v-btn>
         </div>
-        <p class="font_small_text mt-1">등록하시려는 예약 상품을 더욱 돋보이게 할 수 있습니다!</p>
         <div>
           <v-text-field
             placeholder="태그 입력 구분 최대 3개"
             outlined
             v-model="tagInput"
             @keydown.enter="updateTags"
+             hide-details="auto"
           ></v-text-field>
-
+          <p class="font_small_text mt-1">등록하시려는 예약 상품을 더욱 돋보이게 할 수 있습니다!</p>
           <div>
             <v-chip close v-for="(tag, keyIndex) in tags"
                     :key="keyIndex"
@@ -76,10 +89,9 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 flex j_start a_center">
-          <span>예약 상품의 대표이미지를 등록해주세요.</span>
+        <p class="font-weight-bold flex j_start a_center">
+          <span>4. 예약 상품의 대표이미지를 등록해주세요.</span>
         </p>
-        <p class="font_small_text mt-1">3MB 이하로 5개까지 첨부가 가능합니다.</p>
         <div class="flex j_center a_center border_a pa-3">
           <v-file-input
             v-model="images"
@@ -95,6 +107,7 @@
           </v-file-input>
           <v-btn depressed @click="handleFileImport">+ 대표 이미지 첨부하기</v-btn>
         </div>
+        <p class="font_small_text mt-1">3MB 이하로 5개까지 첨부가 가능합니다.</p>
         <div>
           <v-item-group
             v-model="selectedItem"
@@ -131,7 +144,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">등록하실 예약 상품의 카테고리를 선택해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-3">5. 등록하실 예약 상품의 카테고리를 선택해주세요.</p>
         <div class="border_a pa-3">
           <v-btn-toggle
             v-model="selectedItem"
@@ -154,19 +167,20 @@
         </div>
         <p class="font_small_text mt-3 mb-3">찾으시는 카테고리가 없으신가요?</p>
         <div>
-          <v-text-field outlined placeholder="카테고리 직접 입력"></v-text-field>
+          <v-text-field outlined placeholder="카테고리 직접 입력" hide-details="auto"></v-text-field>
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">등록하실 예약 상품에 대해 자세히 소개해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-3">6. 등록하실 예약 상품에 대해 자세히 소개해주세요.</p>
         <div>
-          <v-textarea v-model="content" :error-messages="errors.content" outlined :label="$t('_host_booking_form1.label4')"></v-textarea>
-          <v-textarea v-model="content_en" :error-messages="errors.content_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label5')"></v-textarea>
+          <v-textarea v-model="content" :error-messages="errors.content" outlined :label="$t('_host_booking_form1.label4')" hide-details="auto"></v-textarea>
+          <div class="sized_box_h"></div>
+          <v-textarea v-model="content_en" :error-messages="errors.content_en" :class="classEnField()" outlined :label="$t('_host_booking_form1.label5')" hide-details="auto"></v-textarea>
         </div>
       </div>
       <div class="mb-7">
         <div class="font-weight-bold ma-0 flex j_start a_center">
-          <span>등록하실 예약 상품의 온/오프라인 진행 여부를 선택해주세요.</span>
+          <span>7. 등록하실 예약 상품의 온/오프라인 진행 여부를 선택해주세요.</span>
           <v-btn fab text small><v-icon>mdi-information</v-icon></v-btn>
         </div>
         <div>
@@ -198,7 +212,7 @@
       </div>
       <div class="mb-7" v-show="selectedMethod == 'offline'">
         <p class="font-weight-bold ma-0 mb-3 flex j_start a_center">
-          예약프로그램이 진행되는 오프라인 장소를 알려주세요.
+          8. 예약프로그램이 진행되는 오프라인 장소를 알려주세요.
         </p>
         <div>
           <GoogleMap :coordinate="coordinate" class="mb-6" @update-coordinate="coordinate = $event"/>
@@ -252,14 +266,15 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           to="/host/booking/second"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
   </div>
+    </div>
 </template>
 <script>
 export default {

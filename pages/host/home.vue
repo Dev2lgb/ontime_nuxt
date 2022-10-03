@@ -1,65 +1,80 @@
 <template>
   <div>
     <HostHeader />
+    <div class="host_head pa-5">
+      <div class="host_area">
+        <div class="host_nik">
+        <p><span>관리자</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
+        </div>
+        <div class="host_create">
+          <p>예약이 필요 하신가요?</p>
+          <NuxtLink to="/host/booking" class="create_a">
+            <div class="create_btn">
+              <p>+ 새로운 예약 만들기</p>
+            </div>
+           </NuxtLink>
+
+        </div>
+      </div>
+    </div>
+    
     <div class="user_dashboard full_height j_start pa-5">
-      <div class="user_nik">
-       <p><span>관리자</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
+      
+    <div class="host_area">
+      <div class="progrma_area">
+        <p><v-icon color="#111">mdi-calendar-text</v-icon> 내 예약목록</p>
+        <p><span class="font-weight-bold">2개</span> 예약접수가 진행중입니다.</p>
       </div>
-        
-      <div class="f_width">
-        <h3>예약 관리자 페이지</h3>
-        <v-btn
-          block
-          depressed
-          tile
-          large
-          dark
-          color="#4455ff"
-          class="my-5"
-          to="/host/booking"
-        >+ 새로운 예약 만들기</v-btn>
-      </div>
-      <div class="f_width">
-        <h3 class="mb-3">내 예약 목록 (2)</h3>
-        <div class="f_width">
-          <div class="reservation_item border_a pa-3 mb-3" v-for="item in reservationItems" :key="item.id">
+
+      <div class="progrma_list">
+          <div class="reservation_item pa-3 mb-3" v-for="item in reservationItems" :key="item.id">
             <router-link :to="'/host/booking/' + item.id + '/dashboard'" class="non-deco">
             <div class="flex j_space a_center">
               <div>
-                <v-chip>{{ item.division }}</v-chip>
-                <v-chip>{{ item.status }}</v-chip>
+                <v-chip dark color="#4487fa" label small>{{ item.division }}</v-chip>
+                <v-chip dark color="#28b487" label small>{{ item.status }}</v-chip>
               </div>
-              <span>
+              <span class="view_icon">
                 <v-icon>mdi-eye</v-icon>
                 {{ item.hit }}
               </span>
             </div>
-            <div>
-              <p class="font_sub_title font-weight-bold ma-0 mt-2">{{ item.title }}</p>
-              <v-btn text small color="blue" class="pa-0">예약상품 ({{ item.goodsCount }})</v-btn>
+
+            <div class="list-area">
+              <div class="list_title">
+                <p>{{ item.title }}</p>
+                <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
+                <p>예약상품 ({{ item.goodsCount }})</p>
+              </div>
+              <div class="list_btbt">
+                <p>예약상품 ({{ item.goodsCount }})</p>
+              </div>
             </div>
-            <div class="flex j_space a_center reservation_status_items">
-              <div class="text-center py-3">
-                <p class="font_big_title ma-0">{{ item.count.fin }}</p>
-                <p class="ma-0">예약 확정</p>
+
+            <div class="flex j_space a_center mb-5 progrma_option">
+              <div class="q_width flex d_col j_center a_center py-3">
+                <img src="~/assets/images/list_icon01.png" height="30">
+                <p class="font_small_text">예약확정 ({{ item.count.fin }})</p>
               </div>
-              <div class="text-center py-3">
-                <p class="font_big_title ma-0 ">{{ item.count.ready }}</p>
-                <p class="ma-0">예약 대기</p>
+              <div class="q_width flex d_col j_center a_center py-3">
+                <img src="~/assets/images/list_icon02.png" height="30">
+                <p class="font_small_text">예약대기 ({{ item.count.ready }})</p>
               </div>
-              <div class="text-center py-3">
-                <p class="font_big_title ma-0 ">{{ item.count.cancel }}</p>
-                <p class="ma-0">예약 취소</p>
+              <div class="q_width flex d_col j_center a_center py-3">
+                <img src="~/assets/images/list_icon03.png" height="30">
+                <p class="font_small_text">예약취소 ({{ item.count.cancel }})</p>
               </div>
-              <div class="text-center py-3">
-                <p class="font_big_title ma-0 ">{{ item.count.saved }}</p>
-                <p class="ma-0">저장</p>
+              <div class="q_width flex d_col j_center a_center py-3">
+                <img src="~/assets/images/list_icon04.png" height="30">
+                <p class="font_small_text">저장 ({{ item.count.saved }})</p>
               </div>
             </div>
             </router-link>
-          </div>
+
         </div>
       </div>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -78,10 +93,22 @@ export default {
 </script>
 
 <style scoped>
-.reservation_item { border-radius:10px; }
+.reservation_item {border-bottom: 1px solid #ddd; }
 .reservation_status_items > div { background-color:#ddd; width:calc(25% - 20px); border-radius: 10px}
-.user_nik {margin: 60px 0 50px;}
-.user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px;}
-.user_nik p span {font-weight: bold; color: #435689;}
-  
+.progrma_area {display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 20px;}
+.progrma_area p {margin: 0;}
+.progrma_area p:first-child {font-weight: 700; font-size: 17px;}
+.progrma_area p:last-child {color: #818181;}
+.progrma_area p:last-child span {color: #111;}
+.progrma_list {margin: 20px 0; position: relative;}
+.view_icon {font-size: 14px; color: #818181;}
+.list-area {display: flex; justify-content: space-between;}
+.list_title p {font-size: 18px; font-weight: 700; margin: 10px 0 0}
+.list_title p:nth-child(2) {margin: 4px 0; font-size: 15px;}
+.list_title p:nth-child(3) {font-size: 14px; margin: 14px 0;}
+.list_lettbox {padding-bottom: 20px;}
+.progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 10px;}
+.progrma_option p {margin-top: 10px; margin-bottom: 0;}
+.list_btbt {background: #ef911b; padding: 12px 14px; color: #fff; border-radius: 10px; font-size: 13px; height: 45px; margin-top: 14px;}
+.list_btbt:hover {background: #df871a;}
 </style>

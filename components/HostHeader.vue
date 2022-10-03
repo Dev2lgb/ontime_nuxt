@@ -1,19 +1,20 @@
 <template>
   <div class="fixed_header">
     <v-app-bar
+      class="host_area"
       elevation="0"
-      color="#fff"
+      color="#173bb3"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" x-large></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" x-large  color="#fff"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-btn icon large>
-        <v-icon>mdi-bookmark-plus</v-icon>
+        <v-icon color="#fff">mdi-bookmark-plus</v-icon>
       </v-btn>
       <v-btn icon large>
-        <v-icon>mdi-filter</v-icon>
+        <v-icon color="#fff">mdi-filter</v-icon>
       </v-btn>
       <v-btn icon large>
-        <v-icon>mdi-tooltip-text</v-icon>
+        <v-icon color="#fff">mdi-tooltip-text</v-icon>
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer
@@ -94,4 +95,6 @@ export default {
   },
 }
 </script>
+<style scoped>
+</style>
 

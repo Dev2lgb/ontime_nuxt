@@ -1,5 +1,5 @@
 <template>
-  <div class="f_width">
+  <div class="f_width user_padding">
     <div class="flex j_start a_center">
       <div>
         <v-btn
@@ -11,9 +11,15 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
       </div>
-      <h3>새 예약 만들기 (3/4)</h3>
+      <h3>새 예약 만들기</h3>
     </div>
-    <div class="px-5">
+
+    <div class="host_area">
+    <div class="user_nik">
+      <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (3/4)</p>
+    </div>
+
+    <div class="proceeding">
       <template>
         <v-progress-linear value="75"></v-progress-linear>
       </template>
@@ -24,9 +30,13 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+    <div class="">
+      <div class="titleform">
+        <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>담당자정보</span>
+      </div>
+
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">예약 승인 유형을 선택해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-5">1. 예약 승인 유형을 선택해주세요.</p>
         <div>
           <v-btn-toggle
             v-model="selectedApprove"
@@ -38,16 +48,16 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="N"
             >
               <span class="font-weight-bold mr-3">자동</span>
               예약 신청과 동시에 예약이 확정됩니다.
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="Y"
             >
               <span class="font-weight-bold mr-3">수동</span>
@@ -57,7 +67,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">공개 여부를 선택해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-5">2. 공개 여부를 선택해주세요.</p>
         <div>
           <v-btn-toggle
             v-model="selectedOpen"
@@ -69,16 +79,16 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+             large
+              class="input_pd"
               value="N"
             >
               <span class="font-weight-bold mr-3">전체공개</span>
               온타임의 모든 접속자가 이 예약에 신청할 수 있어요.
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="Y"
             >
               <span class="font-weight-bold mr-3">부분공개</span>
@@ -88,7 +98,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">예약 신청 가능한 기간이 따로 있나요?</p>
+        <p class="font-weight-bold ma-0 mb-5">3. 예약 신청 가능한 기간이 따로 있나요?</p>
         <div class="mb-5">
           <v-btn-toggle
             v-model="selectedTerm"
@@ -100,15 +110,15 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="N"
             >
                 아니요, 없어요
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="Y"
             >
               네, 있어요
@@ -164,7 +174,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">예약 신청 가능한 최소 시간이 따로 있나요?</p>
+        <p class="font-weight-bold ma-0 mb-5">4. 예약 신청 가능한 최소 시간이 따로 있나요?</p>
         <div class="mb-5">
           <v-btn-toggle
             v-model="selectedMinTime"
@@ -176,15 +186,15 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="N"
             >
               아니요, 없어요
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              large
+              class="input_pd"
               value="Y"
             >
               네, 있어요
@@ -204,13 +214,14 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           to="/host/booking/fourth"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -241,4 +252,5 @@ export default {
 <style scoped>
 .sns_logo { width:60px; }
 .sns_input { width:calc(100% - 70px); }
+.input_pd {padding: 24px 16px!important; border: 1px solid #ddd!important;}
 </style>

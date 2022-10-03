@@ -52,7 +52,7 @@
 .global_wrap {display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
 .global_login_wrap {background: #eff2f6; display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
 .global_user_wrap {background: #eff2f6; display:flex; justify-content: center; align-items: flex-start; min-height:100vh; }
-.user_size_wrap { min-height: 100vh;align-items: center;justify-content: center;width: 100%;max-width: 580px;background: #fff;border-radius: 40px; }
+.user_size_wrap { min-height: 100vh;align-items: center;justify-content: center;width: 100%;max-width: 580px;background: #fff; }
 .phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 90vh; }
 .full_height { min-height:90vh; }
 /* form tag style */
@@ -77,4 +77,28 @@
 /* 공통 */
 .area_line {width: 100%; height: 14px; background: #f7f8fa; margin: 0 auto 30px;}
 
+/* 관리자 헤더 공통 */
+.host_head {background: #173bb3; height: 300px; position: relative; margin-bottom: 20px;}
+.host_area {padding: 0 16px; }
+.host_nik {margin: 60px 0 50px;}
+.host_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px; color: #fff;}
+.host_nik p span {font-weight: bold; color: #fff;}
+.host_create>p {margin: 0; font-size: 18px; color: #fff; letter-spacing: -1px; font-weight: 500;}
+.create_a {text-decoration: none; color: #fff!important; position: absolute; left: 40px; right: 40px; bottom: -30px;}
+.create_btn {height: 60px; line-height: 60px; font-size: 22px; background: #4961e5; text-align: center;}
+.create_btn p {font-size: 16px; margin: 0;}
+.host_create h3 {color: #fff;}
 
+/* 유저 헤더 공통 */
+.user_padding {padding: 0 20px 40px;}
+.user_nik {margin: 60px 0 50px;}
+.user_nik p {font-size: 24px; font-weight: 500; letter-spacing: -1px;}
+.user_nik p span {font-weight: 800; color: #28b487;}
+.user_nik p span span {color: #4487fa;}
+
+/* 예약만들기 공통 */
+.proceeding {margin-bottom: 20px;}
+.sized_box_h {height: 10px;}
+.titleform {flex-shrink: 0; display: flex; white-space: nowrap; text-align: center; border: 0px;  margin: 14px 0 20px; font-weight: bold;}
+.titleform span {display: inline-block; padding-left: calc(0.3rem); padding-right: calc(1rem); color: #757575;}
+.titleform::after {position: relative;  width: 100%; border-top: thin solid rgba(58, 53, 65, 0.12); top: 50%; content: ""; transform: translateY(50%);}
