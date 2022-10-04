@@ -13,7 +13,6 @@
       </div>
       <h3>새 예약 만들기</h3>
     </div>
-
     <div class="host_area">
     <div class="user_nik">
       <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (3/4)</p>
@@ -39,7 +38,8 @@
         <p class="font-weight-bold ma-0 mb-5">1. 예약 승인 유형을 선택해주세요.</p>
         <div>
           <v-btn-toggle
-            v-model="selectedApprove"
+            v-model="form.is_booking_confirm"
+            :error-messages="errors.is_booking_confirm"
             color="primary"
             group
             outlined
@@ -50,7 +50,7 @@
             <v-btn
               large
               class="input_pd"
-              value="N"
+              value="Y"
             >
               <span class="font-weight-bold mr-3">자동</span>
               예약 신청과 동시에 예약이 확정됩니다.
@@ -58,7 +58,7 @@
             <v-btn
               large
               class="input_pd"
-              value="Y"
+              value="N"
             >
               <span class="font-weight-bold mr-3">수동</span>
               관리자의 승인 후 예약이 확정됩니다.
@@ -70,7 +70,8 @@
         <p class="font-weight-bold ma-0 mb-5">2. 공개 여부를 선택해주세요.</p>
         <div>
           <v-btn-toggle
-            v-model="selectedOpen"
+            v-model="form.is_public"
+            :error-messages="errors.is_public"
             color="primary"
             group
             outlined
@@ -81,7 +82,7 @@
             <v-btn
              large
               class="input_pd"
-              value="N"
+              value="Y"
             >
               <span class="font-weight-bold mr-3">전체공개</span>
               온타임의 모든 접속자가 이 예약에 신청할 수 있어요.
@@ -89,7 +90,7 @@
             <v-btn
               large
               class="input_pd"
-              value="Y"
+              value="N"
             >
               <span class="font-weight-bold mr-3">부분공개</span>
               별도의 코드를 전달받은 예약자만 신청할 수 있어요.
@@ -101,7 +102,8 @@
         <p class="font-weight-bold ma-0 mb-5">3. 예약 신청 가능한 기간이 따로 있나요?</p>
         <div class="mb-5">
           <v-btn-toggle
-            v-model="selectedTerm"
+            v-model="form.is_booking_available_period"
+            :error-messages="errors.is_booking_available_period"
             color="primary"
             group
             outlined
@@ -125,7 +127,7 @@
             </v-btn>
           </v-btn-toggle>
         </div>
-        <div class="mb-1" v-show="selectedTerm == 'Y'">
+        <div class="mb-1" v-show="form.is_booking_available_period == 'Y'">
           <p class="font_small_text mb-1">예약 신청 가능일자 선택</p>
           <div class="flex j_start a_center">
             <v-menu
@@ -139,7 +141,8 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="dates"
+                  v-model="form.booking_available_period"
+                  :error-messages="errors.booking_available_period"
                   prepend-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
@@ -147,7 +150,7 @@
                 ></v-text-field>
               </template>
               <v-date-picker
-                v-model="dates"
+                v-model="form.booking_available_period"
                 no-title
                 locale="ko"
                 range
@@ -177,7 +180,8 @@
         <p class="font-weight-bold ma-0 mb-5">4. 예약 신청 가능한 최소 시간이 따로 있나요?</p>
         <div class="mb-5">
           <v-btn-toggle
-            v-model="selectedMinTime"
+            v-model="form.is_booking_available_hour"
+            :error-messages="errors.is_booking_available_hour"
             color="primary"
             group
             outlined
@@ -201,9 +205,12 @@
             </v-btn>
           </v-btn-toggle>
         </div>
-        <div class="mb-1" v-show="selectedMinTime == 'Y'">
+        <div class="mb-1" v-show="form.is_booking_available_hour == 'Y'">
           <v-select
-            v-model="min_time" :items="minTimeItems" outlined
+            v-model="form.booking_available_hour"
+            :error-messages="errors.booking_available_hour"
+            :items="minTimeItems"
+            outlined
             item-text="text"
             item-value="value"
           ></v-select>
@@ -217,7 +224,7 @@
           x-large
           dark
           color="#1976d2"
-          to="/host/booking/fourth"
+          @click="nextForm"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
@@ -233,6 +240,8 @@ export default {
     selectedOpen: 'N',
     selectedApprove: 'N',
     dates: [],
+    errors: [],
+    form: {},
     menu: false,
     min_time: '1',
     minTimeItems: [
@@ -243,8 +252,47 @@ export default {
       {text: '예약시간 5시간 전', value: '5'},
     ],
   }),
+  mounted() {
+    this.setBeforeData();
+  },
   methods: {
+    classEnField() {
+      if(this.form.is_en == 'Y') {
+        return 'show_field';
+      } else {
+        return 'en_field';
+      }
+    },
+    async nextForm() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/3';
+        let method = 'post';
 
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          localStorage.setItem('bookingForm', JSON.stringify(this.form));
+          this.$router.push('/host/booking/fourth');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    setBeforeData() {
+      if (localStorage.getItem('bookingForm')) {
+        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      }
+    }
   },
 }
 </script>

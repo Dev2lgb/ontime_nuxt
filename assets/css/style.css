@@ -58,6 +58,7 @@
 /* form tag style */
 
 .non-deco { text-decoration: none; color:#000 !important; }
+.en_field { display:none !important; }
 
 .outlined_btn_group button { border:1px solid #222!important; width:calc(20% - 8px); padding:5px 10px !important; border-radius: 5px !important; }
 .outlined_btn_group button.active { background-color:#111 !important; color:#fff !important; }

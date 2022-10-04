@@ -56,9 +56,9 @@
             <v-btn fab text small><v-icon>mdi-information</v-icon></v-btn>
           </div>
           <div>
-            <v-text-field v-model="content" :error-messages="errors.content" outlined label="예약 상품의 간단 소개를 입력하세요." hide-details="auto"></v-text-field>
+            <v-text-field v-model="form.content" :error-messages="errors.content" outlined label="예약 상품의 간단 소개를 입력하세요." hide-details="auto"></v-text-field>
             <div class="sized_box_h"></div>
-            <v-text-field v-model="content_en" :error-messages="errors.content_en" :class="classEnField()" outlined label="예약 상품의 간단 소개를 입력하세요." hide-details="auto"></v-text-field>
+            <v-text-field v-model="form.content_en" :error-messages="errors.content_en" :class="classEnField()" outlined label="예약 상품의 간단 소개를 입력하세요." hide-details="auto"></v-text-field>
             <p class="font_small_text mt-1">예약 프로그램을 다른 채널로 공유할 때 이미지와 함께 표시됩니다.</p>
           </div>
         </div>
@@ -248,7 +248,7 @@
             <v-text-field hide-details="auto" v-model="form.online_text" :error-messages="errors.online_text" outlined placeholder="플랫폼 직접 입력"></v-text-field>
           </div>
         </div>
-        <div class="mb-7" v-show="selectedMethod == 'online'">
+        <div class="mb-7" v-show="form.on_off_line == 'ONLINE'">
           <div class="font-weight-bold ma-0 flex j_start a_center">
             <span>링크 입력</span>
           </div>
@@ -401,5 +401,4 @@ export default {
 .active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
 .deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
-.en_field { display:none !important; }
 </style>

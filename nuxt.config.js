@@ -36,6 +36,7 @@ export default {
     { src: '@/plugins/vue-awesome-swiper', mode: 'client' },
     { src: '@/plugins/api.js', mode: 'client' },
     { src: '@/plugins/google-map.js', mode: 'client' },
+    { src: '@/plugins/main.js', mode: 'client' },
   ],
 
 

@@ -13,7 +13,6 @@
       </div>
       <h3>새 예약 만들기</h3>
     </div>
-
     <div class="host_area">
     <div class="user_nik">
       <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (4/4)</p>
@@ -39,7 +38,8 @@
         <p class="font-weight-bold ma-0 mb-5">1. 리마인드 메일을 발송할까요?</p>
         <div>
           <v-btn-toggle
-            v-model="selectedMail"
+            v-model="form.is_send_remind_email"
+            :error-messages="errors.is_send_remind_email"
             color="primary"
             group
             outlined
@@ -50,14 +50,14 @@
             <v-btn
                large
               class="input_pd"
-              value="N"
+              value="Y"
             >
               <span class="font-weight-bold">발송</span>
             </v-btn>
             <v-btn
                large
               class="input_pd"
-              value="Y"
+              value="N"
             >
               <span class="font-weight-bold">발송 안함</span>
             </v-btn>
@@ -69,7 +69,8 @@
         <p class="font_small_text mt-1">이름, 성별, 이메일주소, 휴대폰연락는 기본으로 수집됩니다.</p>
         <div class="border_a pa-3">
           <v-btn-toggle
-            v-model="selectedInfos"
+            v-model="form.collect_user_infos"
+            :error-messages="errors.collect_user_infos"
             multiple
             color="primary"
             group
@@ -104,7 +105,7 @@
         <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
         <div class="flex j_center a_center border_a pa-3">
           <v-file-input
-            v-model="files"
+            v-model="form.files"
             label="파일명"
             multiple
             id="ImageFileUpload"
@@ -133,7 +134,7 @@
           x-large
           dark
           color="#1976d2"
-          to="/host/booking/fourth"
+          @click="submitForm"
         >새 예약 등록완료</v-btn>
       </div>
     </div>
@@ -149,6 +150,8 @@ export default {
     questionItems: [
       {id: ''},
     ],
+    form: {},
+    errors:[],
     getInfoItems: [
       { text: '영문 이름' },
       { text: '영문 성' },
@@ -162,6 +165,9 @@ export default {
     files: [],
     filesNames: [],
   }),
+  mounted() {
+    this.setBeforeData();
+  },
   methods: {
     handleFileImport() { //파일업로드 버튼
       let fileUpload = document.getElementById('ImageFileUpload')
@@ -188,6 +194,44 @@ export default {
       this.files.splice(index, 1);
       this.filesNames.splice(index, 1);
     },
+    classEnField() {
+      if(this.form.is_en == 'Y') {
+        return 'show_field';
+      } else {
+        return 'en_field';
+      }
+    },
+    async submitForm() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/4';
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          localStorage.clear('bookingForm');
+          this.$toast.success('예약상품이 등록되었습니다.');
+          this.$router.push('/host/home');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    setBeforeData() {
+      if (localStorage.getItem('bookingForm')) {
+        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      }
+    }
   },
 }
 </script>
