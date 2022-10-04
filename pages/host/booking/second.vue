@@ -1,5 +1,6 @@
 <template>
   <div class="f_width user_padding">
+
     <div class="flex j_start a_center">
       <div>
         <v-btn
@@ -67,7 +68,7 @@
             <v-text-field outlined placeholder="홈페이지 (http://ontimeworld.kr)" ></v-text-field>
           </div>
         </div>
-      
+
       <div class="mb-7">
         <p class="font-weight-bold ma-0 mb-5">2. SNS채널 추가</p>
         <div class="sns_tab">
@@ -158,6 +159,7 @@
         >다음 단계로 이동</v-btn>
       </div>
     </div>
+  {{ beforeForm }}
   </div>
   </div>
 </template>
@@ -165,6 +167,7 @@
 export default {
   layout: 'host',
   data: () => ({
+    beforeForm: localStorage.getItem('bookingForm'),
     selectedTimeDivision: 'N',
     nationalPhoneItems: [
       { name: '대한민국(+82)', value: '+082' },
