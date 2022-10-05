@@ -29,27 +29,66 @@
           row
         >
           <v-radio label="30분" value="30"></v-radio>
-          <v-radio label="60분" value="30"></v-radio>
-          <v-radio label="120분" value="30"></v-radio>
+          <v-radio label="60분" value="60"></v-radio>
+          <v-radio label="120분" value="120"></v-radio>
           <v-radio label="직접입력" value="0"></v-radio>
         </v-radio-group>
         <v-text-field v-show="form.interval_minute == '0'" v-model="form.interval_minute" type="number" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
       </div>
     </div>
     <div class="mb-7">
-      <p class="font-weight-bold ma-0 mb-3">시간 당 예약가능 수량(인원)을 입력해주세요.</p>
+      <p class="font-weight-bold ma-0 mb-3">예약가능한 최소-최대 선택 갯수 을 설정해주세요.</p>
       <div>
-        <v-select
-          v-model="selectedQuantity"
-          :items="QuantityItems"
-          item-text="text"
-          item-value="value"
+        <v-btn-toggle
+          color="primary"
+          v-model="form.booking_time_number"
+          group
           outlined
+          mandatory
           dense
-          hide-details="auto"
-          placeholder="단위 선택"
-        ></v-select>
-        <v-text-field v-show="selectedQuantity == 'Y'" type="number" suffix="명" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+          class="d-flex flex-wrap justify-start align-center"
+        >
+          <v-btn
+            style="border:1px solid #ccc; border-radius:10px"
+            class="ma-1"
+            value="N"
+          >
+            제한 없어요.
+          </v-btn>
+          <v-btn
+            style="border:1px solid #ccc; border-radius:10px"
+            class="ma-1"
+            value="Y"
+          >
+            직접입력
+          </v-btn>
+        </v-btn-toggle>
+
+        <div class="flex j_center a_center mt-3" v-show="form.booking_time_number == 'Y'">
+          <v-select
+            class="h_width"
+            :items="time_number_items"
+            v-model="form.min_booking_time_number"
+            item-text="text"
+            item-value="value"
+            outlined
+            dense
+            hide-details="auto"
+            placeholder="최소 1개 타임"
+          ></v-select>
+
+          <v-select
+            class="h_width ml-3"
+            :items="time_number_items"
+            v-model="form.max_booking_time_number"
+            item-text="text"
+            item-value="value"
+            outlined
+            dense
+            hide-details="auto"
+            placeholder="최대 1개 타임"
+          ></v-select>
+        </div>
       </div>
     </div>
     <div class="mb-7">
@@ -112,8 +151,16 @@
 
 <script>
 export default {
+  props: ['errors'],
   data: () => ({
     form: [],
+    time_number_items: [
+      { text: '1', value: '1' },
+      { text: '2', value: '2' },
+      { text: '3', value: '3' },
+      { text: '4', value: '4' },
+      { text: '5', value: '5' },
+    ],
   })
 }
 </script>

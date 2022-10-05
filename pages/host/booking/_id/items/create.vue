@@ -55,7 +55,7 @@
               style="border:1px solid #ccc; border-radius:10px"
               block
               class="ma-1 col_content_btn"
-              value="date"
+              value="term"
             >
               <p class="font-weight-bold ma-0 mb-2">기간 선택형 예약</p>
               <p>
