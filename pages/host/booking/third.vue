@@ -245,11 +245,11 @@ export default {
     menu: false,
     min_time: '1',
     minTimeItems: [
-      {text: '예약시간 1시간 전', value: '1'},
-      {text: '예약시간 2시간 전', value: '2'},
-      {text: '예약시간 3시간 전', value: '3'},
-      {text: '예약시간 4시간 전', value: '4'},
-      {text: '예약시간 5시간 전', value: '5'},
+      {text: '예약시간 1시간 전', value: 1},
+      {text: '예약시간 2시간 전', value: 2},
+      {text: '예약시간 3시간 전', value: 3},
+      {text: '예약시간 4시간 전', value: 4},
+      {text: '예약시간 5시간 전', value: 5},
     ],
   }),
   mounted() {

@@ -237,7 +237,7 @@
                 v-for="(item, i) in onlineItems" :key="i"
                 style="border:1px solid #ccc; border-radius:10px"
                 class="ma-1"
-                :value="item.text"
+                :value="item.value"
               >
                 {{ item.text }}
               </v-btn>
