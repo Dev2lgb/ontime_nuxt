@@ -51,6 +51,18 @@
                 예약자는 원하는 상품의 날짜만 선택하면 돼요.
               </p>
             </v-btn>
+            <v-btn
+              style="border:1px solid #ccc; border-radius:10px"
+              block
+              class="ma-1 col_content_btn"
+              value="date"
+            >
+              <p class="font-weight-bold ma-0 mb-2">기간 선택형 예약</p>
+              <p>
+                관리자는 날짜나 시간단위의 최소-최대 기간을 설정하여 예약을 받아요.<br >
+                예약자는 우너하는 상품의 시작 &middot; 종료 시점을 선택할 수 있어요.
+              </p>
+            </v-btn>
           </v-btn-toggle>
         </div>
       </div>

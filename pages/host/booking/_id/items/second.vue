@@ -25,159 +25,9 @@
       </div>
     </div>
     <div class="pa-5">
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">지금 선택하신 상품은 어떤 예약인가요?</p>
-        <div class="border_a pa-3" v-show="form.type == 'time'">
-          <p class="font-weight-bold ma-0 mb-2">날짜&시간 선택형 예약</p>
-          <p>
-            관리자는 원하는 날짜를 시간 또는 분 단위로 나누어 예약을 받아요.<br/>
-            예약자는 원하는 상품의 날짜와 시간을 선택할 수 있어요.
-          </p>
-        </div>
-        <div class="border_a pa-3" v-show="form.type == 'date'">
-          <p class="font-weight-bold ma-0 mb-2">날짜 선택형 예약</p>
-          <p>
-            관리자는 시간 설정 없이 하루 단위로만 예약을 받아요.<br/>
-            예약자는 원하는 상품의 날짜만 선택하면 돼요.
-          </p>
-        </div>
-      </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">예약 시작과 종료시간을 알려주세요.</p>
-        <div class="flex j_space a_center">
-          <div class="h_width">
-            <v-select v-model="form.start_time" :error-messages="errors.start_time" :items="timeItems" outlined dense hide-details="auto" placeholder="시작시간"></v-select>
-          </div>
-          <div class="h_width ml-3">
-            <v-select v-model="form.end_time" :error-messages="errors.end_time" :items="timeItems" outlined dense hide-details="auto" placeholder="종료시간"></v-select>
-          </div>
-        </div>
-      </div>
-<!--      <div class="mb-7">-->
-<!--        <p class="font-weight-bold ma-0 mb-3">휴게시간이 있나요?</p>-->
-<!--        <div>-->
-<!--          <v-btn-toggle-->
-<!--            color="primary"-->
-<!--            v-model="selectedRest"-->
-<!--            group-->
-<!--            mandatory-->
-<!--            outlined-->
-<!--            dense-->
-<!--            class="d-flex flex-wrap justify-start align-center"-->
-<!--          >-->
-<!--            <v-btn-->
-<!--              style="border:1px solid #ccc; border-radius:10px"-->
-<!--              value="N"-->
-<!--            >-->
-<!--              아니오, 없어요-->
-<!--            </v-btn>-->
-<!--            <v-btn-->
-<!--              style="border:1px solid #ccc; border-radius:10px"-->
-<!--              value="Y"-->
-<!--            >-->
-<!--              예, 있어요-->
-<!--            </v-btn>-->
-<!--          </v-btn-toggle>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="mb-7" v-show="selectedRest == 'Y'">-->
-<!--        <p class="ma-0 mb-3">휴게시간 설정</p>-->
-<!--        <div class="flex j_space a_center">-->
-<!--          <div class="h_width">-->
-<!--            <v-select :items="timeItems" outlined dense hide-details="auto" placeholder="시작시간"></v-select>-->
-<!--          </div>-->
-<!--          <div class="h_width ml-3">-->
-<!--            <v-select :items="timeItems" outlined dense hide-details="auto" placeholder="종료시간"></v-select>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">몇 시간 단위로 예약을 받으세요?</p>
-        <div>
-          <v-select
-            v-model="form.interval_minute"
-            :items="timeUnitItems"
-            item-text="text"
-            item-value="value"
-            outlined
-            dense
-            hide-details="auto"
-            placeholder="단위 선택"
-          ></v-select>
-          <v-text-field v-show="form.interval_minute == '0'" v-model="form.interval_minute" type="number" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-        </div>
-      </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">시간 당 예약가능 수량(인원)을 입력해주세요.</p>
-        <div>
-          <v-select
-            v-model="selectedQuantity"
-            :items="QuantityItems"
-            item-text="text"
-            item-value="value"
-            outlined
-            dense
-            hide-details="auto"
-            placeholder="단위 선택"
-          ></v-select>
-          <v-text-field v-show="selectedQuantity == 'Y'" type="number" suffix="명" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-        </div>
-      </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">예약가능한 최소-최대 시간을 설정해주세요.</p>
-        <div>
-          <v-select
-            v-model="selectedMaxMinTime"
-            :items="MaxMinTimeItems"
-            item-text="text"
-            item-value="value"
-            outlined
-            dense
-            hide-details="auto"
-            placeholder="최소/최대 시간 선택"
-          ></v-select>
-          <div class="flex j_space a_center" v-show="selectedMaxMinTime == 'Y'">
-            <div class="h_width">
-              <v-text-field type="number" prefix="최소" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-            </div>
-            <div class="h_width ml-2">
-              <v-text-field type="number" prefix="최대" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">하나의 계정으로 최대 몇 명을 예약할 수 있나요?</p>
-        <div>
-          <v-select
-            v-model="selectedMaxMinMan"
-            :items="MaxMinManItems"
-            item-text="text"
-            item-value="value"
-            outlined
-            dense
-            hide-details="auto"
-            placeholder="예약인원설정 선택"
-          ></v-select>
-          <div class="flex j_space a_center mt-3" v-show="selectedMaxMinMan == '0'">
-            <div class="h_width">
-              <v-select
-                item-text="text"
-                item-value="value"
-                outlined
-                dense
-                hide-details="auto"
-                v-model="selectedMaxMinOption"
-                :items="MaxMinOptionItems"
-              ></v-select>
-            </div>
-            <div class="h_width ml-2" v-show="selectedMaxMinOption == 0">
-              <v-text-field type="number" prefix="최대" suffix="명" outlined hide-details="auto" dense></v-text-field>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BookingOptionTime @formData="getFormData()" v-show="form.type == 'time'" />
+      <BookingOptionDate @formData="getFormData()" v-show="form.type == 'date'" />
+      <BookingOptionTerm @formData="getFormData()" v-show="form.type == 'term'" />
 
       <div class="pt-10">
         <v-btn
@@ -194,7 +44,9 @@
   </div>
 </template>
 <script>
+import BookingOptionTime from "../../../../../components/BookingOptionTime";
 export default {
+  components: {BookingOptionTime},
   layout: 'host',
   async fetch() {
     this.loading = true;
@@ -284,6 +136,9 @@ export default {
       } else {
         return 'en_field';
       }
+    },
+    getFormData(formData) {
+      this.form = _.merge({}, this.form, formData)
     },
   },
 }
