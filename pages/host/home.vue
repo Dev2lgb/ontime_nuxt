@@ -17,9 +17,9 @@
         </div>
       </div>
     </div>
-    
+
     <div class="user_dashboard full_height j_start pa-5">
-      
+
     <div class="host_area">
       <div class="progrma_area">
         <p><v-icon color="#111">mdi-calendar-text</v-icon> 내 예약목록</p>
@@ -74,7 +74,7 @@
         </div>
       </div>
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -82,6 +82,7 @@
 <script>
 export default {
   layout: 'host',
+
   data: () => ({
     reservationItems: [
       { id:'123', status:'진행중', title: '[교육] 사찰예절 배움 템플스테이 해맞이...', hit:'311', division:'online', goodsCount:'3', count:{ fin: '4', ready: '5', cancel: '6', saved: '7'} },

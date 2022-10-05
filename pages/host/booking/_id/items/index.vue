@@ -8,47 +8,55 @@
         </div>
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
-
-          <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
-          </v-tabs>
-          
+          <HostTabMenu />
         </div>
       </div>
     </div>
+    <div class="user_dashboard full_height j_start">
+      <div class="select-box">
+        <v-select
+          outlined hide-details="auto"
+          dense
+          v-model="selectedBooking"
+          @change="setInitial"
+          :items="bookings"
+          item-text="text"
+          item-value="value"
+        ></v-select>
+      </div>
 
-<div class="user_dashboard full_height j_start pa-5">
-    <div class="select-box">
-      <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
-        item-text="title"
-        item-value="id"
-      ></v-select>
+      <div class="pa-5">
+        <h3>등록된 예약 상품 (3)</h3>
+        <v-btn outlined color="blue" class="mt-3" :to="'/host/booking/' + this.selectedBooking + '/items/create'">+ 예약상품 등록</v-btn>
+      </div>
     </div>
-
-    <div class="pa-5">
-      <h3>등록된 예약 상품 (3)</h3>
-      <v-btn outlined color="blue" class="mt-3" :to="'/host/booking/' + this.$route.params.id + '/items/create'">+ 예약상품 등록</v-btn>
-    </div>
-
-
-    
-  </div>
   </div>
 </template>
 <script>
+import HostTabMenu from "../../../../../components/HostTabMenu";
 export default {
+  components: {HostTabMenu},
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/items';
+      const response = await this.$axios.get(url);
+      this.bookings = response.data;
+      console.log(response);
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        // console.log(e);
+        this.$toast.error(e.response.data.message);
+      }
+    }
+  },
+  mounted() {
+  },
   data: () => ({
-    selectedItem: '125',
-    reservation_items: [
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '125' },
-      { title: '[전시] 사찰예절 배움 템플스테이 해맞이', id: '126' },
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
-    ],
+    selectedBooking: '125',
+    bookings: [],
   }),
   methods: {
 

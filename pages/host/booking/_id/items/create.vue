@@ -30,7 +30,8 @@
         <div>
           <v-btn-toggle
             color="primary"
-            v-model="selectedType"
+            v-model="form.type"
+            :error-messages="errors.type"
             group
             mandatory
             outlined
@@ -41,7 +42,7 @@
               style="border:1px solid #ccc; border-radius:10px"
               class="ma-1 col_content_btn"
               block
-              value="option1"
+              value="time"
             >
               <p class="font-weight-bold ma-0 mb-2">날짜&시간 선택형 예약</p>
               <p>
@@ -53,7 +54,7 @@
               style="border:1px solid #ccc; border-radius:10px"
               block
               class="ma-1 col_content_btn"
-              value="option2"
+              value="date"
             >
               <p class="font-weight-bold ma-0 mb-2">날짜 선택형 예약</p>
               <p>
@@ -70,6 +71,8 @@
           <v-text-field
             placeholder="예약 상품명 입력"
             outlined
+            v-model="form.title"
+            :error-messages="errors.title"
           ></v-text-field>
         </div>
       </div>
@@ -79,6 +82,8 @@
           <v-text-field
             placeholder="예약 상품 소개 글 입력 "
             outlined
+            v-model="form.desc"
+            :error-messages="errors.desc"
           ></v-text-field>
         </div>
       </div>
@@ -91,7 +96,7 @@
           large
           dark
           color="#4455ff"
-          :to="'/host/booking/' + this.$route.params.id + '/items/second'"
+          @click="nextForm"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
@@ -100,11 +105,69 @@
 <script>
 export default {
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/' + this.$route.params.id + '/options/init';
+      const response = await this.$axios.get(url);
+      this.timezoneItems = response.data.timezoneItems;
+
+      this.setBeforeData();
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+      }
+    }
+  },
   data: () => ({
     selectedType: 'option1',
+    form: {
+      booking_id: '',
+    },
+    errors: [],
   }),
-  methods: {
+  watch: {
+    isEngBookForm(val) {
+      if (val) {
+        let enInput = document.getElementsByClassName('en_input');
 
+      }
+    },
+  },
+  methods: {
+    async nextForm() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/options/1';
+        let method = 'post';
+
+        this.form.booking_id = this.$route.params.id;
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          localStorage.setItem('bookingOptionForm', JSON.stringify(this.form));
+          this.$router.push('/host/booking/' + this.$route.params.id + '/items/second');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    setBeforeData() {
+      if (localStorage.getItem('bookingOptionForm')) {
+        this.form = JSON.parse(localStorage.getItem('bookingOptionForm'));
+      }
+    }
   },
 }
 </script>

@@ -9,19 +9,13 @@
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
 
-          <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
-            <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
-          </v-tabs>
-          
+          <HostTabMenu />
+
         </div>
       </div>
     </div>
 
-<div class="user_dashboard full_height j_start pa-5">
+<div class="user_dashboard full_height j_start">
     <div class="select-box">
       <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservationItems"
                 item-text="title"

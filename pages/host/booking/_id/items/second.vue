@@ -27,41 +27,12 @@
     <div class="pa-5">
       <div class="mb-7">
         <p class="font-weight-bold ma-0 mb-3">지금 선택하신 상품은 어떤 예약인가요?</p>
-        <div>
-          <v-btn-toggle
-            color="primary"
-            v-model="selectedType"
-            group
-            mandatory
-            outlined
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1 col_content_btn"
-              block
-              value="option1"
-            >
-              <p class="font-weight-bold ma-0 mb-2">날짜&시간 선택형 예약</p>
-              <p>
-                관리자는 원하는 날짜를 시간 또는 분 단위로 나누어 예약을 받아요.<br/>
-                예약자는 원하는 상품의 날짜와 시간을 선택할 수 있어요.
-              </p>
-            </v-btn>
-            <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              block
-              class="ma-1 col_content_btn"
-              value="option2"
-            >
-              <p class="font-weight-bold ma-0 mb-2">날짜 선택형 예약</p>
-              <p>
-                관리자는 시간 설정 없이 하루 단위로만 예약을 받아요.<br/>
-                예약자는 원하는 상품의 날짜만 선택하면 돼요.
-              </p>
-            </v-btn>
-          </v-btn-toggle>
+        <div class="border_a pa-3">
+          <p class="font-weight-bold ma-0 mb-2">날짜&시간 선택형 예약</p>
+          <p>
+            관리자는 원하는 날짜를 시간 또는 분 단위로 나누어 예약을 받아요.<br/>
+            예약자는 원하는 상품의 날짜와 시간을 선택할 수 있어요.
+          </p>
         </div>
       </div>
       <div class="mb-7">
