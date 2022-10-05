@@ -15,7 +15,7 @@
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
     </v-app-bar>
-    
+
   </div>
 </template>
 

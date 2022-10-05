@@ -1,6 +1,6 @@
 <template>
   <div class="f_width">
-    <HostSubHeader />
+    <HostSubHeader :title="대시보드"/>
     <div class="host_head pa-5">
       <div class="host_area">
         <div class="host_nik">
@@ -9,14 +9,14 @@
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
 
-          <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
+          <v-tabs :show-arrows="false" class="sub_nav f_width" height="50" slider-color="#fff" color="#fff" dark>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
           </v-tabs>
-          
+
         </div>
       </div>
     </div>
