@@ -10,7 +10,7 @@
       <v-btn icon large>
         <v-icon>mdi-bookmark-plus</v-icon>
       </v-btn>
-      <v-btn icon large>
+      <v-btn icon large to="/sevice_code">
         <v-icon>mdi-filter</v-icon>
       </v-btn>
       <v-btn icon large>
