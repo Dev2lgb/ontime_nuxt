@@ -7,7 +7,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" x-large  color="#fff"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
-      <v-btn icon large>
+      <v-btn icon large to="/my-bookmark">
         <v-icon color="#fff">mdi-bookmark-plus</v-icon>
       </v-btn>
       <v-btn icon large>

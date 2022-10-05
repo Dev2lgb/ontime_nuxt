@@ -1,33 +1,31 @@
 <template>
   <div class="f_width">
-    <HostSubHeader />
-    <div class="host_head pa-5">
+    <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
+    <div class="host_head px-5 pt-5">
       <div class="host_area">
         <div class="host_nik">
         <p><span>관리자</span> 님, 예약관련하여<br>메세지를 확인해 주세요.</p>
         </div>
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
-
           <HostTabMenu />
-
         </div>
       </div>
     </div>
 
-<div class="user_dashboard full_height j_start">
-    <div class="select-box">
-      <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
-        item-text="title"
-        item-value="id"
-      ></v-select>
-    </div>
+    <div class="user_dashboard full_height j_start">
+      <div class="select-box">
+        <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
+          item-text="title"
+          item-value="id"
+        ></v-select>
+      </div>
 
-    <div class="pa-5">
-      <h3>진행중인 메세지만 표시됩니다.</h3>
-      <v-btn text color="blue" class="pa-0">메세지창 편집</v-btn>
+      <div class="pa-5">
+        <h3>진행중인 메세지만 표시됩니다.</h3>
+        <v-btn text color="blue" class="pa-0">메세지창 편집</v-btn>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 <script>

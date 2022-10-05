@@ -1,19 +1,8 @@
 <template>
   <div class="f_width">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          exact
-          :to="'/host/booking/' + this.$route.params.id + '/items'"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </div>
-      <h3>새 예약 상품 등록 (1/4)</h3>
-    </div>
-    <div class="px-5">
+    <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items'"/>
+
+    <div class="px-5 mt-16">
       <template>
         <v-progress-linear value="25"></v-progress-linear>
       </template>
@@ -71,8 +60,19 @@
           <v-text-field
             placeholder="예약 상품명 입력"
             outlined
+            hide-details="auto"
             v-model="form.title"
             :error-messages="errors.title"
+          ></v-text-field>
+
+          <v-text-field
+            placeholder="영문 예약 상품명 입력"
+            outlined
+            class="mt-3"
+            hide-details="auto"
+            v-model="form.title_en"
+            :error-messages="errors.title_en"
+            :class="classEnField()"
           ></v-text-field>
         </div>
       </div>
@@ -80,10 +80,20 @@
         <p class="font-weight-bold ma-0 mb-3">예약 상품 소개글을 간단히 입력해주세요.</p>
         <div>
           <v-text-field
-            placeholder="예약 상품 소개 글 입력 "
+            placeholder="예약 상품 소개 글 입력"
             outlined
+            hide-details="auto"
             v-model="form.desc"
             :error-messages="errors.desc"
+          ></v-text-field>
+          <v-text-field
+            placeholder="영문 예약 상품 소개 글 입력"
+            outlined
+            class="mt-3"
+            hide-details="auto"
+            v-model="form.desc_en"
+            :error-messages="errors.desc_en"
+            :class="classEnField()"
           ></v-text-field>
         </div>
       </div>
@@ -111,6 +121,7 @@ export default {
       let url = '/host/bookings/' + this.$route.params.id + '/options/init';
       const response = await this.$axios.get(url);
       this.timezoneItems = response.data.timezoneItems;
+      this.masterBooking = response.data.booking;
 
       this.setBeforeData();
       this.loading = false;
@@ -122,18 +133,14 @@ export default {
   },
   data: () => ({
     selectedType: 'option1',
+    masterBooking: {},
     form: {
       booking_id: '',
     },
     errors: [],
   }),
   watch: {
-    isEngBookForm(val) {
-      if (val) {
-        let enInput = document.getElementsByClassName('en_input');
 
-      }
-    },
   },
   methods: {
     async nextForm() {
@@ -167,7 +174,14 @@ export default {
       if (localStorage.getItem('bookingOptionForm')) {
         this.form = JSON.parse(localStorage.getItem('bookingOptionForm'));
       }
-    }
+    },
+    classEnField() {
+      if(this.masterBooking.is_en == 'Y') {
+        return 'show_field';
+      } else {
+        return 'en_field';
+      }
+    },
   },
 }
 </script>

@@ -23,11 +23,11 @@
     <div class="host_area">
       <div class="progrma_area">
         <p><v-icon color="#111">mdi-calendar-text</v-icon> 내 예약목록</p>
-        <p><span class="font-weight-bold">2개</span> 예약접수가 진행중입니다.</p>
+        <p><span class="font-weight-bold">2개</span> 예약접수 진행중</p>
       </div>
 
       <div class="progrma_list">
-          <div class="reservation_item pa-3 mb-3" v-for="item in reservationItems" :key="item.id">
+          <div class="reservation_item mb-3" v-for="item in reservationItems" :key="item.id">
             <router-link :to="'/host/booking/' + item.id + '/dashboard'" class="non-deco">
             <div class="flex j_space a_center">
               <div>
@@ -40,11 +40,10 @@
               </span>
             </div>
 
-            <div class="list-area">
+            <div class="list-area flex j_space a_center">
               <div class="list_title">
-                <p>{{ item.title }}</p>
+                <p class="text-ellipsis">{{ item.title }}</p>
                 <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
-                <p>예약상품 ({{ item.goodsCount }})</p>
               </div>
               <div class="list_btbt">
                 <p>예약상품 ({{ item.goodsCount }})</p>
@@ -104,12 +103,16 @@ export default {
 .progrma_list {margin: 20px 0; position: relative;}
 .view_icon {font-size: 14px; color: #818181;}
 .list-area {display: flex; justify-content: space-between;}
-.list_title p {font-size: 18px; font-weight: 700; margin: 10px 0 0}
+.list_title p {font-size: 16px; font-weight: 700; margin: 10px 0 0}
 .list_title p:nth-child(2) {margin: 4px 0; font-size: 15px;}
 .list_title p:nth-child(3) {font-size: 14px; margin: 14px 0;}
 .list_lettbox {padding-bottom: 20px;}
 .progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 10px;}
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
-.list_btbt {background: #ef911b; padding: 12px 14px; color: #fff; border-radius: 10px; font-size: 13px; height: 45px; margin-top: 14px;}
+
+.list_title { width:calc(100% - 70px); padding-right:5px; }
+.list_btbt { width:70px; background: #ef911b; text-align:center; line-height:35px; color: #fff; border-radius: 10px; font-size: 12px; height: 35px; }
 .list_btbt:hover {background: #df871a;}
+
+.text-ellipsis { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 </style>

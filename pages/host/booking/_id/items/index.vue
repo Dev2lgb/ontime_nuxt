@@ -1,7 +1,7 @@
 <template>
   <div class="f_width">
-    <HostSubHeader />
-    <div class="host_head pa-5">
+    <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
+    <div class="host_head px-5 pt-5">
       <div class="host_area">
         <div class="host_nik">
         <p><span>관리자</span> 님, 예약관리<br>예약상품을 확인해 주세요.</p>
