@@ -1,6 +1,6 @@
 <template>
   <div class="f_width">
-    <HostSubHeader />
+    <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head pa-5">
       <div class="host_area">
         <div class="host_nik">
@@ -9,14 +9,14 @@
         <div class="host_create">
           <p style="color:#5b7ade">예약관리 서비스</p>
 
-          <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
+          <v-tabs class="sub_nav" height="50" :show-arrows="false" slider-color="#fff" color="#fff" dark>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/statistics'">통계</v-tab>
             <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/items/'">예약상품</v-tab>
           </v-tabs>
-          
+
         </div>
       </div>
     </div>
@@ -32,11 +32,11 @@
     <div class="pa-5">
       <h3>[교육] 사찰예절 배움 템플스테이 해맞이</h3>
       <v-btn text small class="pa-0 mt-1">ontimewolrd.kr/b/d1a24a <v-icon small class="ml-1">mdi-content-copy</v-icon></v-btn>
-      <div class="flex j_start a_center my-3">
-        <v-btn dark color="#4487fa" label small elevation="0">예약 보기</v-btn>
-        <v-btn dark color="#44acfa" label small class="mx-2" elevation="0">예약코드 복사</v-btn>
-        <v-btn dark color="#fb8c00" label small elevation="0">예약 수정</v-btn>
-        <v-btn dark color="#4caf50" label small class="ml-2" elevation="0">노출중</v-btn>
+      <div class="flex j_start a_center wrap my-3">
+        <v-btn dark color="#4487fa" label small class="ma-1" elevation="0">예약 보기</v-btn>
+        <v-btn dark color="#44acfa" label small class="ma-1" elevation="0">예약코드 복사</v-btn>
+        <v-btn dark color="#fb8c00" label small class="ma-1" elevation="0">예약 수정</v-btn>
+        <v-btn dark color="#4caf50" label small class="ma-1" elevation="0">노출중</v-btn>
       </div>
 
       <div class="flex j_space a_center mb-5 progrma_option">

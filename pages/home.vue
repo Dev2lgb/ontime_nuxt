@@ -27,7 +27,7 @@
               </ul>
             </div>
             <div class="reservation_more">
-              <NuxtLink to="/">
+              <NuxtLink to="/my-bookings">
                 전체보기
               </NuxtLink>
             </div>

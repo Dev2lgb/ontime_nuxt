@@ -1,45 +1,29 @@
 <template>
-  <div class="fixed_header">
-    <v-app-bar
-      class="host_area"
-      elevation="0"
-      color="#173bb3"
-    >
-       <v-btn
+  <div class="flex j_start a_center host_sub_header">
+    <div>
+      <v-btn
         fab
         text
         exact
-        :to="'/host/home'"
-        large  color="#fff"
+        :to="link"
       >
-        <v-icon>mdi-chevron-left</v-icon>
+        <v-icon color="#fff">mdi-chevron-left</v-icon>
       </v-btn>
-    </v-app-bar>
-    
+    </div>
+    <h3 class="font_white">{{ title }}</h3>
   </div>
 </template>
 
-
 <script>
 export default {
-  middleware: ['auth'],
+  props : ['link', 'title'],
   data: () => ({
-    drawer: false,
-    group: null,
-  }),
 
-  watch: {
-    group () {
-      this.drawer = false
-    },
-  },
-  methods: {
-    async logout() {
-      await this.$auth.logout();
-    }
-  },
+  })
 }
 </script>
-<style scoped>
-</style>
 
+<style>
+.host_sub_header { background-color:#173bb3 }
+.font_white { color:#fff; }
+</style>
