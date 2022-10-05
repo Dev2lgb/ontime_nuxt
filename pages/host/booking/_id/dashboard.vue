@@ -15,7 +15,7 @@
       </div>
     </div>
 
-<div class="user_dashboard full_height j_start pa-5">
+<div class="user_dashboard full_height j_start">
     <div class="select-box">
       <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
         item-text="title"
