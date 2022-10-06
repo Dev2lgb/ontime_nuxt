@@ -90,45 +90,37 @@
           ></v-select>
         </div>
       </div>
-    </div>
-    <div class="mb-7">
-      <p class="font-weight-bold ma-0 mb-3">예약가능한 최소-최대 시간을 설정해주세요.</p>
-      <div>
-        <v-select
-          v-model="selectedMaxMinTime"
-          :items="MaxMinTimeItems"
-          item-text="text"
-          item-value="value"
-          outlined
-          dense
-          hide-details="auto"
-          placeholder="최소/최대 시간 선택"
-        ></v-select>
-        <div class="flex j_space a_center" v-show="selectedMaxMinTime == 'Y'">
-          <div class="h_width">
-            <v-text-field type="number" prefix="최소" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-          </div>
-          <div class="h_width ml-2">
-            <v-text-field type="number" prefix="최대" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
-          </div>
-        </div>
-      </div>
+
     </div>
 
     <div class="mb-7">
       <p class="font-weight-bold ma-0 mb-3">하나의 계정으로 최대 몇 명을 예약할 수 있나요?</p>
       <div>
-        <v-select
-          v-model="selectedMaxMinMan"
-          :items="MaxMinManItems"
-          item-text="text"
-          item-value="value"
+        <v-btn-toggle
+          color="primary"
+          v-model="form.max_booking_personnel_number"
+          group
           outlined
+          mandatory
           dense
-          hide-details="auto"
-          placeholder="예약인원설정 선택"
-        ></v-select>
-        <div class="flex j_space a_center mt-3" v-show="selectedMaxMinMan == '0'">
+          class="d-flex flex-wrap justify-start align-center"
+        >
+          <v-btn
+            style="border:1px solid #ccc; border-radius:10px"
+            class="ma-1"
+            value="1"
+          >
+            한 계정당 한 명씩만 받을게요.
+          </v-btn>
+          <v-btn
+            style="border:1px solid #ccc; border-radius:10px"
+            class="ma-1"
+            value="0"
+          >
+            한 계정으로 여려명 예약이 가능해요
+          </v-btn>
+        </v-btn-toggle>
+        <div class="flex j_space a_center mt-3" v-show="form.max_booking_personnel_number == '0'">
           <div class="h_width">
             <v-select
               item-text="text"
@@ -146,6 +138,22 @@
         </div>
       </div>
     </div>
+    <div class="mb-7">
+      <p class="font-weight-bold ma-0 mb-3">시간 당 예약가능 수량(인원)을 입력해주세요.</p>
+      <div>
+        <v-radio-group
+          v-model="form.interval_minute"
+          :error-messages="errors.interval_minute"
+          row
+        >
+          <v-radio label="30분" value="30"></v-radio>
+          <v-radio label="60분" value="60"></v-radio>
+          <v-radio label="120분" value="120"></v-radio>
+          <v-radio label="직접입력" value="0"></v-radio>
+        </v-radio-group>
+        <v-text-field v-show="form.interval_minute == '0'" v-model="form.interval_minute" type="number" suffix="분" outlined hide-details="auto" dense class="mt-3"></v-text-field>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -160,6 +168,11 @@ export default {
       { text: '3', value: '3' },
       { text: '4', value: '4' },
       { text: '5', value: '5' },
+    ],
+    selectedMaxMinOption: '',
+    MaxMinOptionItems: [
+      { text:'제한없음', value:'1' },
+      { text:'최대인원설정', value:'0' },
     ],
   })
 }
