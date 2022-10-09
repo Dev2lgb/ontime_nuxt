@@ -96,8 +96,35 @@
           개인정보가 유출, 오용, 남용되는 경우 개인정보 보호법이 적용될 수 있으며, 이에 대한 법적 책임은 개인정보수집 및 처리자인 예약관리자에게 있습니다.
         </p>
         <div class="mb-5">
-          <v-text-field outlined hide-details="auto" class="mb-3" placeholder="질문 직접 입력" v-for="(item, i) in questionItems" :key="i"></v-text-field>
           <v-btn text block large @click="addQuestion">+ 질문추가</v-btn>
+
+          <div v-for="(item, qindex) in questionItems" :key="qindex" v-show="questionItems.length > 0">
+            <div v-if="item.division == 'solo'" class="mb-5">
+              <v-text-field v-model="item.question" hide-details="auto" placeholder="질문 직접 입력" outlined></v-text-field>
+            </div>
+            <div v-show="item.division == 'selection'" class="mb-5">
+              <v-text-field v-model="item.question" hide-details="auto" placeholder="질문 제목" ></v-text-field>
+              <div class="mt-3">
+                <div v-for="(answer, aindex) in item.answers" :key="aindex" class="mb-3">
+                  <v-text-field v-model="answer.title" hide-details="auto" placeholder="항목 입력" outlined></v-text-field>
+                </div>
+                <v-btn text block large @click="addAnswer(qindex)">+ 항목추가</v-btn>
+              </div>
+              <v-switch v-model="item.answer_option" label="항목 복수 선택 가능" true-value="Y" false-value="N"></v-switch>
+            </div>
+          </div>
+
+          <v-dialog
+            v-model="questionDialog"
+            max-width="300"
+          >
+          <div class="back_white">
+            <v-btn block large @click="addQuestionItem('solo')">단답형 질문</v-btn>
+            <v-btn block large @click="addQuestionItem('selection')">항목선택형 질문</v-btn>
+          </div>
+          </v-dialog>
+
+
         </div>
       </div>
       <div class="mb-7">
@@ -145,6 +172,7 @@
 export default {
   layout: 'host',
   data: () => ({
+    questionDialog: false,
     selectedMail: 'N',
     selectedInfos: [],
     questionItems: [
@@ -176,9 +204,7 @@ export default {
       }
     },
     addQuestion(){
-      this.questionItems.push(
-        { id: '' }
-      );
+      this.questionDialog = true;
     },
     vistaPrevia(file) {
       try{
@@ -231,6 +257,20 @@ export default {
       if (localStorage.getItem('bookingForm')) {
         this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
       }
+    },
+    addQuestionItem(division) {
+      this.questionItems.push({
+        division: division,
+        question: '',
+        answers : [{ title: '', }],
+        answer_option: 'N'
+      })
+      this.questionDialog = false;
+    },
+    addAnswer(index) {
+      this.questionItems[index].answers.push({
+        title: ''
+      })
     }
   },
 }
