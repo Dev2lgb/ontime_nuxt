@@ -113,7 +113,6 @@
               <v-switch v-model="item.answer_option" label="항목 복수 선택 가능" true-value="Y" false-value="N"></v-switch>
             </div>
           </div>
-
           <v-dialog
             v-model="questionDialog"
             max-width="300"
@@ -123,8 +122,6 @@
             <v-btn block large @click="addQuestionItem('selection')">항목선택형 질문</v-btn>
           </div>
           </v-dialog>
-
-
         </div>
       </div>
       <div class="mb-7">
