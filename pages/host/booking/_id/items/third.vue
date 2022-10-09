@@ -77,11 +77,6 @@
                   {{ weekItem.text }}
                 </v-btn>
               </v-btn-toggle>
-  <!--              <v-checkbox label="첫번째주" v-model="form.week_1" :readonly="allCheck == 'Y'" true-value="Y" false-value="N" hide-details="auto" class="mr-2 mt-0"></v-checkbox>-->
-  <!--              <v-checkbox label="두번째주" v-model="form.week_2" :readonly="allCheck == 'Y'" true-value="Y" false-value="N" hide-details="auto" class="mr-2 mt-0"></v-checkbox>-->
-  <!--              <v-checkbox label="세번째주" v-model="form.week_3" :readonly="allCheck == 'Y'" true-value="Y" false-value="N" hide-details="auto" class="mr-2 mt-0"></v-checkbox>-->
-  <!--              <v-checkbox label="네번째주" v-model="form.week_4" :readonly="allCheck == 'Y'" true-value="Y" false-value="N" hide-details="auto" class="mr-2 mt-0"></v-checkbox>-->
-  <!--              <v-checkbox label="다섯번째주" v-model="form.week_5" :readonly="allCheck == 'Y'" true-value="Y" false-value="N" hide-details="auto" class="mr-2 mt-0"></v-checkbox>-->
             </div>
             <v-checkbox hide-details="auto" v-model="allCheck" class="mt-3" label="매주" true-value="Y" false-value="N" value="allWeek"></v-checkbox>
           </div>

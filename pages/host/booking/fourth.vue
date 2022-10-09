@@ -91,15 +91,15 @@
                 <div v-if="item.division == 'solo'" class="mb-5">
                   <v-text-field v-model="item.question" hide-details="auto" placeholder="질문 직접 입력" outlined></v-text-field>
                 </div>
-                <div v-show="item.division == 'selection'" class="mb-5">
+                <div v-show="item.division == 'multiple'" class="mb-5">
                   <v-text-field v-model="item.question" hide-details="auto" placeholder="질문 제목" ></v-text-field>
                   <div class="mt-3">
-                    <div v-for="(answer, aindex) in item.answers" :key="aindex" class="mb-3">
-                      <v-text-field v-model="answer.title" hide-details="auto" placeholder="항목 입력" outlined></v-text-field>
+                    <div v-for="(answer, aindex) in item.answer_items" :key="aindex" class="mb-3">
+                      <v-text-field v-model="item.answer_items[aindex]" hide-details="auto" placeholder="항목 입력" outlined></v-text-field>
                     </div>
                     <v-btn text block large @click="addAnswer(qindex)">+ 항목추가</v-btn>
                   </div>
-                  <v-switch v-model="item.answer_option" label="항목 복수 선택 가능" true-value="Y" false-value="N"></v-switch>
+                  <v-switch v-model="item.is_multiple" label="항목 복수 선택 가능" true-value="Y" false-value="N"></v-switch>
                 </div>
               </div>
               <v-dialog
@@ -108,11 +108,12 @@
               >
               <div class="back_white">
                 <v-btn block large @click="addQuestionItem('solo')">단답형 질문</v-btn>
-                <v-btn block large @click="addQuestionItem('selection')">항목선택형 질문</v-btn>
+                <v-btn block large @click="addQuestionItem('multiple')">항목선택형 질문</v-btn>
               </div>
               </v-dialog>
             </div>
           </div>
+          {{ questionItems }}
           <div class="mb-7">
             <p class="font-weight-bold ma-0">4. 예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
             <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
@@ -249,15 +250,13 @@ export default {
       this.questionItems.push({
         division: division,
         question: '',
-        answers : [{ title: '', }],
-        answer_option: 'N'
+        answer_items : [],
+        is_multiple: 'N'
       })
       this.questionDialog = false;
     },
     addAnswer(index) {
-      this.questionItems[index].answers.push({
-        title: ''
-      })
+      this.questionItems[index].answer_items.push('');
     }
   },
 }
