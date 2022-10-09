@@ -1,116 +1,106 @@
 <template>
-  <div class="f_width user_padding">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          exact
-          to="/host/booking/second"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </div>
-      <h3>새 예약 만들기</h3>
-    </div>
-    <div class="host_area">
-    <div class="user_nik">
-      <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (3/4)</p>
-    </div>
+  <div>
+    <HostSubHeader :title="'예약만들기'" :link="'/host/home'"/>
+    <div class="f_width user_padding">
+      <div class="host_area">
+        <div class="user_nik">
+          <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (3/4)</p>
+        </div>
 
-    <div class="proceeding">
-      <template>
-        <v-progress-linear value="75"></v-progress-linear>
-      </template>
-      <div class="flex j_center a_center mt-1">
-        <p class="q_width text-center font_small_text">기초설정</p>
-        <p class="q_width text-center font_small_text">관리자 정보</p>
-        <p class="q_width text-center font_small_text">확정방법</p>
-        <p class="q_width text-center font_small_text">추가정보</p>
-      </div>
-    </div>
-    <div class="">
-      <div class="titleform">
-        <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>담당자정보</span>
-      </div>
+        <div class="proceeding">
+          <template>
+            <v-progress-linear value="75"></v-progress-linear>
+          </template>
+          <div class="flex j_center a_center mt-1">
+            <p class="q_width text-center font_small_text">기초설정</p>
+            <p class="q_width text-center font_small_text">관리자 정보</p>
+            <p class="q_width text-center font_small_text">확정방법</p>
+            <p class="q_width text-center font_small_text">추가정보</p>
+          </div>
+        </div>
+        <div class="">
+          <div class="titleform">
+            <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>담당자정보</span>
+          </div>
 
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">1. 예약 승인 유형을 선택해주세요.</p>
-        <div>
-          <v-btn-toggle
-            v-model="form.is_booking_confirm"
-            :error-messages="errors.is_booking_confirm"
-            color="primary"
-            group
-            outlined
-            mandatory
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
+          <div class="mb-7">
+            <p class="font-weight-bold ma-0 mb-5">1. 예약 승인 유형을 선택해주세요.</p>
+            <div>
+              <v-btn-toggle
+                v-model="form.is_booking_confirm"
+                :error-messages="errors.is_booking_confirm"
+                color="primary"
+                group
+                outlined
+                mandatory
+                dense
+                class="d-flex flex-wrap justify-start align-center"
+              >
+                <v-btn
+                  large
+                  class="input_pd"
+                  value="Y"
+                >
+                  <span class="font-weight-bold mr-3">자동</span>
+                  예약 신청과 동시에 예약이 확정됩니다.
+                </v-btn>
+                <v-btn
+                  large
+                  class="input_pd"
+                  value="N"
+                >
+                  <span class="font-weight-bold mr-3">수동</span>
+                  관리자의 승인 후 예약이 확정됩니다.
+                </v-btn>
+              </v-btn-toggle>
+            </div>
+          </div>
+          <div class="mb-7">
+            <p class="font-weight-bold ma-0 mb-5">2. 공개 여부를 선택해주세요.</p>
+            <div>
+              <v-btn-toggle
+                v-model="form.is_public"
+                :error-messages="errors.is_public"
+                color="primary"
+                group
+                outlined
+                mandatory
+                dense
+                class="d-flex flex-wrap justify-start align-center"
+              >
+                <v-btn
+                 large
+                  class="input_pd"
+                  value="Y"
+                >
+                  <span class="font-weight-bold mr-3">전체공개</span>
+                  온타임의 모든 접속자가 이 예약에 신청할 수 있어요.
+                </v-btn>
+                <v-btn
+                  large
+                  class="input_pd"
+                  value="N"
+                >
+                  <span class="font-weight-bold mr-3">부분공개</span>
+                  별도의 코드를 전달받은 예약자만 신청할 수 있어요.
+                </v-btn>
+              </v-btn-toggle>
+            </div>
+          </div>
+          <div class="pt-10">
             <v-btn
-              large
-              class="input_pd"
-              value="Y"
-            >
-              <span class="font-weight-bold mr-3">자동</span>
-              예약 신청과 동시에 예약이 확정됩니다.
-            </v-btn>
-            <v-btn
-              large
-              class="input_pd"
-              value="N"
-            >
-              <span class="font-weight-bold mr-3">수동</span>
-              관리자의 승인 후 예약이 확정됩니다.
-            </v-btn>
-          </v-btn-toggle>
+              block
+              depressed
+              tile
+              x-large
+              dark
+              color="#1976d2"
+              @click="nextForm"
+            >다음 단계로 이동</v-btn>
+          </div>
         </div>
       </div>
-      <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-5">2. 공개 여부를 선택해주세요.</p>
-        <div>
-          <v-btn-toggle
-            v-model="form.is_public"
-            :error-messages="errors.is_public"
-            color="primary"
-            group
-            outlined
-            mandatory
-            dense
-            class="d-flex flex-wrap justify-start align-center"
-          >
-            <v-btn
-             large
-              class="input_pd"
-              value="Y"
-            >
-              <span class="font-weight-bold mr-3">전체공개</span>
-              온타임의 모든 접속자가 이 예약에 신청할 수 있어요.
-            </v-btn>
-            <v-btn
-              large
-              class="input_pd"
-              value="N"
-            >
-              <span class="font-weight-bold mr-3">부분공개</span>
-              별도의 코드를 전달받은 예약자만 신청할 수 있어요.
-            </v-btn>
-          </v-btn-toggle>
-        </div>
-      </div>
-      <div class="pt-10">
-        <v-btn
-          block
-          depressed
-          tile
-          x-large
-          dark
-          color="#1976d2"
-          @click="nextForm"
-        >다음 단계로 이동</v-btn>
-      </div>
     </div>
-  </div>
   </div>
 </template>
 <script>

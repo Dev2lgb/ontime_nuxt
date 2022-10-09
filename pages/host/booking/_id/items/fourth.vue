@@ -30,7 +30,7 @@
         <div>
           <v-select
             v-model="selectedTimeZone"
-            :items="timeZoneItems"
+            :items="timezoneItems"
             item-text="text"
             item-value="value"
             outlined
@@ -71,6 +71,124 @@
               ※ 해외 접속자와 화상회의, 온라인 이벤트를 준비하시는 경우 해당 기능을 넣는 것을 추천합니다.
             </p>
         </div>
+        <div class="mb-7">
+          <p class="font-weight-bold ma-0 mb-5">3. 예약 신청 가능한 기간이 따로 있나요?</p>
+          <div class="mb-5">
+            <v-btn-toggle
+              v-model="form.is_booking_available_period"
+              :error-messages="errors.is_booking_available_period"
+              color="primary"
+              group
+              outlined
+              mandatory
+              dense
+              class="d-flex flex-wrap justify-start align-center"
+            >
+              <v-btn
+                large
+                class="input_pd"
+                value="N"
+              >
+                  아니요, 없어요
+              </v-btn>
+              <v-btn
+                large
+                class="input_pd"
+                value="Y"
+              >
+                네, 있어요
+              </v-btn>
+            </v-btn-toggle>
+          </div>
+          <div class="mb-1" v-show="form.is_booking_available_period == 'Y'">
+            <p class="font_small_text mb-1">예약 신청 가능일자 선택</p>
+            <div class="flex j_start a_center">
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :return-value.sync="date"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="form.booking_available_period"
+                    :error-messages="errors.booking_available_period"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="form.booking_available_period"
+                  no-title
+                  locale="ko"
+                  range
+                  scrollable
+                >
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="menu = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.menu.save(date)"
+                  >
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </div>
+          </div>
+        </div>
+        <div class="mb-7">
+          <p class="font-weight-bold ma-0 mb-5">4. 예약 신청 가능한 최소 시간이 따로 있나요?</p>
+          <div class="mb-5">
+            <v-btn-toggle
+              v-model="form.is_booking_available_hour"
+              :error-messages="errors.is_booking_available_hour"
+              color="primary"
+              group
+              outlined
+              mandatory
+              dense
+              class="d-flex flex-wrap justify-start align-center"
+            >
+              <v-btn
+                large
+                class="input_pd"
+                value="N"
+              >
+                아니요, 없어요
+              </v-btn>
+              <v-btn
+                large
+                class="input_pd"
+                value="Y"
+              >
+                네, 있어요
+              </v-btn>
+            </v-btn-toggle>
+          </div>
+          <div class="mb-1" v-show="form.is_booking_available_hour == 'Y'">
+            <v-select
+              v-model="form.booking_available_hour"
+              :error-messages="errors.booking_available_hour"
+              :items="minTimeItems"
+              outlined
+              item-text="text"
+              item-value="value"
+            ></v-select>
+          </div>
+        </div>
       </div>
 
       <div class="pt-10">
@@ -90,8 +208,25 @@
 <script>
 export default {
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/' + this.$route.params.id + '/options/init';
+      const response = await this.$axios.get(url);
+      this.timezoneItems = response.data.timezoneItems;
+      this.masterBooking = response.data.booking;
+
+      this.setBeforeData();
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+      }
+    }
+  },
   data: () => ({
     selectedHoliday: 'N',
+    timezoneItems: [],
     MaxMinOptionItems: [
       { text:'제한없음', value:'1' },
       { text:'최대인원설정', value:'0' },
@@ -107,6 +242,8 @@ export default {
     ],
     dates: [],
     menu: false,
+    form: {},
+    errors: [],
   }),
   methods: {
 

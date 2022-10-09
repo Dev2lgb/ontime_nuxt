@@ -27,7 +27,7 @@
     <div class="pa-5">
       <BookingOptionTime @formData="getFormData()" :errors="errors" v-show="form.type == 'time'" />
       <BookingOptionDate @formData="getFormData()" :errors="errors" v-show="form.type == 'date'" />
-      <BookingOptionTerm @formData="getFormData()" :errors="errors" v-show="form.type == 'term'" />
+<!--      <BookingOptionTerm @formData="getFormData()" :errors="errors" v-show="form.type == 'term'" />-->
 
       <div class="pt-10">
         <v-btn
@@ -37,7 +37,7 @@
           large
           dark
           color="#4455ff"
-          to="/host/booking/125/items/third"
+          :to="'/host/booking/' + this.$route.params.id + '/items/third'"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
