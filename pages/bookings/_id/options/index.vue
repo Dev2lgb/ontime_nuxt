@@ -7,17 +7,18 @@
       </div>
 
       <div class="progrma_area">
-        <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">3개</span>의 예약 옵션이 대기중</p>
+        <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
         <v-select
           outlined
           v-model="selectedReservationOption"
           hide-details="auto"
-          :items="reservationItems"
-          item-value="id"
+          :items="bookingOptionItems"
           :item-text="getItemText"
+          :item-value="getItemValue"
           placeholder="예약 옵션 선택"
         ></v-select>
       </div>
+      {{ selectedReservationOption }}
 
       <div class="select_hide_option">
         <div v-show="selectedReservationOption">
@@ -113,7 +114,25 @@
 <script>
 export default {
   layout: 'user',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/' + this.$route.params.id + '/options';
+      const response = await this.$axios.get(url);
+      this.bookingOptionItems = response.data;
+      this.bookingOptionCount = response.data.length;
+
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
+    bookingOptionCount: 0,
+    selectedBookingOption: '',
     selectedReservationOption: '',
     selectedNumber: '1',
     numberItems: [
@@ -121,11 +140,7 @@ export default {
       { text:'2명', value:'2' },
       { text:'3명', value:'3' },
     ],
-    reservationItems: [
-      { id: '1', title: '템플 스테이 예절교육 집중', desc: '템플스테이 마운틴 투어' },
-      { id: '2', title: '템플 스테이 힐링 세미나', desc: '템플스테이 힐링 세미나 진행' },
-      { id: '3', title: '템플 스테이 비건푸드 체험', desc: '템플스테이 비건푸드 체험' }
-    ],
+    bookingOptionItems: [],
     focus: '',
     events: [],
     type: 'month',
@@ -136,6 +151,9 @@ export default {
   methods: {
     getItemText(item) {
       return `${item.title} - ${item.desc}`;
+    },
+    getItemValue(item) {
+      return item;
     },
     prev () {
       this.$refs.calendar.prev()

@@ -12,10 +12,10 @@
                 <router-link to="">서비스</router-link>
               </li>
               <li>
-                <router-link to="">예약만들기</router-link>
+                <router-link to="/host/home">예약만들기</router-link>
               </li>
               <li>
-                <router-link to="">예약하기</router-link>
+                <router-link to="/home">예약하기</router-link>
               </li>
             </ul>
           </div>
@@ -43,6 +43,31 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="join_section">
+      <div class="inner">
+        <div class="flex j_space a_center">
+          <div class="join_left">
+            <img src="~/assets/images/join_img.png" alt="">
+          </div>
+          <div class="join_right">
+            <h3>
+              어디를 선택해야<br />
+              <span>이 걱정들이 해결될까요?</span>
+            </h3>
+            <div class="flex j_start a_center">
+              <div>
+                <p>엑셀 등 수기로 하는 예약관리</p>
+                <p>해외 예약자의 시차 관리 어려움</p>
+                <p>원하는 사람에게만 예약 받기</p>
+              </div>
+              <v-btn color="#50b999" to="/auth/register" class="join_btn" x-large dark depressed>무료회원 가입하기</v-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -83,4 +108,14 @@ export default {
   .systems h3 { margin:20px 0; }
   .systems p { font-size:13px; }
   .systems_item { width:calc(20% - 10px); }
+  .systems_item h3 { font-weight:300; }
+  .systems_item span { font-weight:bold; }
+  .join_section { background-color:#f3f5f7; padding:70px 0; }
+  .join_left { width:40%; }
+  .join_left img { width:100%; }
+  .join_right { width:60%; padding-left:70px; }
+  .join_right h3 { font-size:40px; font-weight:400; margin-bottom:30px; }
+  .join_right h3 span { font-weight:bold; }
+  .join_right p { margin-bottom:20px; }
+  .join_right .join_btn { margin-left:30px; }
 </style>
