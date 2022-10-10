@@ -10,7 +10,7 @@
         <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
         <v-select
           outlined
-          v-model="selectedReservationOption"
+          v-model="selectedBookingOption"
           hide-details="auto"
           :items="bookingOptionItems"
           :item-text="getItemText"
@@ -18,10 +18,10 @@
           placeholder="예약 옵션 선택"
         ></v-select>
       </div>
-      {{ selectedReservationOption }}
+      {{ selectedBookingOption }}
 
       <div class="select_hide_option">
-        <div v-show="selectedReservationOption">
+        <div v-show="selectedBookingOption.type == 'time'">
           <div class="area_line"></div>
           <div class="pb-7">
             <div class="d-flex justify-space-between align-center user_num">
@@ -31,7 +31,7 @@
 
             <v-select
               outlined
-              v-model="selectedNumber"
+              v-model="personnel"
               hide-details="auto"
               :items="numberItems"
               item-value="value"
@@ -104,6 +104,89 @@
 
           </div>
         </div>
+        <div v-show="selectedBookingOption.type == 'date'">
+          <div class="area_line"></div>
+          <div class="pb-7">
+            <div class="d-flex justify-space-between align-center user_num">
+              <h3><v-icon>mdi-account-multiple</v-icon> 인원 선택하기</h3>
+              <p class="ma-0">최대 {{ selectedBookingOption.max_booking_personnel_number }}명까지 참여가능해요.</p>
+            </div>
+
+            <v-select
+              outlined
+              v-model="personnel"
+              hide-details="auto"
+              :items="getPersonnelItems(selectedBookingOption.max_booking_personnel_number)"
+              item-value="value"
+              item-text="text"
+            ></v-select>
+          </div>
+          <div class="area_line"></div>
+          <div class="pb-7">
+            <div>
+              <h3><v-icon>mdi-calendar-clock</v-icon> 날짜 선택하기</h3>
+              <p>
+                예약 신청 가능일자 :
+                <span v-if="selectedBookingOption.booking_available_start_date">
+                  {{ selectedBookingOption.booking_available_start_date }} 부터 {{ selectedBookingOption.booking_available_end_date }} 까지
+                </span>
+                <span v-else>제한없음</span>
+                <br />({{ selectedBookingOption.timezone }} 기준)
+              </p>
+            </div>
+            <div class="f_width flex j_space a_center mb-5">
+              <div class="flex j_center a_center mt-3">
+                <v-btn
+                  fab
+                  text
+                  small
+                  color="grey darken-2"
+                  @click="prev"
+                >
+                  <v-icon small>
+                    mdi-chevron-left
+                  </v-icon>
+                </v-btn>
+                <p v-if="$refs.calendar" class="cal_title ma-0">
+                  {{ $refs.calendar.title }}
+                </p>
+                <v-btn
+                  fab
+                  text
+                  small
+                  color="grey darken-2"
+                  @click="next"
+                >
+                  <v-icon small>
+                    mdi-chevron-right
+                  </v-icon>
+                </v-btn>
+              </div>
+            </div>
+            <v-sheet height="400">
+              <v-calendar
+                ref="calendar"
+                v-model="focus"
+                color="primary"
+                :events="events"
+                :type="type"
+                @click:event="showEvent"
+                locale="ko"
+                @change="updateRange"
+                event-color="transparent"
+
+              ></v-calendar>
+            </v-sheet>
+          </div>
+          <div class="area_line"></div>
+          <div class="">
+            <div>
+              <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
+              <p class="mt-2">최소1타임 / 최대 3타임 선택 가능해요.</p>
+            </div>
+
+          </div>
+        </div>
         <div class="flex j_space a_center mt-10">
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" :to="'/bookings/' + this.$route.params.id + '/options/second'">다음단계</v-btn>
         </div>
@@ -133,8 +216,7 @@ export default {
   data: () => ({
     bookingOptionCount: 0,
     selectedBookingOption: '',
-    selectedReservationOption: '',
-    selectedNumber: '1',
+    personnel: 1,
     numberItems: [
       { text:'1명', value:'1' },
       { text:'2명', value:'2' },
@@ -145,15 +227,42 @@ export default {
     events: [],
     type: 'month',
   }),
+  watch: {
+    selectedBookingOption() {
+      this.getCalendar()
+    }
+  },
   mounted () {
     this.$refs.calendar.checkChange()
   },
   methods: {
+    async getCalendar() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/2022-10-01/2022-10-31';
+        const response = await this.$axios.get(url);
+        this.calendarItems = response.data;
+
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          //this.$toast.error(e.response.data.message);
+        }
+      }
+    },
     getItemText(item) {
       return `${item.title} - ${item.desc}`;
     },
     getItemValue(item) {
       return item;
+    },
+    getPersonnelItems(lcount) {
+      let numberItems = [];
+      for(let i = 1; i <= lcount; i++) {
+        numberItems.push({ text: i + '명', value: i });
+      }
+      return numberItems;
     },
     prev () {
       this.$refs.calendar.prev()
