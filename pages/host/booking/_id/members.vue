@@ -92,7 +92,7 @@
           <v-btn outlined>취소</v-btn>
         </v-btn-toggle>
       </div>
-      <div class="mt-5">
+      <div class="matching_option">
         <h3>예약자 (3명)</h3>
         <div class="flex j_space a_center py-3">
           <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
@@ -103,65 +103,78 @@
           </div>
         </div>
       </div>
-      <div>
-        <div class="rounded_item px-5 py-2 mb-4" v-for="memberItem in memberItems" :key="memberItem.id">
-          <div>
-            <v-checkbox value="memberItem.id" hide-details="auto"></v-checkbox>
+
+      <!-- 예약자 반복카드 -->
+      <div class="matching_card" v-for="memberItem in memberItems" :key="memberItem.id">
+        <div class="matching_list">
+          <div class="list_group">
+             <v-checkbox value="memberItem.id" hide-details="auto" class="matching_inp"></v-checkbox>
+             <div class="matching_state">{{ memberItem.status }}</div>
+             <p class="list_title">{{ memberItem.name }} 외{{ memberItem.reservation_count-1 }} 예약 <v-icon>mdi-message-text</v-icon></p>
           </div>
-          <div class="flex j_start a_center">
-            <span class="status_circle">{{ memberItem.status }}</span>
-            <h3 class="ml-3">{{ memberItem.name }} <v-icon>mdi-message-text</v-icon></h3>
-          </div>
-          <div class="mt-5">
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">연락처</span>
-              <p class="ma-0">{{ memberItem.phone }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">이메일</span>
-              <p class="ma-0">{{ memberItem.email }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">출생연도</span>
-              <p class="ma-0">{{ memberItem.birth }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">성별</span>
-              <p class="ma-0">{{ memberItem.gender }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">국적</span>
-              <p class="ma-0">{{ memberItem.nation }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">예약인원</span>
-              <p class="ma-0">{{ memberItem.reservation_count }} 명</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">예약옵션</span>
-              <div>
-                <div v-for="option in memberItem.options" :key="option.id" class="mb-3">
-                  <p class="mb-1">{{ option.name }}</p>
-                  <v-chip small>{{ option.stime }}</v-chip>
-                  <v-chip small>{{ option.etime }}</v-chip>
-                </div>
-              </div>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">신청시간</span>
-              <p class="ma-0">{{ memberItem.time }}</p>
-            </div>
-            <div class="flex j_start a_start mb-1">
-              <span class="sub_title">요청사항</span>
-              <p class="ma-0">{{ memberItem.memo }}</p>
-            </div>
-            <div class="flex j_start a_start mt-3">
-              <v-btn small depressed>예약취소</v-btn>
-              <v-btn small depressed class="ml-3">이용완료</v-btn>
-            </div>
+          <div class="btn_group">
+            <v-btn small depressed dark color="#c54a41">예약취소</v-btn>&nbsp;
+            <v-btn small depressed dark color="#4caf50">이용완료</v-btn>&nbsp;
+            <v-btn small depressed dark color="#173bb3" @click="toggleOnOff">상세</v-btn>
           </div>
         </div>
+        <div v-if="isStatusOn" class="matching_hidden">
+          <div class="hidden_title">
+            <p>예약자 정보</p>
+          </div>
+          <div class="hidden_table">
+            <table>
+              <tr>
+                <th>신청일</th>
+                <td>{{ memberItem.time }}</td>
+                <th>예약자명</th>
+                <td>{{ memberItem.name }}</td>
+              </tr>
+              <tr>
+                <th>연락처</th>
+                <td>{{ memberItem.phone }}</td>
+                <th>이메일</th>
+                <td>{{ memberItem.email }}</td>
+              </tr>
+              <tr>
+                <th>예약인원</th>
+                <td>{{ memberItem.reservation_count }}명</td>
+                <th>국적</th>
+                <td>{{ memberItem.nation }}</td>
+              </tr>
+              <tr>
+                <th>출생연도</th>
+                <td>{{ memberItem.birth }}</td>
+                <th>성별</th>
+                <td>{{ memberItem.gender }}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="hidden_title">
+            <p>예약 옵션정보</p>
+          </div>
+          <div class="hidden_table">
+            <table>
+              <tr v-for="option in memberItem.options" :key="option.id">
+                <td>{{ option.name }}</td>
+                <td>{{ option.stime }}</td>
+                <td>{{ option.etime }}</td>
+              </tr>
+            </table>
+          </div>
+
+           <div class="hidden_title">
+            <p>요청사항</p>
+          </div>
+          <div class="hidden_area">
+            <textarea class="hidden_txtarea">{{ memberItem.memo }}</textarea>
+          </div>
+
+
+        </div>
       </div>
+    
     </div>
   </div>
   </div>
@@ -170,6 +183,7 @@
 export default {
   layout: 'host',
   data: () => ({
+    isStatusOn: false,
     date: [],
     menu: false,
     selectedItem: '125',
@@ -204,7 +218,9 @@ export default {
     ],
   }),
   methods: {
-
+    toggleOnOff: function() {
+    this.isStatusOn = !this.isStatusOn;
+  }
   },
 }
 </script>
@@ -221,4 +237,6 @@ export default {
 .sub_nav {margin-top: -7px;}
 ::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
 .select-box {padding: 0 20px;}
+
+.matching_option {margin: 20px 0; border-bottom: 2px solid #eee; padding-bottom: 5px;}
 </style>
