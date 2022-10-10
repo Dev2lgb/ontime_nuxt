@@ -270,6 +270,8 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'host',
   async fetch() {
@@ -329,9 +331,29 @@ export default {
       try{
         this.images.forEach(element => {
           this.urls.push({'src':URL.createObjectURL(element)})
+          this.uploadFile(element);
           // this.createImage(element);
         });
       } catch(e) {}
+    },
+    async uploadFile(element) {
+      try{
+        let url = '/files/1';
+        let method = 'post';
+
+        let formData = new FormData();
+        formData.append('file', element);
+
+        const response = await this.$axios({
+          url: url, method: method, data:formData
+        })
+
+        if (response.data.result) {
+          console.log('이미지 등록 완료')
+        }
+      } catch(e) {
+        console.log(e);
+      }
     },
     deleteFile(index) {
       this.urls.splice(index, 1)
@@ -363,7 +385,8 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          localStorage.setItem('bookingForm', JSON.stringify(this.form));
+          this.setBookingForm(JSON.stringify(this.form));
+          // localStorage.setItem('bookingForm', JSON.stringify(this.form));
           this.$router.push('/host/booking/second');
         }
         this.loading = false;
@@ -378,10 +401,14 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['setBookingForm']),
     setBeforeData() {
-      if (localStorage.getItem('bookingForm')) {
-        this.form = JSON.parse(localStorage.getItem('bookingForm'));
+      if (this.$store.state.common.bookingForm) {
+        this.form = JSON.parse(this.$store.state.common.bookingForm);
       }
+      // if (localStorage.getItem('bookingForm')) {
+      //   this.form = JSON.parse(localStorage.getItem('bookingForm'));
+      // }
     }
   },
 }

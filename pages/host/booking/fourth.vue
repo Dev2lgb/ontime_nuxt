@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'"/>
+    <HostSubHeader :title="'예약만들기'" />
     <div class="f_width user_padding">
       <div class="host_area">
         <div class="user_nik">
@@ -58,8 +58,8 @@
             <p class="font_small_text mt-1">이름, 성별, 이메일주소, 휴대폰연락는 기본으로 수집됩니다.</p>
             <div class="border_a pa-3">
               <v-btn-toggle
-                v-model="form.collect_user_infos"
-                :error-messages="errors.collect_user_infos"
+                v-model="form.collect_user_infos1"
+                :error-messages="errors.collect_user_infos1"
                 multiple
                 color="primary"
                 group
@@ -71,9 +71,9 @@
                   v-for="(item, i) in getInfoItems" :key="i"
                   style="border:1px solid #ccc;"
                   class="ma-1"
-                  :value="item.text"
+                  :value="item"
                 >
-                  {{ item.text }}
+                  {{ item.question }}
                 </v-btn>
               </v-btn-toggle>
             </div>
@@ -87,7 +87,7 @@
             <div class="mb-5">
               <v-btn text block large @click="addQuestion">+ 질문추가</v-btn>
 
-              <div v-for="(item, qindex) in questionItems" :key="qindex" v-show="questionItems.length > 0">
+              <div v-for="(item, qindex) in form.collect_user_infos2" :key="qindex" v-show="form.collect_user_infos2.length > 0">
                 <div v-if="item.division == 'solo'" class="mb-5">
                   <v-text-field v-model="item.question" hide-details="auto" placeholder="질문 직접 입력" outlined></v-text-field>
                 </div>
@@ -113,7 +113,6 @@
               </v-dialog>
             </div>
           </div>
-          {{ questionItems }}
           <div class="mb-7">
             <p class="font-weight-bold ma-0">4. 예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
             <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
@@ -157,26 +156,27 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'host',
   data: () => ({
     questionDialog: false,
     selectedMail: 'N',
     selectedInfos: [],
-    questionItems: [
-      {id: ''},
-    ],
-    form: {},
+    form: {
+      collect_user_infos2: []
+    },
     errors:[],
     getInfoItems: [
-      { text: '영문 이름' },
-      { text: '영문 성' },
-      { text: '소속' },
-      { text: '직함' },
-      { text: '전화번호' },
-      { text: '주소' },
-      { text: '우편번호' },
-      { text: '주/도' },
+      { division: 'solo', question: '영문 이름' },
+      { division: 'solo', question: '영문 성' },
+      { division: 'solo', question: '소속' },
+      { division: 'solo', question: '직함' },
+      { division: 'solo', question: '전화번호' },
+      { division: 'solo', question: '주소' },
+      { division: 'solo', question: '우편번호' },
+      { division: 'solo', question: '주/도' },
     ],
     files: [],
     filesNames: [],
@@ -225,7 +225,7 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          localStorage.clear('bookingForm');
+          this.clearBookingForm();
           this.$toast.success('예약상품이 등록되었습니다.');
           this.$router.push('/host/home');
         }
@@ -241,13 +241,17 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['setBookingForm', 'clearBookingForm']),
     setBeforeData() {
-      if (localStorage.getItem('bookingForm')) {
-        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      if (this.$store.state.common.bookingForm) {
+        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
       }
+      // if (localStorage.getItem('bookingForm')) {
+      //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      // }
     },
     addQuestionItem(division) {
-      this.questionItems.push({
+      this.form.collect_user_infos2.push({
         division: division,
         question: '',
         answer_items : [],
@@ -256,7 +260,7 @@ export default {
       this.questionDialog = false;
     },
     addAnswer(index) {
-      this.questionItems[index].answer_items.push('');
+      this.form.collect_user_infos2[index].answer_items.push('');
     }
   },
 }

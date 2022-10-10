@@ -5,7 +5,7 @@
         fab
         text
         exact
-        :to="link"
+        @click="$router.go(-1)"
       >
         <v-icon color="#fff">mdi-chevron-left</v-icon>
       </v-btn>
