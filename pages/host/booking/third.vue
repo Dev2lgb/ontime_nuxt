@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'"/>
+    <HostSubHeader :title="'예약만들기'" />
     <div class="f_width user_padding">
       <div class="host_area">
         <div class="user_nik">
@@ -104,6 +104,8 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'host',
   data: () => ({
@@ -145,7 +147,8 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          localStorage.setItem('bookingForm', JSON.stringify(this.form));
+          this.setBookingForm(JSON.stringify(this.form));
+          // localStorage.setItem('bookingForm', JSON.stringify(this.form));
           this.$router.push('/host/booking/fourth');
         }
         this.loading = false;
@@ -160,10 +163,14 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['setBookingForm']),
     setBeforeData() {
-      if (localStorage.getItem('bookingForm')) {
-        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      if (this.$store.state.common.bookingForm) {
+        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
       }
+      // if (localStorage.getItem('bookingForm')) {
+      //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
+      // }
     }
   },
 }

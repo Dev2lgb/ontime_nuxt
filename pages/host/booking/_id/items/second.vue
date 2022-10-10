@@ -1,19 +1,7 @@
 <template>
   <div class="f_width">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          exact
-          :to="'/host/booking/' + this.$route.params.id + '/items/create'"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </div>
-      <h3>새 예약 상품 등록 (2/4)</h3>
-    </div>
-    <div class="px-5">
+    <HostSubHeader :title="'예약상품 등록'" />
+    <div class="px-5 mt-16">
       <template>
         <v-progress-linear value="50"></v-progress-linear>
       </template>

@@ -1,19 +1,7 @@
 <template>
   <div class="f_width">
-    <div class="flex j_start a_center">
-      <div>
-        <v-btn
-          fab
-          text
-          exact
-          :to="'/host/booking/' + + this.$route.params.id + '/items/create'"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </div>
-      <h3>새 예약 상품 등록 (3/4)</h3>
-    </div>
-    <div class="px-5">
+    <HostSubHeader :title="'예약상품 등록'" />
+    <div class="px-5 mt-16">
       <template>
         <v-progress-linear value="75"></v-progress-linear>
       </template>
@@ -30,7 +18,7 @@
         <div>
           <v-btn-toggle
             color="primary"
-            v-model="selectedHoliday"
+            v-model="form.is_na_day"
             group
             mandatory
             outlined
@@ -53,7 +41,7 @@
             </v-btn>
           </v-btn-toggle>
         </div>
-        <div v-show="selectedHoliday == 'Y'" class="mt-3 ">
+        <div v-show="form.is_na_day == 'Y'" class="mt-3 ">
           <div class="mb-5">
             <p class="font_small_text mb-1">휴무일 주기 선택</p>
             <div class="flex j_start a_center mt-2 ">
@@ -115,7 +103,7 @@
               >휴무일 추가</v-btn>
             </div>
             <div>
-              <v-chip v-for="(holiday, h) in holidays" :key="h" class="ma-1" close @click:close="deleteHoliday(h)">
+              <v-chip v-for="(holiday, h) in form.na_weekdays" :key="h" class="ma-1" close @click:close="deleteHoliday(h)">
                 {{ getChipText(holiday) }}
               </v-chip>
             </div>
@@ -127,14 +115,14 @@
               ref="menu"
               v-model="menu"
               :close-on-content-click="false"
-              :return-value.sync="dates"
+              :return-value.sync="form.na_days"
               transition="scale-transition"
               offset-y
               min-width="auto"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-combobox
-                  v-model="dates"
+                  v-model="form.na_days"
                   multiple
                   chips
                   small-chips
@@ -149,7 +137,7 @@
                 ></v-combobox>
               </template>
               <v-date-picker
-                v-model="dates"
+                v-model="form.na_days"
                 multiple
                 no-title
                 locale="ko"
@@ -166,7 +154,7 @@
                 <v-btn
                   text
                   color="primary"
-                  @click="$refs.menu.save(dates)"
+                  @click="$refs.menu.save(form.na_days)"
                 >
                   OK
                 </v-btn>
@@ -184,6 +172,7 @@
           large
           dark
           color="#4455ff"
+          @click="nextForm"
           :to="'/host/booking/' + this.$route.params.id + '/items/fourth'"
         >다음 단계로 이동</v-btn>
       </div>
@@ -193,10 +182,28 @@
 <script>
 export default {
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/' + this.$route.params.id + '/options/init';
+      const response = await this.$axios.get(url);
+      this.timezoneItems = response.data.timezoneItems;
+      this.masterBooking = response.data.booking;
+
+      this.setBeforeData();
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+      }
+    }
+  },
   data: () => ({
-    form: {},
+    form: {
+      na_weekdays: [],
+      na_days: [],
+    },
     errors: [],
-    holidays: [],
     allCheck: 'N',
     selectedWeek: [],
     selectedWeekend: [],
@@ -213,15 +220,14 @@ export default {
       { text: '다섯번째주', value:'5'},
     ],
     weekendItems: [
-      { text: '월', value:'Mon'},
-      { text: '화', value:'Tue'},
-      { text: '수', value:'Wed'},
-      { text: '목', value:'Thu'},
-      { text: '금', value:'Fri'},
-      { text: '토', value:'Sat'},
-      { text: '일', value:'Sun'},
+      { text: '월', value:'1'},
+      { text: '화', value:'2'},
+      { text: '수', value:'3'},
+      { text: '목', value:'4'},
+      { text: '금', value:'5'},
+      { text: '토', value:'6'},
+      { text: '일', value:'7'},
     ],
-    dates: [],
     menu: false,
   }),
   watch: {
@@ -234,11 +240,44 @@ export default {
     }
   },
   methods: {
+    async nextForm() {
+      this.loading = true;
+
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/options/3';
+        let method = 'post';
+
+        this.form.booking_id = this.$route.params.id;
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          localStorage.setItem('bookingOptionForm', JSON.stringify(this.form));
+          this.$router.push('/host/booking/' + this.$route.params.id + '/items/fourth');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    setBeforeData() {
+      if (localStorage.getItem('bookingOptionForm')) {
+        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      }
+    },
     addHoliday() {
       for(let i = 0; i < this.selectedWeekend.length; i++) {
         for(let w = 0; w < this.selectedWeek.length; w++) {
-          this.holidays.push({
-            weekend: this.selectedWeekend[i], week:this.selectedWeek[w]
+          this.form.na_weekdays.push({
+            week:this.selectedWeek[w], day: this.selectedWeekend[i]
           });
         }
       }
@@ -246,11 +285,11 @@ export default {
     getChipText(item) {
       let returnText = '';
       let weekName = _.filter(this.weekItems, { value: item.week });
-      let weekendName = _.filter(this.weekendItems, { value: item.weekend });
+      let weekendName = _.filter(this.weekendItems, { value: item.day });
       return weekName[0].text + ' ' + weekendName[0].text;
     },
     deleteHoliday(index) {
-      this.holidays.splice(index, 1);
+      this.form.na_weekdays.splice(index, 1);
     }
   },
 }
