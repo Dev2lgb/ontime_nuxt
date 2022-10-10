@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
 * { font-family: 'Noto Sans KR', sans-serif;}
+
+ul { list-style: none; }
+a { text-decoration: none; color:#222; }
+
 /* flex Setting */
 .flex { display:flex; flex:unset !important; }
 .flex.d_col { flex-direction: column; }
@@ -55,6 +59,8 @@
 .user_size_wrap { min-height: 100vh;align-items: center;justify-content: center;width: 100%;max-width: 580px;background: #fff; }
 .phone_size_wrap { width:100%; max-width:580px; background-color:#fff; min-height: 90vh; }
 .full_height { min-height:90vh; }
+.inner { max-width:1300px !important; margin:0 auto;  }
+
 /* form tag style */
 
 .non-deco { text-decoration: none; color:#000 !important; }
