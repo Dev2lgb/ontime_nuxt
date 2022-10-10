@@ -25,9 +25,9 @@
       </div>
     </div>
     <div class="pa-5">
-      <BookingOptionTime @formData="getFormData()" :errors="errors" v-show="form.type == 'time'" />
-      <BookingOptionDate @formData="getFormData()" :errors="errors" v-show="form.type == 'date'" />
-<!--      <BookingOptionTerm @formData="getFormData()" :errors="errors" v-show="form.type == 'term'" />-->
+      <BookingOptionTime @form-data="getFormData" :errors="errors" v-show="form.type == 'time'" />
+      <BookingOptionDate @form-data="getFormData" :errors="errors" v-show="form.type == 'date'" />
+<!--      <BookingOptionTerm @form-data="getFormData" :errors="errors" v-show="form.type == 'term'" />-->
 
       <div class="pt-10">
         <v-btn
@@ -37,7 +37,7 @@
           large
           dark
           color="#4455ff"
-          :to="'/host/booking/' + this.$route.params.id + '/items/third'"
+          @click="nextForm"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
@@ -100,6 +100,7 @@ export default {
   methods: {
     async nextForm() {
       this.loading = true;
+
       try {
         let url = '/host/bookings/' + this.$route.params.id + '/options/2';
         let method = 'post';

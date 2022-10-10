@@ -202,6 +202,12 @@ export default {
         value.count = val;
       });
     },
+    form: {
+      deep: true,
+      handler(val) {
+        this.$emit('formData', val);
+      }
+    }
   },
   methods: {
     calcTimeTable() {
@@ -254,6 +260,11 @@ export default {
         setMin = '00';
       }
       return setHour + ':' + setMin
+    },
+  },
+  setBeforeData() {
+    if (localStorage.getItem('bookingOptionForm')) {
+      this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
     }
   },
 }
