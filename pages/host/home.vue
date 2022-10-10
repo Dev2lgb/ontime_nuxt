@@ -111,7 +111,7 @@ export default {
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 
 .list_title { width:calc(100% - 70px); padding-right:5px; }
-.list_btbt { width:70px; background: #ef911b; text-align:center; line-height:35px; color: #fff; border-radius: 10px; font-size: 12px; height: 35px; }
+.list_btbt { width:80px; background: #ef911b; text-align:center; line-height:35px; color: #fff; border-radius: 10px; font-size: 12px; height: 35px; }
 .list_btbt:hover {background: #df871a;}
 
 .text-ellipsis { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }

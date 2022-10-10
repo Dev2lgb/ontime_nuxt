@@ -109,3 +109,24 @@ a { text-decoration: none; color:#222; }
 .titleform {flex-shrink: 0; display: flex; white-space: nowrap; text-align: center; border: 0px;  margin: 14px 0 20px; font-weight: bold;}
 .titleform span {display: inline-block; padding-left: calc(0.3rem); padding-right: calc(1rem); color: #757575;}
 .titleform::after {position: relative;  width: 100%; border-top: thin solid rgba(58, 53, 65, 0.12); top: 50%; content: ""; transform: translateY(50%);}
+
+/* 예약현황 카드 */
+.matching_card { margin-bottom: 20px; border-bottom: 1px solid #ddd;padding-bottom: 25px;}
+.matching_list {display: flex;align-items: center; justify-content: space-between; align-content: center;}
+.list_group {display: flex;align-items: center;}
+.matching_state {width: 44px; height: 28px; line-height: 28px; background: #2196f3; text-align: center; margin-right: 10px; border-radius: 6px; font-size: 12px; color: #fff;}
+.list_title {margin-bottom: 0!important; font-size: 17px; font-weight: 700;}
+.btn_group {display: flex;align-items: center;}
+.btn_group div {font-size: 14px; padding: 10px;}
+.btn_group div:first-child {background: #333; cursor: pointer;}
+.matching_inp {margin-top: 0!important;}
+
+.matching_hidden {padding: 20px; margin-top: 20px; border: 1px solid #ddd; border-top: 4px solid #cbcbcb;}
+.hidden_title {display: flex;justify-content: space-between;}
+.hidden_title p {margin-bottom: 0!important; font-size: 13px; font-weight: 700; color: #173bb3;}
+.hidden_table {margin: 4px 0 20px;}
+.hidden_table table {width: 100%; font-size: 14px; text-align: left;}
+.hidden_table table th {border-bottom: 1px solid #ddd; padding: 12px 4px;color: #626262; font-weight: 400;}
+.hidden_table table td {border-bottom: 1px solid #ddd; padding: 12px 4px;}
+.hidden_txtarea{width: 100%; padding: 20px; border: 1px solid #ddd;margin-top: 10px; font-size: 14px;}
+.hidden_area{margin-top: 4px;}
