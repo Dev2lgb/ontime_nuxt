@@ -164,6 +164,7 @@
               </div>
             </div>
             <v-sheet height="400">
+
               <v-calendar
                 ref="calendar"
                 v-model="focus"
@@ -174,8 +175,8 @@
                 locale="ko"
                 @change="updateRange"
                 event-color="transparent"
-
               ></v-calendar>
+              {{ events }}
             </v-sheet>
           </div>
           <div class="area_line"></div>
@@ -226,31 +227,17 @@ export default {
     focus: '',
     events: [],
     type: 'month',
+    calendarItems: [],
   }),
   watch: {
-    selectedBookingOption() {
-      this.getCalendar()
-    }
+    // selectedBookingOption() {
+    //   this.getCalendar()
+    // }
   },
   mounted () {
     this.$refs.calendar.checkChange()
   },
   methods: {
-    async getCalendar() {
-      this.loading = true;
-      try {
-        let url = '/host/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/2022-10-01/2022-10-31';
-        const response = await this.$axios.get(url);
-        this.calendarItems = response.data;
-
-        this.loading = false;
-      } catch (e) {
-        if (e.response.status == '401') {
-          console.log(e);
-          //this.$toast.error(e.response.data.message);
-        }
-      }
-    },
     getItemText(item) {
       return `${item.title} - ${item.desc}`;
     },
@@ -270,12 +257,34 @@ export default {
     next () {
       this.$refs.calendar.next()
     },
-    updateRange ({ start, end }) {
-      const events = []
-      events.push({ color:'#483dff', start: '2022-09-13', end: '2022-09-13', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      events.push({ color:'#483dff', start: '2022-09-14', end: '2022-09-14', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      events.push({ color:'#483dff', start: '2022-09-15', end: '2022-09-15', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      this.events = events
+    async updateRange ({ start, end }) {
+      this.loading = true;
+      try {
+        let url = '/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/' + start.date + '/' + end.date;
+        const response = await this.$axios.get(url);
+        this.calendarItems = response.data;
+        let eventData = response.data.availableTimes;
+
+        for (let i = 0; i < eventData.length; i++) {
+          events.push({
+            id : eventData[i].id,
+            date : eventData[i].date,
+            is_on : eventData[i].is_on,
+            name: eventData[i].available_personnel + '/' + eventData[i].total_personnel,
+            start: eventData[i].date + ' ' + eventData[i].time,
+            end: eventData[i].date + ' ' + eventData[i].time,
+            timed: '0',
+          })
+        }
+        this.events = events
+
+        this.loading = false;
+      } catch (e) {
+        // if (e.response.status == '401') {
+        //   console.log(e);
+        //   //this.$toast.error(e.response.data.message);
+        // }
+      }
     },
     showEvent() {},
   },
