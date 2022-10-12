@@ -14,7 +14,7 @@
           <p class="font_small_text ma-0 mb-1">{{ item.desc }}</p>
 
           <p class="color_main ma-0">
-            <v-chip class="mr-2" small v-for="date in item.date_times">{{ date }}</v-chip>
+            <v-chip class="mr-2" small v-for="(date, dateIndex) in item.date_times" :key="dateIndex">{{ date }}</v-chip>
           </p>
           <p class="ma-0 font_small_text mt-1">({{ item.timezone }})</p>
         </div>
