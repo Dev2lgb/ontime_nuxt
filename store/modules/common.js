@@ -6,6 +6,8 @@ export const common = {
   state: () => ({
     bookingForm: localStorage.getItem("bookingForm"),
     bookingOptionForm: localStorage.getItem("bookingOptionForm"),
+    userBookingForm: localStorage.getItem("userBookingForm"),
+    userBookingOptionForm: localStorage.getItem("userBookingOptionForm"),
 
     locale: localStorage.getItem("locale") ?? 'ko',
     _CONST_: {
@@ -21,6 +23,25 @@ export const common = {
       localStorage.setItem("locale", p);
       state.locale = p;
     },
+    setUserBookingForm(state, p) {
+      localStorage.setItem("userBookingForm", p);
+      state.userBookingForm = p;
+    },
+    setUserBookingOptionForm(state, p) {
+      let userBookingOptionForm = JSON.parse(state.userBookingOptionForm);
+      if (userBookingOptionForm) {
+        userBookingOptionForm.push(JSON.parse(p));
+      } else {
+        userBookingOptionForm = [JSON.parse(p)];
+      }
+      state.userBookingOptionForm = JSON.stringify(userBookingOptionForm);
+
+      localStorage.setItem("userBookingOptionForm", state.userBookingOptionForm);
+    },
+    clearUserBookingForm(state) {
+      localStorage.clear('userBookingForm');
+      state.bookingOptionForm = '';
+    },
     setBookingForm(state, p) {
       localStorage.setItem("bookingForm", p);
       state.bookingForm = p;
@@ -35,8 +56,13 @@ export const common = {
     },
     clearBookingOptionForm(state) {
       localStorage.clear('bookingOptionForm');
-      state.bookingForm = '';
+      state.bookingOptionForm = '';
     },
+    clearUserBookingOptionForm(state) {
+      localStorage.clear('userBookingOptionForm');
+      state.bookingOptionForm = '';
+    },
+
   },
 //action : mutation 호출 및 처리
   actions: {
@@ -56,6 +82,12 @@ export const common = {
     },
     bookingOptionForm: (state) => {
       return state.bookingOptionForm;
+    },
+    userBookingForm: (state) => {
+      return state.userBookingForm;
+    },
+    userBookingOptionForm: (state) => {
+      return state.userBookingOptionForm;
     },
   },
 };

@@ -265,7 +265,7 @@ export default {
         }
       }
     },
-    ...mapMutations("common",['setBookingOptionForm']),
+    ...mapMutations("common",['setBookingOptionForm', 'clearBookingOptionForm']),
     setBeforeData() {
       if (this.$store.state.common.bookingOptionForm) {
         this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
