@@ -123,7 +123,7 @@
       <div>
         <v-btn-toggle
           color="primary"
-          v-model="is_booking_day_number"
+          v-model="is_booking_number"
           group
           outlined
           mandatory
@@ -145,16 +145,16 @@
             직접입력
           </v-btn>
         </v-btn-toggle>
-        <div v-show="is_booking_day_number == 'Y'" class="flex j_center a_center mt-5">
+        <div v-show="is_booking_number == 'Y'" class="flex j_center a_center mt-5">
             <v-text-field type="number" class="h_width text-right"
-                          v-model="form.min_booking_day_number"
+                          v-model="form.min_booking_number"
                           outlined
                           hide-details="auto"
                           prefix="최소"
                           suffix="일"
                           placeholder="최소 1일"></v-text-field>
             <v-text-field type="number" class="h_width ml-3 text-right"
-                          v-model="form.max_booking_day_number"
+                          v-model="form.max_booking_number"
                           outlined
                           prefix="최대"
                           suffix="일"
@@ -229,10 +229,10 @@ export default {
         this.form.date_personnel = 0;
       }
     },
-    is_booking_day_number(val) {
+    is_booking_number(val) {
       if(val == 'N') {
-        this.form.max_booking_day_number = 0;
-        this.form.min_booking_day_number = 0;
+        this.form.max_booking_number = 0;
+        this.form.min_booking_number = 0;
       }
     },
     is_max_booking_personnel_number(val) {
@@ -250,13 +250,13 @@ export default {
     this.setBeforeData()
   },
   data: () => ({
-    is_booking_day_number: 'N',
+    is_booking_number: 'N',
     is_date_personnel: 'N',
     is_max_booking_personnel_number: 'N',
     form: {
       date_personnel: 0,
-      min_booking_day_number: 0,
-      max_booking_day_number: 0,
+      min_booking_number: 0,
+      max_booking_number: 0,
       max_booking_personnel_number: 0,
     },
 
@@ -275,8 +275,8 @@ export default {
         if (this.form.date_personnel > 0) {
           this.is_date_personnel = 'Y';
         }
-        if (this.form.min_booking_day_number > 0 || this.form.min_booking_day_number > 0) {
-          this.is_booking_day_number = 'Y';
+        if (this.form.min_booking_number > 0 || this.form.min_booking_number > 0) {
+          this.is_booking_number = 'Y';
         }
         if (this.form.max_booking_personnel_number == 0) {
           this.is_max_booking_personnel_number = 'Y';

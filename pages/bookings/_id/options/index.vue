@@ -163,27 +163,34 @@
                 </v-btn>
               </div>
             </div>
-            <v-sheet height="400">
-
+            <v-sheet height="600">
               <v-calendar
                 ref="calendar"
                 v-model="focus"
                 color="primary"
                 :events="events"
                 :type="type"
-                @click:event="showEvent"
+                @click:event="addBookings"
                 locale="ko"
+                :event-more="false"
                 @change="updateRange"
                 event-color="transparent"
-              ></v-calendar>
-              {{ events }}
+              >
+                <template v-slot:event="{ event }">
+                  <p class="text-center ma-0 date_selector" :class="dayClass(event)">{{ event.name }}</p>
+                </template>
+              </v-calendar>
             </v-sheet>
           </div>
           <div class="area_line"></div>
           <div class="">
             <div>
-              <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
-              <p class="mt-2">최소1타임 / 최대 3타임 선택 가능해요.</p>
+              <h3><v-icon>mdi-clock</v-icon> 선택된 날짜</h3>
+              <p class="mt-2" v-if="this.bookingOptionItems.min_booking_number">최소 {{ this.bookingOptionItems.min_booking_number}}일 / 최대 {{ this.bookingOptionItems.max_booking_number }}일 선택 가능해요.</p>
+              <p class="mt-2" v-else>날짜를 선택해주세요.</p>
+              <div>
+               <v-chip v-for="(date, d) in date_times" :key="d" class="ma-1" close @click:close="deleteDate(d)">{{ date }}</v-chip>
+              </div>
             </div>
 
           </div>
@@ -228,11 +235,16 @@ export default {
     events: [],
     type: 'month',
     calendarItems: [],
+    availableDays: [],
+    availableDateTimes: [],
+    date_times: [],
   }),
   watch: {
-    // selectedBookingOption() {
-    //   this.getCalendar()
-    // }
+    selectedBookingOption() {
+      const start = this.$refs.calendar.lastStart;
+      const end = this.$refs.calendar.lastEnd;
+      this.updateRange({start, end});
+    }
   },
   mounted () {
     this.$refs.calendar.checkChange()
@@ -263,19 +275,21 @@ export default {
         let url = '/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/' + start.date + '/' + end.date;
         const response = await this.$axios.get(url);
         this.calendarItems = response.data;
-        let eventData = response.data.availableTimes;
+        this.availableDateTimes = response.data.availableDateTimes;
+        let events = [];
 
-        for (let i = 0; i < eventData.length; i++) {
+        for (let i = 0; i <  this.availableDateTimes.length; i++) {
           events.push({
-            id : eventData[i].id,
-            date : eventData[i].date,
-            is_on : eventData[i].is_on,
-            name: eventData[i].available_personnel + '/' + eventData[i].total_personnel,
-            start: eventData[i].date + ' ' + eventData[i].time,
-            end: eventData[i].date + ' ' + eventData[i].time,
+            id :  this.availableDateTimes[i].id,
+            date :  this.availableDateTimes[i].date,
+            is_on :  this.availableDateTimes[i].is_on,
+            name:  (this.availableDateTimes[i].total_personnel - this.availableDateTimes[i].available_personnel) + '/' +  this.availableDateTimes[i].total_personnel,
+            start:  this.availableDateTimes[i].date,
+            end:  this.availableDateTimes[i].date,
             timed: '0',
           })
         }
+        console.log(events);
         this.events = events
 
         this.loading = false;
@@ -286,12 +300,35 @@ export default {
         // }
       }
     },
-    showEvent() {},
+    addBookings(event) {
+      console.log(event);
+      if (this.date_times.length > this.bookingOptionItems.max_booking_number) {
+        this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
+      }
+      this.date_times.push(event.day.date);
+    },
+    deleteDate(index) {
+      this.date_times.splice(index, 1);
+    },
+    dayClass(event) {
+      if (event) {
+        return 'activate_date';
+      } else {
+        return 'non_activate_date';
+      }
+    }
   },
 }
 </script>
 
 <style scoped>
+.date_selector { height:50px; }
+.activate_date {
+  color:#483dff;
+}
+.non_activate_date {
+  color:#aaa;
+}
 .thumbnail_width { width:150px; }
 .res_content_width { width:calc(100% - 210px); }
 .bookmark_width { width:60px }
@@ -307,4 +344,5 @@ export default {
 .user_num p {font-size: 14px; color: #ff5722;}
 
 .next_btn {font-size: 15px;}
+::v-deep .v-event > div { color:#333 !important; text-align:center; }
 </style>

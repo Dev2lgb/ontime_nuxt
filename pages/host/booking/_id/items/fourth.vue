@@ -195,6 +195,8 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'host',
   async fetch() {
@@ -247,7 +249,7 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          localStorage.clear('bookingOptionForm');
+          this.clearBookingOptionForm();
           this.$toast.success('예약상품이 등록되었습니다.');
           this.$router.push('/host/booking/' + this.$route.params.id + '/items');
         }
@@ -263,10 +265,14 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['setBookingOptionForm']),
     setBeforeData() {
-      if (localStorage.getItem('bookingOptionForm')) {
-        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      if (this.$store.state.common.bookingOptionForm) {
+        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
       }
+      // if (localStorage.getItem('bookingOptionForm')) {
+      //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      // }
     },
     classEnField() {
       if(this.masterBooking.is_en == 'Y') {
