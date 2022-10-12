@@ -80,19 +80,24 @@
                 ></v-select>
               </div>
             </div>
-            <v-sheet height="400">
+            <v-sheet height="600">
               <v-calendar
                 ref="calendar"
                 v-model="focus"
                 color="primary"
                 :events="events"
                 :type="type"
-                @click:event="showEvent"
+                :event-more="false"
+                @click:event="addBookings"
                 locale="ko"
                 @change="updateRange"
                 event-color="transparent"
 
-              ></v-calendar>
+              >
+                <template v-slot:event="{ event }">
+                  <p class="text-center ma-0 date_selector" :class="dayClass(event)">{{ event.name }}</p>
+                </template>
+              </v-calendar>
             </v-sheet>
           </div>
           <div class="area_line"></div>
@@ -200,7 +205,7 @@
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="nextForm">다음단계</v-btn>
         </div>
       </div>
-      {{ availableDateTimes }}
+      {{ events }}
     </div>
   </div>
 </template>
@@ -291,7 +296,21 @@ export default {
         let events = [];
 
         if (this.selectedBookingOption.type == 'time') {
+          let groupbyData = _.chain(this.availableDateTimes)
+            .groupBy("date")
+            .map((value, key) => ({ date: key, times: value }))
+            .value()
 
+          console.log(groupbyData);
+          for (let i = 0; i <  groupbyData.length; i++) {
+            events.push({
+              date :  groupbyData[i].date,
+              times :  groupbyData[i].times,
+              start:  groupbyData[i].date,
+              end:  groupbyData[i].date,
+              timed: '0',
+            })
+          }
         }
         if (this.selectedBookingOption.type == 'date') {
           for (let i = 0; i <  this.availableDateTimes.length; i++) {
@@ -306,7 +325,6 @@ export default {
             })
           }
         }
-
 
         this.events = events
 
@@ -337,6 +355,11 @@ export default {
         return 'activate_date';
       } else {
         return 'non_activate_date';
+      }
+      if (event.available_personnel == 0) {
+        return 'non_activate_date';
+      } else {
+        return 'activate_date';
       }
     },
     nextForm() {
