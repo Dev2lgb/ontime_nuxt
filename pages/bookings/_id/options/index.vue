@@ -181,6 +181,7 @@
                 </template>
               </v-calendar>
             </v-sheet>
+
           </div>
           <div class="area_line"></div>
           <div class="">
@@ -199,7 +200,7 @@
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="nextForm">다음단계</v-btn>
         </div>
       </div>
-      {{ form }}
+      {{ availableDateTimes }}
     </div>
   </div>
 </template>
@@ -289,17 +290,24 @@ export default {
         this.availableDateTimes = response.data.availableDateTimes;
         let events = [];
 
-        for (let i = 0; i <  this.availableDateTimes.length; i++) {
-          events.push({
-            id :  this.availableDateTimes[i].id,
-            date :  this.availableDateTimes[i].date,
-            is_on :  this.availableDateTimes[i].is_on,
-            name:  this.availableDateTimes[i].available_personnel + '/' +  this.availableDateTimes[i].total_personnel,
-            start:  this.availableDateTimes[i].date,
-            end:  this.availableDateTimes[i].date,
-            timed: '0',
-          })
+        if (this.selectedBookingOption.type == 'time') {
+
         }
+        if (this.selectedBookingOption.type == 'date') {
+          for (let i = 0; i <  this.availableDateTimes.length; i++) {
+            events.push({
+              id :  this.availableDateTimes[i].id,
+              date :  this.availableDateTimes[i].date,
+              is_on :  this.availableDateTimes[i].is_on,
+              name:  this.availableDateTimes[i].available_personnel + '/' +  this.availableDateTimes[i].total_personnel,
+              start:  this.availableDateTimes[i].date,
+              end:  this.availableDateTimes[i].date,
+              timed: '0',
+            })
+          }
+        }
+
+
         this.events = events
 
         this.loading = false;
