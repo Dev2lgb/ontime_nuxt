@@ -88,7 +88,7 @@
                 :events="events"
                 :type="type"
                 :event-more="false"
-                @click:event="addBookings"
+                @click:event="showBookingTime"
                 locale="ko"
                 @change="updateRange"
                 event-color="transparent"
@@ -249,6 +249,7 @@ export default {
       title : '',
       desc : '',
       timezone : '',
+      timeTypesItem: [],
     }
   }),
   watch: {
@@ -300,10 +301,15 @@ export default {
             .groupBy("date")
             .map((value, key) => ({ date: key, times: value }))
             .value()
-
-          console.log(groupbyData);
           for (let i = 0; i <  groupbyData.length; i++) {
+            let available_count = 0;
+            let total_count = 0;
+            for (let j = 0; j <  groupbyData[i].times.length; j++) {
+              available_count += groupbyData[i].times[j].available_personnel;
+              total_count += groupbyData[i].times[j].total_personnel;
+            }
             events.push({
+              name: available_count + '/' + total_count,
               date :  groupbyData[i].date,
               times :  groupbyData[i].times,
               start:  groupbyData[i].date,
@@ -337,9 +343,11 @@ export default {
       }
     },
     addBookings(event) {
-      if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
-        this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
-        return false;
+      if (this.selectedBookingOption.max_booking_number) {
+        if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
+          this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
+          return false;
+        }
       }
       if (this.form.date_times.indexOf(event.day.date) >= 0) {
         this.$toast.error('이미 추가한 날짜입니다.');
@@ -363,14 +371,19 @@ export default {
       }
     },
     nextForm() {
-      if ((this.form.date_times.length) < this.selectedBookingOption.min_booking_number) {
-        this.$toast.error('최소 예약 갯수에 맞춰 선택해주세요.');
-        return false;
+      if (this.selectedBookingOption.min_booking_number) {
+        if ((this.form.date_times.length) < this.selectedBookingOption.min_booking_number) {
+          this.$toast.error('최소 예약 갯수에 맞춰 선택해주세요.');
+          return false;
+        }
       }
       this.setUserBookingOptionForm(JSON.stringify(this.form));
       this.$router.push('/bookings/' + this.$route.params.id + '/options/second');
     },
     ...mapMutations("common",['setUserBookingOptionForm']),
+  },
+  showBookingTime(event) {
+    this.timeTypesItem.push();
   },
 }
 </script>
