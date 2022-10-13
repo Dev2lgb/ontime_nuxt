@@ -80,19 +80,24 @@
                 ></v-select>
               </div>
             </div>
-            <v-sheet height="400">
+            <v-sheet height="600">
               <v-calendar
                 ref="calendar"
                 v-model="focus"
                 color="primary"
                 :events="events"
                 :type="type"
-                @click:event="showEvent"
+                :event-more="false"
+                @click:event="addBookings"
                 locale="ko"
                 @change="updateRange"
                 event-color="transparent"
 
-              ></v-calendar>
+              >
+                <template v-slot:event="{ event }">
+                  <p class="text-center ma-0 date_selector" :class="dayClass(event)">{{ event.name }}</p>
+                </template>
+              </v-calendar>
             </v-sheet>
           </div>
           <div class="area_line"></div>
@@ -114,7 +119,7 @@
 
             <v-select
               outlined
-              v-model="personnel"
+              v-model="form.personnel"
               hide-details="auto"
               :items="getPersonnelItems(selectedBookingOption.max_booking_personnel_number)"
               item-value="value"
@@ -127,8 +132,8 @@
               <h3><v-icon>mdi-calendar-clock</v-icon> 날짜 선택하기</h3>
               <p>
                 예약 신청 가능일자 :
-                <span v-if="selectedBookingOption.booking_available_start_date">
-                  {{ selectedBookingOption.booking_available_start_date }} 부터 {{ selectedBookingOption.booking_available_end_date }} 까지
+                <span v-if="selectedBookingOption.start_date">
+                  {{ selectedBookingOption.start_date }} 부터 {{ selectedBookingOption.end_date }} 까지
                 </span>
                 <span v-else>제한없음</span>
                 <br />({{ selectedBookingOption.timezone }} 기준)
@@ -163,38 +168,50 @@
                 </v-btn>
               </div>
             </div>
-            <v-sheet height="400">
+            <v-sheet height="600">
               <v-calendar
                 ref="calendar"
                 v-model="focus"
                 color="primary"
                 :events="events"
                 :type="type"
-                @click:event="showEvent"
+                @click:event="addBookings"
                 locale="ko"
+                :event-more="false"
                 @change="updateRange"
                 event-color="transparent"
-
-              ></v-calendar>
+              >
+                <template v-slot:event="{ event }">
+                  <p class="text-center ma-0 date_selector" :class="dayClass(event)">{{ event.name }}</p>
+                </template>
+              </v-calendar>
             </v-sheet>
+
           </div>
           <div class="area_line"></div>
           <div class="">
             <div>
-              <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
-              <p class="mt-2">최소1타임 / 최대 3타임 선택 가능해요.</p>
+              <h3><v-icon>mdi-clock</v-icon> 선택된 날짜</h3>
+              <p class="mt-2" v-if="this.selectedBookingOption.min_booking_number > 0">최소 {{ this.selectedBookingOption.min_booking_number}}일 / 최대 {{ this.selectedBookingOption.max_booking_number }}일 선택 가능해요.</p>
+              <p class="mt-2" v-else>날짜를 선택해주세요.</p>
+              <div>
+               <v-chip v-for="(date, d) in form.date_times" :key="d" class="ma-1" close @click:close="deleteDate(d)">{{ date }}</v-chip>
+              </div>
             </div>
 
           </div>
         </div>
         <div class="flex j_space a_center mt-10">
-          <v-btn class="next_btn" x-large depressed dark block color="#28b487" :to="'/bookings/' + this.$route.params.id + '/options/second'">다음단계</v-btn>
+          <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="nextForm">다음단계</v-btn>
         </div>
       </div>
+      {{ events }}
     </div>
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'user',
   async fetch() {
@@ -204,7 +221,6 @@ export default {
       const response = await this.$axios.get(url);
       this.bookingOptionItems = response.data;
       this.bookingOptionCount = response.data.length;
-
       this.loading = false;
     } catch (e) {
       if (e.response.status == '401') {
@@ -217,40 +233,40 @@ export default {
     bookingOptionCount: 0,
     selectedBookingOption: '',
     personnel: 1,
-    numberItems: [
-      { text:'1명', value:'1' },
-      { text:'2명', value:'2' },
-      { text:'3명', value:'3' },
-    ],
+    numberItems: [],
     bookingOptionItems: [],
     focus: '',
     events: [],
     type: 'month',
+    calendarItems: [],
+    availableDays: [],
+    availableDateTimes: [],
+    form : {
+      id : '',
+      type: '',
+      personnel: 1,
+      date_times: [],
+      title : '',
+      desc : '',
+      timezone : '',
+    }
   }),
   watch: {
     selectedBookingOption() {
-      this.getCalendar()
+      this.form.id = this.selectedBookingOption.id;
+      this.form.type = this.selectedBookingOption.type;
+      this.form.title = this.selectedBookingOption.title;
+      this.form.desc = this.selectedBookingOption.desc;
+      this.form.timezone = this.selectedBookingOption.timezone;
+      const start = this.$refs.calendar.lastStart;
+      const end = this.$refs.calendar.lastEnd;
+      this.updateRange({start, end});
     }
   },
   mounted () {
     this.$refs.calendar.checkChange()
   },
   methods: {
-    async getCalendar() {
-      this.loading = true;
-      try {
-        let url = '/host/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/2022-10-01/2022-10-31';
-        const response = await this.$axios.get(url);
-        this.calendarItems = response.data;
-
-        this.loading = false;
-      } catch (e) {
-        if (e.response.status == '401') {
-          console.log(e);
-          //this.$toast.error(e.response.data.message);
-        }
-      }
-    },
     getItemText(item) {
       return `${item.title} - ${item.desc}`;
     },
@@ -270,19 +286,103 @@ export default {
     next () {
       this.$refs.calendar.next()
     },
-    updateRange ({ start, end }) {
-      const events = []
-      events.push({ color:'#483dff', start: '2022-09-13', end: '2022-09-13', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      events.push({ color:'#483dff', start: '2022-09-14', end: '2022-09-14', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      events.push({ color:'#483dff', start: '2022-09-15', end: '2022-09-15', name: '10/20', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      this.events = events
+    async updateRange ({ start, end }) {
+      this.loading = true;
+      try {
+        let url = '/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/' + start.date + '/' + end.date;
+        const response = await this.$axios.get(url);
+        this.calendarItems = response.data;
+        this.availableDateTimes = response.data.availableDateTimes;
+        let events = [];
+
+        if (this.selectedBookingOption.type == 'time') {
+          let groupbyData = _.chain(this.availableDateTimes)
+            .groupBy("date")
+            .map((value, key) => ({ date: key, times: value }))
+            .value()
+
+          console.log(groupbyData);
+          for (let i = 0; i <  groupbyData.length; i++) {
+            events.push({
+              date :  groupbyData[i].date,
+              times :  groupbyData[i].times,
+              start:  groupbyData[i].date,
+              end:  groupbyData[i].date,
+              timed: '0',
+            })
+          }
+        }
+        if (this.selectedBookingOption.type == 'date') {
+          for (let i = 0; i <  this.availableDateTimes.length; i++) {
+            events.push({
+              id :  this.availableDateTimes[i].id,
+              date :  this.availableDateTimes[i].date,
+              is_on :  this.availableDateTimes[i].is_on,
+              name:  this.availableDateTimes[i].available_personnel + '/' +  this.availableDateTimes[i].total_personnel,
+              start:  this.availableDateTimes[i].date,
+              end:  this.availableDateTimes[i].date,
+              timed: '0',
+            })
+          }
+        }
+
+        this.events = events
+
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
     },
-    showEvent() {},
+    addBookings(event) {
+      if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
+        this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
+        return false;
+      }
+      if (this.form.date_times.indexOf(event.day.date) >= 0) {
+        this.$toast.error('이미 추가한 날짜입니다.');
+        return false;
+      }
+      this.form.date_times.push(event.day.date);
+    },
+    deleteDate(index) {
+      this.form.date_times.splice(index, 1);
+    },
+    dayClass(event) {
+      if (event) {
+        return 'activate_date';
+      } else {
+        return 'non_activate_date';
+      }
+      if (event.available_personnel == 0) {
+        return 'non_activate_date';
+      } else {
+        return 'activate_date';
+      }
+    },
+    nextForm() {
+      if ((this.form.date_times.length) < this.selectedBookingOption.min_booking_number) {
+        this.$toast.error('최소 예약 갯수에 맞춰 선택해주세요.');
+        return false;
+      }
+      this.setUserBookingOptionForm(JSON.stringify(this.form));
+      this.$router.push('/bookings/' + this.$route.params.id + '/options/second');
+    },
+    ...mapMutations("common",['setUserBookingOptionForm']),
   },
 }
 </script>
 
 <style scoped>
+.date_selector { height:50px; }
+.activate_date {
+  color:#483dff;
+}
+.non_activate_date {
+  color:#aaa;
+}
 .thumbnail_width { width:150px; }
 .res_content_width { width:calc(100% - 210px); }
 .bookmark_width { width:60px }
@@ -298,4 +398,5 @@ export default {
 .user_num p {font-size: 14px; color: #ff5722;}
 
 .next_btn {font-size: 15px;}
+::v-deep .v-event > div { color:#333 !important; text-align:center; }
 </style>

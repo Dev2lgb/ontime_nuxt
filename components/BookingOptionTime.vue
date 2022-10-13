@@ -42,7 +42,7 @@
       <div>
         <v-btn-toggle
           color="primary"
-          v-model="form.booking_time_number"
+          v-model="form.booking_number"
           group
           outlined
           mandatory
@@ -65,15 +65,15 @@
           </v-btn>
         </v-btn-toggle>
 
-        <div class="flex j_center a_center mt-3" v-show="form.booking_time_number == 'Y'">
+        <div class="flex j_center a_center mt-3" v-show="form.booking_number == 'Y'">
           <v-text-field type="number" class="h_width"
-                        v-model="form.min_booking_time_number"
+                        v-model="form.min_booking_number"
                         outlined
                         dense
                         hide-details="auto"
                         placeholder="최소 1개 타임"></v-text-field>
           <v-text-field type="number" class="h_width ml-3"
-                        v-model="form.max_booking_time_number"
+                        v-model="form.max_booking_number"
                         outlined
                         dense
                         hide-details="auto"

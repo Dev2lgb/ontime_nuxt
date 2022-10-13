@@ -29,10 +29,12 @@
         >다음 단계로 이동</v-btn>
       </div>
     </div>
+
   </div>
 </template>
 <script>
 import BookingOptionTime from "../../../../../components/BookingOptionTime";
+import {mapMutations} from "vuex";
 export default {
   components: {BookingOptionTime},
   layout: 'host',
@@ -99,7 +101,8 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          localStorage.setItem('bookingOptionForm', JSON.stringify(this.form));
+          this.setBookingOptionForm(JSON.stringify(this.form));
+          // localStorage.setItem('bookingOptionForm', JSON.stringify(this.form));
           this.$router.push('/host/booking/' + this.$route.params.id + '/items/third');
         }
         this.loading = false;
@@ -114,10 +117,14 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['setBookingOptionForm']),
     setBeforeData() {
-      if (localStorage.getItem('bookingOptionForm')) {
-        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      if (this.$store.state.common.bookingOptionForm) {
+        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
       }
+      // if (localStorage.getItem('bookingOptionForm')) {
+      //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      // }
     },
     classEnField() {
       if(this.masterBooking.is_en == 'Y') {
