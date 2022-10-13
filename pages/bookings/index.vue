@@ -40,7 +40,7 @@
               class="img_radius"
             ></v-img>
           </div>
-          <router-link to="/bookings/13" class="non-deco card_subject">
+          <router-link to="/bookings/1" class="non-deco card_subject">
             <h3 class="text_title">[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
             <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
             <p class="desc">
@@ -69,7 +69,7 @@
                 class="img_radius"
               ></v-img>
             </div>
-            <router-link to="/bookings/13" class="non-deco card_subject">
+            <router-link to="/bookings/1" class="non-deco card_subject">
               <h3 class="text_title">[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
               <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
               <p class="desc">

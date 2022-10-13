@@ -26,14 +26,14 @@
           <div class="pb-7">
             <div class="d-flex justify-space-between align-center user_num">
               <h3><v-icon>mdi-account-multiple</v-icon> 인원 선택하기</h3>
-              <p class="ma-0">최대 3명까지 참여가능해요.</p>
+              <p class="ma-0">최대 {{ selectedBookingOption.max_booking_personnel_number }}명까지 참여가능해요.</p>
             </div>
 
             <v-select
               outlined
               v-model="personnel"
               hide-details="auto"
-              :items="numberItems"
+              :items="getPersonnelItems(selectedBookingOption.max_booking_personnel_number)"
               item-value="value"
               item-text="text"
             ></v-select>
@@ -99,7 +99,7 @@
           <div class="">
             <div>
               <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
-              <p class="mt-2">최소1타임 / 최대 3타임 선택 가능해요.</p>
+              <p class="mt-2">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
             </div>
 
           </div>
