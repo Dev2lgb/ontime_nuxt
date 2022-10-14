@@ -205,7 +205,7 @@
         </div>
 
         <div class="flex j_space a_center">
-          <router-link to="" class="half_btn left flex j_space a_start">
+          <router-link to="/host/home" class="half_btn left flex j_space a_start">
             <div class="h_btn_title">
               <p>예약관리가 필요하시다면</p>
               <h3>예약만들기</h3>
@@ -215,7 +215,7 @@
             </div>
           </router-link>
 
-          <router-link to="" class="half_btn right flex j_space a_start">
+          <router-link to="/home" class="half_btn right flex j_space a_start">
             <div class="h_btn_title">
               <p>예약관리을 참여하신다면</p>
               <h3>예약하기</h3>
@@ -230,12 +230,29 @@
 
     <div class="footer">
       <div class="footer_header">
-        <div class="inner">
-
+        <div class="inner flex j_space a_center">
+          <div class="f_logo">
+            <img src="~/assets/images/f_logo.png" alt="">
+          </div>
+          <div class="f_menu flex j_end a_center">
+            <a href="">이용약관</a>
+            <a href="">개인정보처리방침</a>
+          </div>
         </div>
       </div>
-      <div class="inner">
-
+      <div class="footer_body inner flex j_space a_center">
+        <div class="f_left">
+          <p>
+            상호명 : 온타임  I  대표:홍길동  I  사업자등록번호: 012-34-56789  I  통신판매업신고 : 제0000-서울영등포-0000호
+            I  주소 : 서울시 영등포구 양평로 33길 49 4층 405호
+            이메일 : ontimeworld.manager@gmail.com
+          </p>
+          <p class="color_gray">Copyright© 2022 All rights reserved by ONTIME.</p>
+        </div>
+        <div class="text-right f_right">
+          <p class="customer_tel">고객지원 <span>1000-0000</span></p>
+          <p class="customer_time">운영시간 10:00 ~ 18:00  I  점심시간 12:00 ~ 13:00 (주말,공휴일 제외)</p>
+        </div>
       </div>
     </div>
 
@@ -258,55 +275,5 @@ export default {
 </script>
 
 <style>
-  .header_height { height:100px; }
-  .logo { width:300px; }
-  .nav { width:calc(100% - 600px); }
-  .nav li { width:20%; }
-  .logo img { width:160px; }
-  .header_auth { width:300px; }
-  .header_auth a { text-decoration: none; }
-  .header_btn { width:50%; color:#444; font-size:14px; display:inline-block; text-align:center; border:1px solid #ddd; border-radius:50px; padding:10px 0; }
-  .header_btn.colored { color:#fff; background-color:#4676bb; margin-left:5px; }
-  .systems { padding:60px 0; }
-  .systems h3 { margin:20px 0; }
-  .systems p { font-size:13px; }
-  .systems_item { width:calc(20% - 10px); }
-  .systems_item h3 { font-weight:300; }
-  .systems_item span { font-weight:bold; }
-  .systems_item img { width:30px; }
-  .join_section { background-color:#f3f5f7; padding:70px 0; }
-  .join_left { width:50%; }
-  .join_left img { width:90%; }
-  .join_right { width:50%; }
-  .join_right h3 { font-size:40px; font-weight:400; margin-bottom:30px; }
-  .join_right h3 span { font-weight:bold; }
-  .join_right p { margin-bottom:20px; }
-  .join_right .join_btn { margin-left:30px; }
-  .service_section { padding:70px 0; background-color:#f9f9f9; }
-  .service_left .service_logo img { width:100px; border-bottom:1px solid #ccc; padding-bottom:10px; }
-  .service_left h3 { font-size:40px; margin-bottom:30px; color:#484848; }
-  .service_btn { color:#4676bb; margin-top:20px; display:inline-block; }
-  .service_left, .service_right { width:50%; }
-  .service2_left, .service2_right { width:50%; }
-  .service2_left img { width:80%; }
-  .service2_right h3 { font-size:40px; margin-bottom:30px; color:#484848; }
-  .service2_section { padding:0px 0; }
-  .circle_icon { width:60px; height:60px; margin:0; display:flex; justify-content: center; align-items: center; border-radius:100%; border:1px solid #4676bb; text-align:center; }
-  .process_item { text-align:center; width:100px; position:relative; }
-  .process_item::after { position:absolute; content:""; opacity: .4; display:block; width:30px; height:1px; background-color:#4676bb; top:30px; left:85px; }
-  .process_item:last-child::after { display:none; }
-  .process_item p { font-size:12px; color:#4676bb; margin-top:5px; }
-  .s2_text { margin:30px 0; }
-  .s2_text2 { color:#aaa; }
-  .underline_btn { border-bottom:1px solid #7f7f7f; color:#7f7f7f; font-weight:500; padding-bottom:5px; display:inline-block; margin-bottom:20px; }
-  .book_section { padding:150px 0; }
-  .rec { width:15px; height:15px; border:1px solid #222; background-color:#fff; display:inline-block; margin-right:5px; }
-  .chip_box { margin-top:10px; }
-  .book_h3 { font-size:35px; font-weight:400; }
-  .book_h3 span { font-weight:bold; }
-  .half_btn { width:calc(50% - 10px); padding:30px; border-radius:20px; margin-top:40px; color:#fff; }
-  .half_btn.left { background-color:#3c81f9; }
-  .half_btn.right { background-color:#50b999; }
-  .half_btn h3 { font-size:35px; }
-  .h_btn_title { padding-top:30px; }
+
 </style>

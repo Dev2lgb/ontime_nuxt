@@ -92,10 +92,9 @@
                 locale="ko"
                 @change="updateRange"
                 event-color="transparent"
-
               >
                 <template v-slot:event="{ event }">
-                  <p class="text-center ma-0 date_selector" :class="dayClass(event)">{{ event.name }}</p>
+                  <p class="text-center ma-0 date_selector"  :class="dayClass(event)">{{ event.name }}</p>
                 </template>
               </v-calendar>
             </v-sheet>
@@ -106,7 +105,28 @@
               <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
               <p class="mt-2">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
             </div>
-
+            <div>
+              <v-btn-toggle
+                color="primary"
+                v-model="form.date_times"
+                :error-messages="errors.type"
+                group
+                outlined
+                multiple
+                dense
+                class="d-flex flex-wrap justify-start align-center"
+              >
+                <v-btn
+                  style="border:1px solid #ccc; border-radius:10px"
+                  class="ma-1 col_content_btn"
+                  v-for="(date, d) in timeTypesItem" :key="d"
+                  :value="date.date + ' ' + date.time"
+                >
+                  {{ date.time }}
+                </v-btn>
+              </v-btn-toggle>
+              {{ form }}
+            </div>
           </div>
         </div>
         <div v-show="selectedBookingOption.type == 'date'">
@@ -199,13 +219,13 @@
               </div>
             </div>
 
+
           </div>
         </div>
         <div class="flex j_space a_center mt-10">
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="nextForm">다음단계</v-btn>
         </div>
       </div>
-      {{ events }}
     </div>
   </div>
 </template>
@@ -230,6 +250,8 @@ export default {
     }
   },
   data: () => ({
+    errors: [],
+    timezoneItems:[],
     bookingOptionCount: 0,
     selectedBookingOption: '',
     personnel: 1,
@@ -241,6 +263,7 @@ export default {
     calendarItems: [],
     availableDays: [],
     availableDateTimes: [],
+    timeTypesItem: [],
     form : {
       id : '',
       type: '',
@@ -249,7 +272,6 @@ export default {
       title : '',
       desc : '',
       timezone : '',
-      timeTypesItem: [],
     }
   }),
   watch: {
@@ -342,6 +364,12 @@ export default {
         }
       }
     },
+    showBookingTime(event) {
+      this.timeTypesItem = [];
+      for(let i = 0; i < event.eventParsed.input.times.length; i++) {
+        this.timeTypesItem.push({date: event.day.date, time: event.eventParsed.input.times[i].time});
+      }
+    },
     addBookings(event) {
       if (this.selectedBookingOption.max_booking_number) {
         if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
@@ -370,6 +398,7 @@ export default {
         return 'activate_date';
       }
     },
+
     nextForm() {
       if (this.selectedBookingOption.min_booking_number) {
         if ((this.form.date_times.length) < this.selectedBookingOption.min_booking_number) {
@@ -381,10 +410,9 @@ export default {
       this.$router.push('/bookings/' + this.$route.params.id + '/options/second');
     },
     ...mapMutations("common",['setUserBookingOptionForm']),
+
   },
-  showBookingTime(event) {
-    this.timeTypesItem.push();
-  },
+
 }
 </script>
 
