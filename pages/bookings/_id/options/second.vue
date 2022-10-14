@@ -174,7 +174,7 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          this.clearBookingOptionForm();
+          this.clearUserBookingOptionForm();
           this.$toast.success('예약 신청이 완료되었습니다.');
           this.$router.push('/home');
         }
@@ -190,7 +190,7 @@ export default {
         }
       }
     },
-    ...mapMutations("common",['clearBookingOptionForm']),
+    ...mapMutations("common",['clearUserBookingOptionForm']),
   },
 }
 </script>

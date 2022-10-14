@@ -5,7 +5,6 @@
       <div class="user_nik">
         <p>예약옵션을 선택해주세요.<br>해당 예약은 <span><span>1개의 옵션</span></span>만 선택 가능.</p>
       </div>
-
       <div class="progrma_area">
         <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
         <v-select
@@ -106,25 +105,40 @@
               <p class="mt-2">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
             </div>
             <div>
-              <v-btn-toggle
-                color="primary"
+<!--              <v-btn-toggle-->
+<!--                color="primary"-->
+<!--                v-model="form.date_times"-->
+<!--                :error-messages="errors.type"-->
+<!--                group-->
+<!--                outlined-->
+<!--                multiple-->
+<!--                dense-->
+<!--                class="d-flex flex-wrap justify-start align-center"-->
+<!--              >-->
+<!--                <v-btn-->
+<!--                  style="border:1px solid #ccc; border-radius:10px"-->
+<!--                  class="ma-1 col_content_btn"-->
+<!--                  v-for="(date, d) in timeTypesItem" :key="d"-->
+<!--                  :value="date.date + ' ' + date.time"-->
+<!--                >-->
+<!--                  {{ date.time }}-->
+<!--                </v-btn>-->
+<!--              </v-btn-toggle>-->
+              <v-chip-group
                 v-model="form.date_times"
-                :error-messages="errors.type"
-                group
-                outlined
+                :error-messages="errors.date_times"
+                column
+                :max="selectedBookingOption.max_booking_number"
                 multiple
-                dense
-                class="d-flex flex-wrap justify-start align-center"
               >
-                <v-btn
-                  style="border:1px solid #ccc; border-radius:10px"
-                  class="ma-1 col_content_btn"
-                  v-for="(date, d) in timeTypesItem" :key="d"
-                  :value="date.date + ' ' + date.time"
-                >
-                  {{ date.time }}
-                </v-btn>
-              </v-btn-toggle>
+              <v-chip
+                filter
+                v-for="(date, d) in timeTypesItem" :key="d"
+                :value="date.date + ' ' + date.time"
+              >
+                {{ date.time }}
+              </v-chip>
+              </v-chip-group>
               {{ form }}
             </div>
           </div>
@@ -241,6 +255,11 @@ export default {
       const response = await this.$axios.get(url);
       this.bookingOptionItems = response.data;
       this.bookingOptionCount = response.data.length;
+
+      let urlBooking = '/bookings/' + this.$route.params.id;
+      const responseBooking = await this.$axios.get(urlBooking);
+      this.booking = responseBooking.data.data.booking;
+
       this.loading = false;
     } catch (e) {
       if (e.response.status == '401') {
@@ -254,6 +273,7 @@ export default {
     timezoneItems:[],
     bookingOptionCount: 0,
     selectedBookingOption: '',
+    booking: {},
     personnel: 1,
     numberItems: [],
     bookingOptionItems: [],
@@ -366,6 +386,7 @@ export default {
     },
     showBookingTime(event) {
       this.timeTypesItem = [];
+      this.form.date_times = [];
       for(let i = 0; i < event.eventParsed.input.times.length; i++) {
         this.timeTypesItem.push({date: event.day.date, time: event.eventParsed.input.times[i].time});
       }
