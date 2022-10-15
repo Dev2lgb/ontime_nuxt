@@ -17,8 +17,6 @@
           placeholder="예약 옵션 선택"
         ></v-select>
       </div>
-      {{ selectedBookingOption }}
-
       <div class="select_hide_option">
         <div v-show="selectedBookingOption.type == 'time'">
           <div class="area_line"></div>
@@ -139,7 +137,6 @@
                 {{ date.time }}
               </v-chip>
               </v-chip-group>
-              {{ form }}
             </div>
           </div>
         </div>

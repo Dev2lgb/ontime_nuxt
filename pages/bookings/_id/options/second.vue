@@ -9,16 +9,16 @@
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
 
       <div>
-        <div v-for="item in items" :key="item.id" class="border_a mb-3 pa-5">
+        {{booking}}
+        <div v-for="item in items" :key="item.id" class="border_a mb-3 pa-5 position_rel">
+          <v-btn text class="ab_btn" fab><v-icon>mdi-pencil-box</v-icon>{{ item.id }}</v-btn>
           <p class="font-weight-bold ma-0">{{ item.title }}</p>
           <p class="font_small_text ma-0 mb-1">{{ item.desc }}</p>
-
           <p class="color_main ma-0">
             <v-chip class="mr-2" small v-for="(date, dateIndex) in item.date_times" :key="dateIndex">{{ date }}</v-chip>
           </p>
           <p class="ma-0 font_small_text mt-1">({{ item.timezone }})</p>
         </div>
-
         <v-btn block depressed text color="#5544aa" class="font-weight-bold" :to="'/bookings/' + this.$route.params.id + '/options'">+ 항목 추가</v-btn>
       </div>
       <div class="mt-10">
@@ -93,9 +93,7 @@
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="submitForm">예약완료</v-btn>
         </div>
       </div>
-      {{ this.booking.collect_user_infos1 }}
     </div>
-    {{ form }}
   </div>
 </template>
 <script>
@@ -135,6 +133,7 @@ export default {
       { text: '행사', value:'5' },
     ],
     items: [],
+    errors: [],
   }),
   mounted() {
     this.setData();
@@ -177,6 +176,10 @@ export default {
           this.clearUserBookingOptionForm();
           this.$toast.success('예약 신청이 완료되었습니다.');
           this.$router.push('/home');
+        } else {
+          this.clearUserBookingOptionForm();
+          this.$toast.error(response.data.message);
+          this.$router.push('/home');
         }
         this.loading = false;
       } catch (e) {
@@ -211,4 +214,6 @@ export default {
 .user_num p {font-size: 14px; color: #ff5722;}
 
 .next_btn {font-size: 15px;}
+.position_rel { position:relative; }
+.ab_btn { position:absolute; top:10px; right:10px; }
 </style>

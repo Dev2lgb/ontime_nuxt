@@ -37,6 +37,7 @@ export default {
     { src: '@/plugins/api.js', mode: 'client' },
     { src: '@/plugins/google-map.js', mode: 'client' },
     { src: '@/plugins/main.js', mode: 'client' },
+    { src: '@/plugins/chart.js', mode: 'client' },
   ],
 
 
