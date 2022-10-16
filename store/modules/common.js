@@ -28,7 +28,10 @@ export const common = {
       state.userBookingForm = p;
     },
     setUserBookingOptionForm(state, p) {
-      let userBookingOptionForm = JSON.parse(state.userBookingOptionForm);
+      let userBookingOptionForm = [];
+      if (state.userBookingOptionForm) {
+        userBookingOptionForm = JSON.parse(state.userBookingOptionForm);
+      }
       if (userBookingOptionForm) {
         userBookingOptionForm.push(JSON.parse(p));
       } else {
@@ -39,7 +42,7 @@ export const common = {
       localStorage.setItem("userBookingOptionForm", state.userBookingOptionForm);
     },
     clearUserBookingForm(state) {
-      localStorage.clear('userBookingForm');
+      localStorage.removeItem('userBookingForm');
       state.bookingOptionForm = '';
     },
     setBookingForm(state, p) {
@@ -47,7 +50,7 @@ export const common = {
       state.bookingForm = p;
     },
     clearBookingForm(state) {
-      localStorage.clear('bookingForm');
+      localStorage.removeItem('bookingForm');
       state.bookingForm = '';
     },
     setBookingOptionForm(state, p) {
@@ -55,12 +58,12 @@ export const common = {
       state.bookingOptionForm = p;
     },
     clearBookingOptionForm(state) {
-      localStorage.clear('bookingOptionForm');
+      localStorage.removeItem('bookingOptionForm');
       state.bookingOptionForm = '';
     },
     clearUserBookingOptionForm(state) {
-      localStorage.clear('userBookingOptionForm');
-      state.bookingOptionForm = '';
+      localStorage.removeItem('userBookingOptionForm');
+      state.userBookingOptionForm = '';
     },
 
   },

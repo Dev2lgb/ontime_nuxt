@@ -4,7 +4,7 @@
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_form">
         <div class="user_nik">
-          <p><span>홍길동</span> 님, 환영합니다.<br>어떤 프로그램을 찾고 계신가요?</p>
+          <p><span>홍길동</span> {{$t('_home.hello')}}<br>{{$t('_home.find_program')}}</p>
         </div>
         <div class="program_form">
           <ul>

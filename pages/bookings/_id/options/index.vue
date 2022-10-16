@@ -5,6 +5,7 @@
       <div class="user_nik">
         <p>예약옵션을 선택해주세요.<br>해당 예약은 <span><span>1개의 옵션</span></span>만 선택 가능.</p>
       </div>
+      {{ availableDateTimes }}
       <div class="progrma_area">
         <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
         <v-select
@@ -68,11 +69,13 @@
                   </v-icon>
                 </v-btn>
               </div>
-              <div class="q_width">
+              <div class="q_width" v-show="selectedBookingOption.is_use_timezone === 'Y'">
                 <v-select
                   :items="timezoneItems"
                   outlined
+                  v-model="selectedTimezone"
                   dense
+                  @change=""
                   hide-details="auto"
                 ></v-select>
               </div>
@@ -133,8 +136,9 @@
                 filter
                 v-for="(date, d) in timeTypesItem" :key="d"
                 :value="date.date + ' ' + date.time"
+                :disabled="!date.is_available || !date.is_on"
               >
-                {{ date.time }}
+                {{ date.timezone_time }}
               </v-chip>
               </v-chip-group>
             </div>
@@ -229,8 +233,6 @@
                <v-chip v-for="(date, d) in form.date_times" :key="d" class="ma-1" close @click:close="deleteDate(d)">{{ date }}</v-chip>
               </div>
             </div>
-
-
           </div>
         </div>
         <div class="flex j_space a_center mt-10">
@@ -248,14 +250,20 @@ export default {
   async fetch() {
     this.loading = true;
     try {
+      localStorage.removeItem('userBookingOptionForm');
+      let urlBooking = '/bookings/' + this.$route.params.id;
+      const responseBooking = await this.$axios.get(urlBooking);
+      this.booking = responseBooking.data.data.booking;
+
       let url = '/host/bookings/' + this.$route.params.id + '/options';
       const response = await this.$axios.get(url);
       this.bookingOptionItems = response.data;
       this.bookingOptionCount = response.data.length;
 
-      let urlBooking = '/bookings/' + this.$route.params.id;
-      const responseBooking = await this.$axios.get(urlBooking);
-      this.booking = responseBooking.data.data.booking;
+      //타임존
+      let urlInit = 'host/bookings/init';
+      const responseInit = await this.$axios.get(urlInit);
+      this.timezoneItems = responseInit.data.timezoneItems;
 
       this.loading = false;
     } catch (e) {
@@ -268,9 +276,9 @@ export default {
   data: () => ({
     errors: [],
     timezoneItems:[],
+    selectedTimezone: '',
     bookingOptionCount: 0,
     selectedBookingOption: '',
-    booking: {},
     personnel: 1,
     numberItems: [],
     bookingOptionItems: [],
@@ -281,6 +289,7 @@ export default {
     availableDays: [],
     availableDateTimes: [],
     timeTypesItem: [],
+    booking: { timezone: '' },
     form : {
       id : '',
       type: '',
@@ -298,8 +307,17 @@ export default {
       this.form.title = this.selectedBookingOption.title;
       this.form.desc = this.selectedBookingOption.desc;
       this.form.timezone = this.selectedBookingOption.timezone;
+      this.selectedTimezone = this.selectedBookingOption.timezone;
       const start = this.$refs.calendar.lastStart;
       const end = this.$refs.calendar.lastEnd;
+      this.updateRange({start, end});
+    },
+    selectedTimezone() {
+      const start = this.$refs.calendar.lastStart;
+      const end = this.$refs.calendar.lastEnd;
+      this.form.date_times = [];
+      this.form.timezone = this.selectedTimezone;
+      this.timeTypesItem = [];
       this.updateRange({start, end});
     }
   },
@@ -329,7 +347,13 @@ export default {
     async updateRange ({ start, end }) {
       this.loading = true;
       try {
-        let url = '/bookings/' + this.$route.params.id + '/options/' + this.selectedBookingOption.id + '/' + start.date + '/' + end.date;
+        let url = '/bookings/' + this.$route.params.id + '/options/'
+          + this.selectedBookingOption.id + '/' + start.date + '/' + end.date
+
+          if (this.selectedTimezone) {
+          url +=  '/' + this.selectedTimezone;
+          }
+
         const response = await this.$axios.get(url);
         this.calendarItems = response.data;
         this.availableDateTimes = response.data.availableDateTimes;
@@ -343,12 +367,24 @@ export default {
           for (let i = 0; i <  groupbyData.length; i++) {
             let available_count = 0;
             let total_count = 0;
+            let is_available = false;
+            let is_on = false;
             for (let j = 0; j <  groupbyData[i].times.length; j++) {
-              available_count += groupbyData[i].times[j].available_personnel;
+              if (groupbyData[i].times[j].is_available) {
+                is_available = true;
+              }
+              if (groupbyData[i].times[j].is_on) {
+                is_on = true;
+              }
+              if (groupbyData[i].times[j].is_available && groupbyData[i].times[j].is_on) {
+                available_count += groupbyData[i].times[j].available_personnel;
+              }
               total_count += groupbyData[i].times[j].total_personnel;
             }
             events.push({
               name: available_count + '/' + total_count,
+              is_on: is_on,
+              is_available: is_available,
               date :  groupbyData[i].date,
               times :  groupbyData[i].times,
               start:  groupbyData[i].date,
@@ -385,7 +421,7 @@ export default {
       this.timeTypesItem = [];
       this.form.date_times = [];
       for(let i = 0; i < event.eventParsed.input.times.length; i++) {
-        this.timeTypesItem.push({date: event.day.date, time: event.eventParsed.input.times[i].time});
+        this.timeTypesItem.push({date: event.day.date, time: event.eventParsed.input.times[i].time, timezone_time: event.eventParsed.input.times[i].timezone_time,is_available: event.eventParsed.input.times[i].is_available, is_on:event.eventParsed.input.times[i].is_on });
       }
     },
     addBookings(event) {
@@ -415,6 +451,18 @@ export default {
       } else {
         return 'activate_date';
       }
+
+      if (!event.is_available) {
+        return 'non_activate_date';
+      } else {
+        return 'activate_date';
+      }
+
+      if (!event.is_on) {
+        return 'non_activate_date';
+      } else {
+        return 'activate_date';
+      }
     },
 
     nextForm() {
@@ -424,6 +472,9 @@ export default {
           return false;
         }
       }
+
+      //todo : 기존에 등록된 옵션키가있으면 알러트
+
       this.setUserBookingOptionForm(JSON.stringify(this.form));
       this.$router.push('/bookings/' + this.$route.params.id + '/options/second');
     },

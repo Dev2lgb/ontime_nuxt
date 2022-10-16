@@ -38,6 +38,8 @@
   },
   "_login": {
     "title": "ONTIME에 오신것을 환영합니다!",
+    "desc" : "서비스 이용을 위해 계정 로그인을 진행해주세요",
+    "desc2" : "아직 회원이 아니신가요?",
     "email": "이메일",
     "password": "비빌번호",
     "login": "로그인",
@@ -54,7 +56,8 @@
     "logout": "로그아웃"
   },
   "_home": {
-    "hello": "님, 안녕하세요",
+    "hello": "님, 환영합니다",
+    "find_program": "어떤 프로그램을 찾고계신가요?",
     "my_booking": "내 예약",
     "new_booking": "예약하러 가기",
     "last_booking": "지난 예약",

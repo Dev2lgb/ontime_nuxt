@@ -38,6 +38,8 @@
   },
   "_login": {
     "title": "Welcome to ONTIME!",
+    "desc" : "영문) 서비스 이용을 위해 계정 로그인을 진행해주세요",
+    "desc2" : "영문) 아직 회원이 아니신가요?",
     "email": "Email",
     "password": "Password",
     "login": "Login",
@@ -55,6 +57,7 @@
   },
   "_home": {
     "hello": ", Hello!",
+    "find_program": "영문) 어떤 프로그램을 찾고계신가요?",
     "my_booking": "My Booking Pages",
     "new_booking": "Book a new reservation.",
     "last_booking": "Past Bookings",

@@ -149,7 +149,12 @@
                   class="ma-1"
                   :value="item.value"
                 >
-                  {{ item.text }}
+                  <span v-if="$i18n.locale === 'ko'">
+                    {{ item.text_ko }}
+                  </span>
+                  <span v-else>
+                    {{ item.text_en }}
+                  </span>
                 </v-btn>
               </v-btn-toggle>
             </div>
@@ -198,7 +203,7 @@
               </v-btn-toggle>
             </div>
           </div>
-          <div class="mb-7" v-show="form.on_off_line == 'OFFLINE'">
+          <div class="mb-7" v-show="form.on_off_line === 'OFFLINE'">
             <p class="font-weight-bold ma-0 mb-3 flex j_start a_center">
               8. 예약프로그램이 진행되는 오프라인 장소를 알려주세요.
             </p>
@@ -208,7 +213,7 @@
               <v-text-field placeholder="영문 상세주소 입력"  v-model="form.address_en" :class="classEnField()" :error-messages="errors.address_en" outlined></v-text-field>
             </div>
           </div>
-          <div class="mb-7" v-show="form.on_off_line == 'ONLINE'">
+          <div class="mb-7" v-show="form.on_off_line === 'ONLINE'">
             <p class="font-weight-bold ma-0 mb-3 flex j_start a_center">
               온타임으로 예약을 접수 받고 난 후, 예약 프로그램이 진행되는 플랫폼은 어디인가요?
             </p>
@@ -237,7 +242,7 @@
               <v-text-field hide-details="auto" v-model="form.online_text" :error-messages="errors.online_text" outlined placeholder="플랫폼 직접 입력"></v-text-field>
             </div>
           </div>
-          <div class="mb-7" v-show="form.on_off_line == 'ONLINE'">
+          <div class="mb-7" v-show="form.on_off_line === 'ONLINE'">
             <div class="font-weight-bold ma-0 flex j_start a_center">
               <span>링크 입력</span>
             </div>
@@ -288,7 +293,7 @@ export default {
       this.setBeforeData();
       this.loading = false;
     } catch (e) {
-      if (e.response.status == '401') {
+      if (e.response.status === '401') {
         console.log(e);
         //this.$toast.error(e.response.data.message);
       }
@@ -307,6 +312,7 @@ export default {
     errors: [],
     images: [],
     urls: [],
+    selectedItem: '',
   }),
   watch: {
     isEngBookForm(val) {
@@ -360,7 +366,7 @@ export default {
       this.images.splice(index, 1)
     },
     classEnField() {
-      if(this.form.is_en == 'Y') {
+      if(this.form.is_en === 'Y') {
         return 'show_field';
       } else {
         return 'en_field';
@@ -391,11 +397,11 @@ export default {
         }
         this.loading = false;
       } catch (e) {
-        if (e.response.status == '422') {
+        if (e.response.status === '422') {
           this.errors = e.response.data.errors;
           this.$toast.error(e.response.data.message);
         }
-        if (e.response.status == '401') {
+        if (e.response.status === '401') {
           // console.log(e);
           this.$toast.error(e.response.data.message);
         }

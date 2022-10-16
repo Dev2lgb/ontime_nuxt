@@ -9,8 +9,7 @@
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
 
       <div>
-        {{booking}}
-        <div v-for="item in items" :key="item.id" class="border_a mb-3 pa-5 position_rel">
+        <div v-for="(item, index) in items" :key="index" class="border_a mb-3 pa-5 position_rel">
           <v-btn text class="ab_btn" fab><v-icon>mdi-pencil-box</v-icon>{{ item.id }}</v-btn>
           <p class="font-weight-bold ma-0">{{ item.title }}</p>
           <p class="font_small_text ma-0 mb-1">{{ item.desc }}</p>
@@ -22,14 +21,14 @@
         <v-btn block depressed text color="#5544aa" class="font-weight-bold" :to="'/bookings/' + this.$route.params.id + '/options'">+ 항목 추가</v-btn>
       </div>
       <div class="mt-10">
-        <div v-for="(qItem, q) in booking.collect_user_infos1" :key="q">
+        <div v-for="(qItem, q) in booking.collect_user_infos1" :key="q + 'q'">
           <div v-show="qItem.division == 'solo'" class="mb-5">
             <v-text-field :label="qItem.question" outlined hide-details="auto" v-model="qItem.answer"></v-text-field>
           </div>
           <div v-show="qItem.division == 'multiple'" class="mb-5">
             <p>
               {{ qItem.question }}
-              <v-span v-if="qItem.is_multiple == 'Y'">(복수선택 가능)</v-span>
+              <span v-if="qItem.is_multiple == 'Y'">(복수선택 가능)</span>
             </p>
             <v-btn-toggle
               color="primary"
@@ -45,7 +44,7 @@
                 style="border:1px solid #ccc; border-radius:10px"
                 class="ma-1 text-left"
                 v-for="(answer, a) in qItem.answer_items"
-                :key="a"
+                :key="a + 'l'"
                 :value="answer"
                 block
               >
@@ -54,29 +53,29 @@
             </v-btn-toggle>
           </div>
         </div>
-        <div v-for="(qItem, q) in this.booking.collect_user_infos2" :key="q">
-          <div v-show="qItem.division == 'solo'" class="mb-5">
-            <v-text-field :label="qItem.question" outlined hide-details="auto" v-model="qItem.answer"></v-text-field>
+        <div v-for="(qItem2, q2) in booking.collect_user_infos2" :key="q2">
+          <div v-show="qItem2.division == 'solo'" class="mb-5">
+            <v-text-field :label="qItem2.question" outlined hide-details="auto" v-model="qItem2.answer"></v-text-field>
           </div>
-          <div v-show="qItem.division == 'multiple'" class="mb-5">
+          <div v-show="qItem2.division == 'multiple'" class="mb-5">
             <p>
-              {{ qItem.question }}
-              <v-span v-if="qItem.is_multiple == 'Y'">(복수선택 가능)</v-span>
+              {{ qItem2.question }}
+              <span v-if="qItem2.is_multiple == 'Y'">(복수선택 가능)</span>
             </p>
             <v-btn-toggle
               color="primary"
               group
-              v-model="qItem.answer"
+              v-model="qItem2.answer"
               outlined
-              :multiple="qItem.is_multiple == 'Y'"
+              :multiple="qItem2.is_multiple == 'Y'"
               dense
               class="d-flex flex-wrap justify-start align-center"
             >
               <v-btn
                 style="border:1px solid #ccc; border-radius:10px"
                 class="ma-1"
-                v-for="(answer, a) in qItem.answer_items"
-                :key="a"
+                v-for="(answer, a2) in qItem2.answer_items"
+                :key="a2 + 'l'"
                 :value="answer"
                 block
               >
@@ -123,7 +122,10 @@ export default {
       collect_user_infos1: [],
       collect_user_infos2: [],
     },
-    booking: {},
+    booking: {
+      collect_user_infos1: [],
+      collect_user_infos2: [],
+    },
     searchCategoryItems: [
       { text: '전체', value:'' },
       { text: '교육', value:'1' },

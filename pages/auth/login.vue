@@ -14,7 +14,7 @@
           <v-card flat>
             <div class="loginTextB">
               <p class="firstTextTitle">{{$t('_login.title')}}</p>
-              <p class="lastTextTitle">서비스 이용을 위해 계정 로그인을 진행해주세요</p>
+              <p class="lastTextTitle">{{$t('_login.desc')}}</p>
             </div>
             <v-card-text class="pa-0">
               <v-select outlined dense v-model="selectedLang" hide-details="auto" :items="langItems" class="language"
@@ -32,7 +32,7 @@
               <v-btn color="primary" block x-large @click="login">LOGIN</v-btn>
             </v-card-actions>
             <div class="settingBox2">
-              <span>아직 회원이 아니신가요?</span>&emsp;<router-link to="/auth/register">{{$t('_login.register')}}</router-link>
+              <span>{{$t('_login.desc2')}}</span>&emsp;<router-link to="/auth/register">{{$t('_login.register')}}</router-link>
             </div>
           </v-card>
           <div class="snsform">
