@@ -87,6 +87,53 @@
               </v-btn-toggle>
             </div>
           </div>
+          <div class="mb-7">
+            <p class="font-weight-bold ma-0 mb-5">3. 하나의 계정으로 최대 몇 개의 예약상품을 예약할 수 있나요?</p>
+            <div>
+              <v-btn-toggle
+                v-model="form.is_option_count"
+                :error-messages="errors.is_option_count"
+                color="primary"
+                group
+                outlined
+                mandatory
+                dense
+                class="d-flex flex-wrap justify-start align-center"
+              >
+                <v-btn
+                  large
+                  class="input_pd"
+                  value="Y"
+                >
+                  한 계정당 한 개씩만 받을게요
+                </v-btn>
+                <v-btn
+                  large
+                  class="input_pd"
+                  value="N"
+                >
+                  복수의 예약상품을 예약할 수 있어요.
+                </v-btn>
+              </v-btn-toggle>
+
+              <div class="flex j_space a_center mt-3" v-show="form.is_option_count == 'N'">
+                <div class="h_width">
+                  <v-select
+                    item-text="text"
+                    item-value="value"
+                    outlined
+                    dense
+                    hide-details="auto"
+                    v-model="selectedMaxMinOption"
+                    :items="MaxMinOptionItems"
+                  ></v-select>
+                </div>
+                <div class="h_width ml-2" v-show="selectedMaxMinOption == 'Y'">
+                  <v-text-field type="number" v-model="form.max_booking_personnel_number" prefix="최대" suffix="개" outlined hide-details="auto" dense></v-text-field>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="pt-10">
             <v-btn
               block
@@ -124,6 +171,11 @@ export default {
       {text: '예약시간 3시간 전', value: 3},
       {text: '예약시간 4시간 전', value: 4},
       {text: '예약시간 5시간 전', value: 5},
+    ],
+    selectedMaxMinOption: 'N',
+    MaxMinOptionItems: [
+      { text:'제한없음', value:'N' },
+      { text:'최대갯수설정', value:'Y' },
     ],
   }),
   mounted() {
