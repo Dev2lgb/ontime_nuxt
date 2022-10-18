@@ -307,6 +307,7 @@ export default {
       selectedMethod: 'offline', //예약방법
       tags: [],
       address: '',
+      title_images: [],
     },
     tagInput: '',
     errors: [],
@@ -344,6 +345,7 @@ export default {
     },
     async uploadFile(element) {
       try{
+        //1: 이미지 2: 안내파일
         let url = '/files/1';
         let method = 'post';
 
@@ -355,6 +357,9 @@ export default {
         })
 
         if (response.data.result) {
+          console.log(response.data);
+          this.urls = process.env.BASEURL + response.data.thumbnail;
+          this.form.title_images.push(response.data.id);
           console.log('이미지 등록 완료')
         }
       } catch(e) {

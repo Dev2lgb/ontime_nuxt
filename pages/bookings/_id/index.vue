@@ -9,8 +9,12 @@
         ></v-img>
       </div>
       <div class="progrma_subject">
-        <h3>[교육] 사찰예절 배움 템플스테이 해맞이 체험 프로그램</h3>
-        <p class="color_main my-1">#자연휴식형 #친환경 #힐링</p>
+        <h3>[{{ booking.category_name }}] {{ booking.title }}</h3>
+        <p class="color_main my-1">
+          <span v-for="(tag, tagIndex) in booking.tags" :key="tagIndex + 't'">
+            {{ tag }}
+          </span>
+        </p>
         <div class="flex j_space a_center mb-5 progrma_option">
           <div class="q_width flex d_col j_center a_center py-3">
             <img src="~/assets/images/progrma_icon01.png" height="40">
@@ -31,9 +35,7 @@
         </div>
         <h3 class="font_sub_title"><v-icon>mdi-calendar-text</v-icon> 예약 프로그램을 소개합니다</h3>
         <p class="progrma_text">
-          - 사극에 자주 등장하는 장희빈부터 사도세자까지 수많은 역사의 주인공들이 살았던 창경궁을 경험해보세요.<br /><br />
-          - 달빛이 내린 창경궁의 밤에서 곳곳에 숨어 있는 흥미진진한 이야기를 들어보세요.<br /><br />
-          - 밤의 장막을 스크린 삼아 영화 같은 창경궁 곳곳을 가족/연인/친구들과 함께 걸어보세요.
+          {{ booking.content }}
         </p>
         <div class="area_line"></div>
         <h3 class="font_sub_title mt-5"><v-icon>mdi-whatsapp</v-icon> 예약에 대한 문의사항이 있으신가요?</h3>
@@ -42,11 +44,11 @@
         <div class="flex j_space a_center wrap progrma_call">
           <div class="flex j_start a_center h_width pa-2">
             <img src="~/assets/images/p_icon01.png" height="30">&emsp;
-            <p class="ma-0 ml-1">홍길동</p>
+            <p class="ma-0 ml-1">{{ booking.host_name }}</p>
           </div>
           <div class="flex j_start a_center h_width pa-2">
             <img src="~/assets/images/p_icon02.png" height="30">&emsp;
-            <p class="ma-0 ml-1">apple@naver.com</p>
+            <p class="ma-0 ml-1">{{ booking.email }}</p>
           </div>
           <div class="flex j_start a_center h_width pa-2">
             <img src="~/assets/images/p_icon03.png" height="30">&emsp;
@@ -79,14 +81,33 @@
         </div>
       </div>
     </div>
+      {{ booking }}
     </div>
   </div>
 </template>
 <script>
 export default {
   layout: 'user',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/bookings/' + this.$route.params.id;
+      const response = await this.$axios.get(url);
+
+      this.booking = response.data.data.booking;
+
+      this.setBeforeData();
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status === '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
     searchCategory: '',
+    booking: {},
     searchCategoryItems: [
       { text: '전체', value:'' },
       { text: '교육', value:'1' },
