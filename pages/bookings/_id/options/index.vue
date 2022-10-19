@@ -3,9 +3,10 @@
     <SubHeader :link="'/bookings'" :title="'예약하기'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
-        <p>예약옵션을 선택해주세요.<br>해당 예약은 <span><span>1개의 옵션</span></span>만 선택 가능.</p>
+        <p>예약옵션을 선택해주세요.</p>
+        <p v-show="booking.is_multiple_option == 'N' || booking.multiple_option_count == 1">해당 예약은 <span>1개의 옵션</span>만 선택 가능.</p>
+        <p v-show="booking.is_multiple_option == 'Y' || booking.multiple_option_count > 0">해당 예약은 <span>{{ booking.multiple_option_count }}개의 옵션</span>만 선택 가능.</p>
       </div>
-      {{ availableDateTimes }}
       <div class="progrma_area">
         <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
         <v-select
@@ -240,6 +241,7 @@
         </div>
       </div>
     </div>
+    {{ booking }}
   </div>
 </template>
 <script>
@@ -377,9 +379,9 @@ export default {
                 is_on = true;
               }
               if (groupbyData[i].times[j].is_available && groupbyData[i].times[j].is_on) {
-                available_count += groupbyData[i].times[j].available_personnel;
+                available_count += parseInt(groupbyData[i].times[j].available_personnel);
               }
-              total_count += groupbyData[i].times[j].total_personnel;
+              total_count += parseInt(groupbyData[i].times[j].total_personnel);
             }
             events.push({
               name: available_count + '/' + total_count,

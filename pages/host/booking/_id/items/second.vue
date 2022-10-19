@@ -16,7 +16,7 @@
       <BookingOptionTime @form-data="getFormData" :errors="errors" v-show="form.type == 'time'" />
       <BookingOptionDate @form-data="getFormData" :errors="errors" v-show="form.type == 'date'" />
 <!--      <BookingOptionTerm @form-data="getFormData" :errors="errors" v-show="form.type == 'term'" />-->
-
+{{ form }}
       <div class="pt-10">
         <v-btn
           block
@@ -136,6 +136,7 @@ export default {
     getFormData(formData) {
       this.form = _.merge({}, this.form, formData)
     },
+
   },
 }
 </script>

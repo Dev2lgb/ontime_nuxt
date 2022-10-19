@@ -137,31 +137,31 @@
           <div class="ma-0 time_col2">가능 수량(인원)</div>
           <div class="ma-0 time_col3">On/Off</div>
         </div>
-        <div class="flex j_center a_center time_head py-2 font_small_text background_gray" v-show="timePerNumber.length > 0">
+        <div class="flex j_center a_center time_head py-2 font_small_text background_gray" v-show="form.time_personnels.length > 0">
           <div class="ma-0 time_col1">일괄설정</div>
           <div class="ma-0 time_col2">
             <v-text-field type="number" v-model="countAll" class="font_small_text itemCount" hide-details="auto" outlined dense suffix="명"></v-text-field>
           </div>
           <div class="ma-0 time_col3"></div>
         </div>
-        <div class="flex j_center a_center time_body font_small_text" v-for="(item, i) in timePerNumber" :key="i">
-          <div class="ma-0 time_col1">{{ item.timeRange }}</div>
+        <div class="flex j_center a_center time_body font_small_text" v-for="(item, i) in form.time_personnels" :key="i">
+          <div class="ma-0 time_col1">{{ item.time }}</div>
           <div class="ma-0 time_col2">
-            <v-text-field type="number" v-model="item.count" class="font_small_text" :value="item.count" hide-details="auto" outlined dense suffix="명"></v-text-field>
+            <v-text-field type="number" v-model="item.personnel" class="font_small_text" :value="item.personnel" hide-details="auto" outlined dense suffix="명"></v-text-field>
           </div>
           <div class="ma-0 time_col3">
             <v-switch
               class="d-inline-block"
-              v-model="item.onOff"
+              v-model="item.is_on"
               true-value="Y"
               false-value="N"
             ></v-switch>
           </div>
         </div>
-        <div v-show="timePerNumber.length == 0">
+        <div v-show="form.time_personnels.length == 0">
           <p class="font_small_text color_gray text-center py-5">예약시작, 종료시간, 단위를 선택하세요.</p>
         </div>
-        <div v-show="timePerNumber.length > 0">
+        <div v-show="form.time_personnels.length > 0">
           <v-switch
             class="d-inline-block"
             v-model="form.no_limit"
@@ -171,6 +171,8 @@
           ></v-switch>
         </div>
       </div>
+
+      {{ form.time_personnels }}
     </div>
   </div>
 </template>
@@ -179,7 +181,10 @@
 export default {
   props: ['errors'],
   data: () => ({
-    form: [],
+    form: {
+      no_limit: 'N',
+      time_personnels: [],
+    },
     time_number_items: [
       { text: '1', value: '1' },
       { text: '2', value: '2' },
@@ -193,19 +198,21 @@ export default {
       { text:'제한없음', value:'1' },
       { text:'최대인원설정', value:'0' },
     ],
-    timePerNumber: [],
     countAll: 1,
   }),
   watch: {
     countAll(val) {
-      _.forEach(this.timePerNumber, function(value) {
-        value.count = val;
+      _.forEach(this.form.time_personnels, function(value) {
+        value.personnel = val;
       });
     },
+    // form(val) {
+    //   this.$emit('form-data', val);
+    // },
     form: {
       deep: true,
       handler(val) {
-        this.$emit('formData', val);
+        this.$emit('form-data', val);
       }
     }
   },
@@ -230,13 +237,13 @@ export default {
       }
 
       let m = Number(startTimeMin);
-      this.timePerNumber = [];
+      this.form.time_personnels = [];
       if (unitMinute > 0) {
         while (m < endTimeMin) {
           let minRange = (m/60);
           let maxRange = (m + unitMinute) / 60;
-          this.timePerNumber.push({
-            timeRange: this.changeTimeFormat(minRange) + '~' + this.changeTimeFormat(maxRange), count: '1', onOff: 'Y'
+          this.form.time_personnels.push({
+            time: this.changeTimeFormat(minRange) + '~' + this.changeTimeFormat(maxRange), personnel: '1', is_on: 'Y'
           });
           m = m + unitMinute;
         }
@@ -267,6 +274,7 @@ export default {
       this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
     }
   },
+
 }
 </script>
 

@@ -3,14 +3,14 @@
     <SubHeader :link="'/bookings'" :title="'예약하기'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
-        <p>[{{ booking.category_name }}] {{ booking.title }}</p>
+        <p>[{{ getCategoryName(booking) }}] {{ booking.title }}</p>
       </div>
       <p class="ma-0">아라 예약정보를 다시한번 확인해주세요.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
 
       <div>
         <div v-for="(item, index) in items" :key="index" class="border_a mb-3 pa-5 position_rel">
-          <v-btn text class="ab_btn" fab><v-icon>mdi-pencil-box</v-icon>{{ item.id }}</v-btn>
+          <v-btn text class="ab_btn" @click="deleteItem(index)" fab color="red"><v-icon>mdi-delete</v-icon></v-btn>
           <p class="font-weight-bold ma-0">{{ item.title }}</p>
           <p class="font_small_text ma-0 mb-1">{{ item.desc }}</p>
           <p class="color_main ma-0">
@@ -92,6 +92,8 @@
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="submitForm">예약완료</v-btn>
         </div>
       </div>
+
+      {{ booking }}
     </div>
   </div>
 </template>
@@ -109,10 +111,10 @@ export default {
 
       this.loading = false;
     } catch (e) {
-      if (e.response.status == '401') {
-        console.log(e);
-        //this.$toast.error(e.response.data.message);
-      }
+      // if (e.response.status == '401') {
+      //   console.log(e);
+      //   //this.$toast.error(e.response.data.message);
+      // }
     }
   },
   data: () => ({
@@ -163,12 +165,19 @@ export default {
         let url = '/bookings/' + this.$route.params.id;
         let method = 'post';
 
-        for(let itemIndex = 0; itemIndex < this.booking.collect_user_infos1.length; itemIndex++) {
-          this.form.collect_user_infos1.push({ question: this.booking.collect_user_infos1[itemIndex].question, answer: this.booking.collect_user_infos1[itemIndex].answer });
+        if (this.booking.collect_user_infos1) {
+          for(let itemIndex = 0; itemIndex < this.booking.collect_user_infos1.length; itemIndex++) {
+            this.form.collect_user_infos1.push({ question: this.booking.collect_user_infos1[itemIndex].question, answer: this.booking.collect_user_infos1[itemIndex].answer });
+          }
         }
 
-        for(let itemIndex = 0; itemIndex < this.booking.collect_user_infos2.length; itemIndex++) {
-          this.form.collect_user_infos2.push({ question: this.booking.collect_user_infos2[itemIndex].question, answer: this.booking.collect_user_infos2[itemIndex].answer });
+        if (this.booking.collect_user_infos2) {
+          for (let itemIndex = 0; itemIndex < this.booking.collect_user_infos2.length; itemIndex++) {
+            this.form.collect_user_infos2.push({
+              question: this.booking.collect_user_infos2[itemIndex].question,
+              answer: this.booking.collect_user_infos2[itemIndex].answer
+            });
+          }
         }
 
         const response = await this.$axios({
@@ -185,6 +194,7 @@ export default {
         }
         this.loading = false;
       } catch (e) {
+        // console.log(e);
         if (e.response.status == '422') {
           this.errors = e.response.data.errors;
           this.$toast.error(e.response.data.message);
@@ -194,6 +204,17 @@ export default {
           this.$toast.error(e.response.data.message);
         }
       }
+    },
+    getCategoryName(item) {
+      if (item.category_text) {
+        return item.category_text;
+      }
+      if (item.hasOwnProperty('category_name')){
+        return item.category_name.name_ko;
+      }
+    },
+    deleteItem(index) {
+
     },
     ...mapMutations("common",['clearUserBookingOptionForm']),
   },
