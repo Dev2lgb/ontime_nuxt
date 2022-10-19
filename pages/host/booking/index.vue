@@ -149,7 +149,7 @@
                   class="ma-1"
                   :value="item.value"
                 >
-                  <span v-if="$i18n.locale === 'ko'">
+                  <span v-if="$i18n.locale === 'ko' || $i18n.locale == ''">
                     {{ item.text_ko }}
                   </span>
                   <span v-else>
@@ -272,6 +272,7 @@
         </div>
       </div>
     </div>
+    {{ form }}
   </div>
 </template>
 <script>
@@ -280,6 +281,7 @@ import {mapMutations} from "vuex";
 export default {
   layout: 'host',
   async fetch() {
+
     this.loading = true;
     try {
       let url = 'host/bookings/init';
@@ -356,12 +358,10 @@ export default {
           url: url, method: method, data:formData
         })
 
-        if (response.data.result) {
-          console.log(response.data);
-          this.urls = process.env.BASEURL + response.data.thumbnail;
-          this.form.title_images.push(response.data.id);
-          console.log('이미지 등록 완료')
-        }
+        this.form.title_images = [];
+        // this.urls.push(process.env.BASEURL + response.data.thumbnail);
+        this.form.title_images.push({id : response.data.id });
+
       } catch(e) {
         console.log(e);
       }

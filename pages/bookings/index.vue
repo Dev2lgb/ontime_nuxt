@@ -26,22 +26,26 @@
 
       <div class="pa-3 border_b card_action" v-for="(item, index) in items" :key="index">
         <div>
-          <v-chip dark color="#4487fa" label small>Online</v-chip>
-          <v-chip dark color="#28b487" label small>New</v-chip>
-          <v-chip dark color="#ff5722" label small>마감임박</v-chip>
+          <v-chip dark color="#4487fa" class="mb-3" label small v-show="item.on_off_line == 'ONLINE'">
+            {{ item.on_off_line }}
+          </v-chip>
+          <v-chip dark color="#333" class="mb-3"  label small v-show="item.on_off_line == 'OFFLINE'">
+            {{ item.on_off_line }}
+          </v-chip>
         </div>
         <div class="flex j_space a_center">
           <div class="thumbnail_width">
             <v-img
-              :src="`https://picsum.photos/500/300?image=10`"
+              :src="getThumbnail(item.files)"
               :lazy-src="`https://picsum.photos/10/6?image=10`"
               aspect-ratio="1"
               width="80"
               class="img_radius"
             ></v-img>
+            {{ item.files }}
           </div>
           <router-link :to="'/bookings/' + item.id" class="non-deco card_subject">
-            <h3 class="text_title">[{{ item.category_name }}] {{ item.title }}</h3>
+            <h3 class="text_title">[{{ getCategoryName(item) }}] {{ item.title }}</h3>
             <p class="color_main font_small_text tag_text">
               <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex + 't'">
                 {{ tag }}
@@ -56,11 +60,6 @@
           <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
         </div>
       </div>
-
-
-      {{ items }}
-      <!-- -->
-
     </div>
   </div>
 </template>
@@ -97,7 +96,18 @@ export default {
     ],
   }),
   methods: {
-
+    getCategoryName(item) {
+      if (item.category_text) {
+        return item.category_text;
+      } else {
+        return item.category_name.name_ko
+      }
+    },
+    getThumbnail(files) {
+      if (files.length > 0) {
+        return files[0].url
+      }
+    }
   },
 }
 </script>
@@ -122,7 +132,7 @@ export default {
 .select_reset {max-width: 130px;}
 
 .card_action {position: relative;margin-top: 12px;}
-.text_title {font-size: 15px; margin-top: 10px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.text_title {font-size: 15px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .tag_text {margin: 5px 0;}
 .desc {font-size: 13px; max-height:39px; overflow: hidden; }
 .card_subject {padding-left: 20px; display:block; width:calc(100% - 80px); }

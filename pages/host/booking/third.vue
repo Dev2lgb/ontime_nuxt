@@ -91,8 +91,8 @@
             <p class="font-weight-bold ma-0 mb-5">3. 하나의 계정으로 최대 몇 개의 예약상품을 예약할 수 있나요?</p>
             <div>
               <v-btn-toggle
-                v-model="form.is_option_count"
-                :error-messages="errors.is_option_count"
+                v-model="form.is_multiple_option"
+                :error-messages="errors.is_multiple_option"
                 color="primary"
                 group
                 outlined
@@ -103,20 +103,20 @@
                 <v-btn
                   large
                   class="input_pd"
-                  value="Y"
+                  value="N"
                 >
                   한 계정당 한 개씩만 받을게요
                 </v-btn>
                 <v-btn
                   large
                   class="input_pd"
-                  value="N"
+                  value="Y"
                 >
                   복수의 예약상품을 예약할 수 있어요.
                 </v-btn>
               </v-btn-toggle>
 
-              <div class="flex j_space a_center mt-3" v-show="form.is_option_count == 'N'">
+              <div class="flex j_space a_center mt-3" v-show="form.is_multiple_option == 'Y'">
                 <div class="h_width">
                   <v-select
                     item-text="text"
@@ -128,8 +128,8 @@
                     :items="MaxMinOptionItems"
                   ></v-select>
                 </div>
-                <div class="h_width ml-2" v-show="selectedMaxMinOption == 'Y'">
-                  <v-text-field type="number" v-model="form.max_booking_personnel_number" prefix="최대" suffix="개" outlined hide-details="auto" dense></v-text-field>
+                <div class="h_width ml-2">
+                  <v-text-field type="number" v-model="form.multiple_option_count" prefix="최대" suffix="개" outlined hide-details="auto" dense></v-text-field>
                 </div>
               </div>
             </div>
@@ -181,6 +181,13 @@ export default {
   mounted() {
     this.setBeforeData();
   },
+  watch: {
+    selectedMaxMinOption(val) {
+      if (val == 'N') {
+        this.form.multiple_option_count = 0;
+      }
+    },
+  },
   methods: {
     classEnField() {
       if(this.form.is_en == 'Y') {
@@ -219,6 +226,9 @@ export default {
     setBeforeData() {
       if (this.$store.state.common.bookingForm) {
         this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
+        if (this.form.multiple_option_count > 0) {
+          this.selectedMaxMinOption = 'Y'
+        }
       }
       // if (localStorage.getItem('bookingForm')) {
       //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingForm')))
