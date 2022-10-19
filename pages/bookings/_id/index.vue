@@ -28,8 +28,8 @@
           </div>
           <div class="q_width flex d_col j_center a_center py-3">
             <img src="~/assets/images/progrma_icon03.png" height="40">
-            <p class="font_small_text" v-show="booking.is_booking_confirm == 'Y'">예약즉시 확정</p>
-            <p class="font_small_text" v-show="booking.is_booking_confirm == 'N'">승인후 확정</p>
+            <p class="font_small_text" v-show="booking.is_booking_confirm == 'N'">예약즉시 확정</p>
+            <p class="font_small_text" v-show="booking.is_booking_confirm == 'Y'">승인후 확정</p>
           </div>
           <div class="q_width flex d_col j_center a_center py-3">
             <img src="~/assets/images/progrma_icon04.png" height="40">

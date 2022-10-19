@@ -39,7 +39,7 @@
                 <v-btn
                   large
                   class="input_pd"
-                  value="Y"
+                  value="N"
                 >
                   <span class="font-weight-bold mr-3">자동</span>
                   예약 신청과 동시에 예약이 확정됩니다.
@@ -47,7 +47,7 @@
                 <v-btn
                   large
                   class="input_pd"
-                  value="N"
+                  value="Y"
                 >
                   <span class="font-weight-bold mr-3">수동</span>
                   관리자의 승인 후 예약이 확정됩니다.
