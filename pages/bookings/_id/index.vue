@@ -4,7 +4,8 @@
     <div class="user_dashboard full_height j_start pa-5">
       <div>
         <v-img
-          :src="`https://picsum.photos/500/300?image=10`"
+          aspect-ratio="1.4"
+          :src="getThumbnail(booking.title_images)"
           :lazy-src="`https://picsum.photos/10/6?image=10`"
         ></v-img>
       </div>
@@ -88,7 +89,12 @@
           <div class="area_line"></div>
         </div>
         <h3 class="font_sub_title my-6"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
-        <div class="border_a pa-3 mb-5"></div>
+        <div class="border_a pa-3 mb-5">
+          <div v-for="(file, f) in booking.info_files">
+            <v-btn text :href="file.url" target="_blank" color="#0000ff">{{ file.name }}</v-btn>
+          </div>
+
+        </div>
 
         <div class="flex j_space a_center mt-10 ">
           <div class="flex j_start a_center">
@@ -97,7 +103,6 @@
         </div>
       </div>
     </div>
-      {{ booking }}
     </div>
   </div>
 </template>
@@ -140,6 +145,11 @@ export default {
       }
       if (item.hasOwnProperty('category_name')){
         return item.category_name.name_ko;
+      }
+    },
+    getThumbnail(files) {
+      if (Array.isArray(files)) {
+        return files[0].url
       }
     }
   },

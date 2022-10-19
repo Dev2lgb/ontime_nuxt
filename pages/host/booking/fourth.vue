@@ -117,13 +117,13 @@
             <p class="font-weight-bold ma-0">4. 예약관련 안내사항 및 기타파일을 첨부해주세요. (선택)</p>
             <p class="font_small_text mt-1">총 30MB 이하로 5개까지 첨부가 가능합니다.</p>
             <div class="flex j_center a_center border_a pa-3">
+              {{ form.info_files }}
               <v-file-input
-                v-model="form.files"
+                v-model="files"
                 label="파일명"
                 multiple
                 id="ImageFileUpload"
                 @change="vistaPrevia"
-                accept="image/png, image/jpeg"
                 prepend-icon=""
                 append-icon=""
                 class="hide_input"
@@ -165,7 +165,8 @@ export default {
     selectedMail: 'N',
     selectedInfos: [],
     form: {
-      collect_user_infos2: []
+      collect_user_infos2: [],
+      info_files: []
     },
     errors:[],
     getInfoItems: [
@@ -195,13 +196,39 @@ export default {
       this.questionDialog = true;
     },
     vistaPrevia(file) {
+      if (this.files.length > 5) {
+        alert('파일은 5개까지만 등록 가능합니다.');
+        return false;
+      }
       try{
         this.files.forEach(element => {
           console.log(element);
-          this.filesNames.push({'name':element.name})
+          this.filesNames.push({'name':element.name});
+          this.uploadFile(element);
           // this.createImage(element);
         });
       } catch(e) {}
+    },
+    async uploadFile(element) {
+      try{
+        //1: 이미지 2: 안내파일
+        let url = '/files/2';
+        let method = 'post';
+
+        let formData = new FormData();
+        formData.append('file', element);
+
+        const response = await this.$axios({
+          url: url, method: method, data:formData
+        })
+
+        this.form.info_files = [];
+        // this.urls.push(process.env.BASEURL + response.data.thumbnail);
+        this.form.info_files.push({id : response.data.id });
+
+      } catch(e) {
+        console.log(e);
+      }
     },
     deleteFile(index) {
       console.log(index);

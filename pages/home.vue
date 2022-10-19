@@ -33,11 +33,13 @@
             </div>
           </div>
 
-          <div class="reservation_slid pb-10">
-            <BookingSlider />
+          <div class="reservation_slid pb-10" v-if="items.length > 0">
+            <BookingSlider :items="items" />
+          </div>
+          <div class="text-center pt-10 color_gray" v-else>
+            진행중인 예약이 없습니다.
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -46,7 +48,23 @@
 <script>
 export default {
   layout: 'user',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/my/bookings';
+      const response = await this.$axios.get(url);
+      console.log(response);
+      this.items = response.data.data;
+      this.loading = false;
+    } catch (e) {
+      // if (e.response.status === '401') {
+      //   console.log(e);
+      //   //this.$toast.error(e.response.data.message);
+      // }
+    }
+  },
   data: () => ({
+    items: [],
   }),
 }
 </script>

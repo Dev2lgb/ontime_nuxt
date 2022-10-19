@@ -333,7 +333,7 @@ export default {
       }
     },
     vistaPrevia(file) {
-      if (this.images.length > 10) {
+      if (this.images.length > 5) {
         alert('이미지는 최대 10장까지만 등록 가능합니다.');
         return false;
       }

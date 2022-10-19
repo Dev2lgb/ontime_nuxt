@@ -12,7 +12,7 @@
       </div>
 
       <div class="progrma_area">
-        <p><span class="font-weight-bold">2개</span>의 프로그램</p>
+        <p><span class="font-weight-bold">{{ items.length }}개</span>의 프로그램</p>
         <v-select
           class="select_reset"
           prepend-inner-icon="mdi-filter-variant"
@@ -24,41 +24,45 @@
         ></v-select>
       </div>
 
-      <div class="pa-3 border_b card_action" v-for="(item, index) in items" :key="index">
-        <div>
-          <v-chip dark color="#4487fa" class="mb-3" label small v-show="item.on_off_line == 'ONLINE'">
-            {{ item.on_off_line }}
-          </v-chip>
-          <v-chip dark color="#333" class="mb-3"  label small v-show="item.on_off_line == 'OFFLINE'">
-            {{ item.on_off_line }}
-          </v-chip>
-        </div>
-        <div class="flex j_space a_center">
-          <div class="thumbnail_width">
-            <v-img
-              :src="getThumbnail(item.files)"
-              :lazy-src="`https://picsum.photos/10/6?image=10`"
-              aspect-ratio="1"
-              width="80"
-              class="img_radius"
-            ></v-img>
-            {{ item.files }}
+      <div v-if="items.length > 0">
+        <div class="pa-3 border_b card_action" v-for="(item, index) in items" :key="index" >
+          <div>
+            <v-chip dark color="#4487fa" class="mb-3" label small v-show="item.on_off_line == 'ONLINE'">
+              {{ item.on_off_line }}
+            </v-chip>
+            <v-chip dark color="#333" class="mb-3"  label small v-show="item.on_off_line == 'OFFLINE'">
+              {{ item.on_off_line }}
+            </v-chip>
           </div>
-          <router-link :to="'/bookings/' + item.id" class="non-deco card_subject">
-            <h3 class="text_title">[{{ getCategoryName(item) }}] {{ item.title }}</h3>
-            <p class="color_main font_small_text tag_text">
-              <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex + 't'">
-                {{ tag }}
-              </span>
-            </p>
-            <p class="desc">
-              {{  item.content }}
-            </p>
-          </router-link>
+          <div class="flex j_space a_center">
+            <div class="thumbnail_width">
+              <v-img
+                :src="getThumbnail(item.title_images)"
+                :lazy-src="`https://picsum.photos/10/6?image=10`"
+                aspect-ratio="1"
+                width="80"
+                class="img_radius"
+              ></v-img>
+            </div>
+            <router-link :to="'/bookings/' + item.id" class="non-deco card_subject">
+              <h3 class="text_title">[{{ getCategoryName(item) }}] {{ item.title }}</h3>
+              <p class="color_main font_small_text tag_text">
+                <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex + 't'">
+                  {{ tag }}
+                </span>
+              </p>
+              <p class="desc">
+                {{  item.content }}
+              </p>
+            </router-link>
+          </div>
+          <div class="bookmark_width flex j_center a_center">
+            <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
+          </div>
         </div>
-        <div class="bookmark_width flex j_center a_center">
-          <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
-        </div>
+      </div>
+      <div class="text-center pt-10 color_gray" v-else>
+        진행중인 예약프로그램이 없습니다.
       </div>
     </div>
   </div>
@@ -72,15 +76,16 @@ export default {
       let url = '/bookings';
       const response = await this.$axios.get(url);
 
+
       this.items = response.data.data;
 
       this.setBeforeData();
       this.loading = false;
     } catch (e) {
-      if (e.response.status === '401') {
-        console.log(e);
-        //this.$toast.error(e.response.data.message);
-      }
+      // if (e.response.status === '401') {
+      //   console.log(e);
+      //   //this.$toast.error(e.response.data.message);
+      // }
     }
   },
   data: () => ({
