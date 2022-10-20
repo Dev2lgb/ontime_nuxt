@@ -1,17 +1,12 @@
 <template>
   <swiper class="swiper pb-10" :options="swiperOption">
     <swiper-slide class="slider_item" v-for="(item, i) in items" :key="i">
-      <div >
+      <div>
         <v-img
           aspect-ratio="1.4"
-          :src="getThumbnail(item.booking.title_images)"
+          :src="item.url"
           :lazy-src="`https://picsum.photos/10/6?image=10`"
         ></v-img>
-        <div class="pa-3">
-          <h3 class="mb-3 font_small_text">[{{ getCategoryName(item.booking) }}] {{ item.booking.title }}</h3>
-          <p class="ma-0 font_small_text">템플 스테이 예절 교육 집중</p>
-          <p class="ma-0 font_small_text">{{ item.booking_date }} <span v-show="item.booking_time">{{ item.booking_time }}</span></p>
-        </div>
       </div>
     </swiper-slide>
   </swiper>
@@ -31,8 +26,6 @@ export default {
   data() {
     return {
       swiperOption: {
-        slidesPerView: 'auto',
-        spaceBetween: 20,
         // pagination: {
         //   el: '.swiper-pagination',
         //   clickable: true
@@ -63,6 +56,6 @@ export default {
 </script>
 
 <style scoped>
-.slider_item { width:55%; border-radius:20px; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; }
+.slider_item { width:100%; }
 </style>
 

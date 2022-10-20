@@ -60,7 +60,11 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/dayjs',
     '@nuxtjs/toast',
-],
+    'nuxt-clipboard',
+  ],
+  clipboard: {
+    autoSetContainer: true
+  },
   //알러트 설정
   toast: {
     position: 'top-center',

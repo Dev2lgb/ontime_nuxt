@@ -149,7 +149,8 @@
                   class="ma-1"
                   :value="item.value"
                 >
-                  <span v-if="$i18n.locale === 'ko' || $i18n.locale == ''">
+
+                  <span v-if="$i18n.locale === 'ko' || !$i18n.locale">
                     {{ item.text_ko }}
                   </span>
                   <span v-else>
@@ -208,7 +209,7 @@
               8. 예약프로그램이 진행되는 오프라인 장소를 알려주세요.
             </p>
             <div>
-              <GoogleMap :coordinate="coordinate" class="mb-6" @update-coordinate="form.coordinate = $event"/>
+              <GoogleMap :coordinate="form.coordinate" class="mb-6" @update-coordinate="form.coordinate = $event"/>
               <v-text-field placeholder="상세주소 입력"  v-model="form.address" :error-messages="errors.address" outlined></v-text-field>
               <v-text-field placeholder="영문 상세주소 입력"  v-model="form.address_en" :class="classEnField()" :error-messages="errors.address_en" outlined></v-text-field>
             </div>
@@ -358,7 +359,6 @@ export default {
           url: url, method: method, data:formData
         })
 
-        this.form.title_images = [];
         // this.urls.push(process.env.BASEURL + response.data.thumbnail);
         this.form.title_images.push({id : response.data.id });
 
@@ -402,11 +402,11 @@ export default {
         }
         this.loading = false;
       } catch (e) {
-        if (e.response.status === '422') {
+        if (e.response.status == '422') {
           this.errors = e.response.data.errors;
           this.$toast.error(e.response.data.message);
         }
-        if (e.response.status === '401') {
+        if (e.response.status == '401') {
           // console.log(e);
           this.$toast.error(e.response.data.message);
         }

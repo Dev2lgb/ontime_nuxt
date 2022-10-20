@@ -18,7 +18,6 @@
           outlined hide-details="auto"
           dense
           v-model="selectedBooking"
-          @change="setInitial"
           :items="bookings"
           item-text="text"
           item-value="value"

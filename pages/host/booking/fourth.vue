@@ -222,7 +222,6 @@ export default {
           url: url, method: method, data:formData
         })
 
-        this.form.info_files = [];
         // this.urls.push(process.env.BASEURL + response.data.thumbnail);
         this.form.info_files.push({id : response.data.id });
 

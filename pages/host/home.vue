@@ -4,7 +4,7 @@
     <div class="host_head pa-5">
       <div class="host_area">
         <div class="host_nik">
-        <p><span>관리자</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
+        <p><span>{{ $store.$auth.user.name }}</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
         </div>
         <div class="host_create">
           <p>예약이 필요 하신가요?</p>
@@ -23,16 +23,16 @@
     <div class="host_area">
       <div class="progrma_area">
         <p><v-icon color="#111">mdi-calendar-text</v-icon> 내 예약목록</p>
-        <p><span class="font-weight-bold">2개</span> 예약접수 진행중</p>
+        <p><span class="font-weight-bold">{{ items.length }}개</span> 예약접수 진행중</p>
       </div>
 
-      <div class="progrma_list">
-          <div class="reservation_item mb-3" v-for="item in reservationItems" :key="item.id">
+      <div class="progrma_list" v-if="items.length > 0">
+          <div class="reservation_item mb-3" v-for="(item, index) in items" :key="item.index">
             <router-link :to="'/host/booking/' + item.id + '/dashboard'" class="non-deco">
             <div class="flex j_space a_center">
               <div>
-                <v-chip dark color="#4487fa" label small>{{ item.division }}</v-chip>
-                <v-chip dark color="#28b487" label small>{{ item.status }}</v-chip>
+                <v-chip dark color="#4487fa" label small>{{ item.on_off_line }}</v-chip>
+                <v-chip dark color="#28b487" label small>{{ item.status_name.text_ko }}</v-chip>
               </div>
               <span class="view_icon">
                 <v-icon>mdi-eye</v-icon>
@@ -43,37 +43,39 @@
             <div class="list-area flex j_space a_center">
               <div class="list_title">
                 <p class="text-ellipsis">{{ item.title }}</p>
-                <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
+                <p class="color_main font_small_text tag_text">
+                  <span class="mr-1" v-for="(tag, tagIndex) in item.tags" :key="tagIndex + 't'">{{ tag }}</span>
+                </p>
               </div>
               <div class="list_btbt">
-                <p>예약상품 ({{ item.goodsCount }})</p>
+                <p>예약상품 ({{ item.options_count }})</p>
               </div>
             </div>
 
             <div class="flex j_space a_center mb-5 progrma_option">
               <div class="q_width flex d_col j_center a_center py-3">
                 <img src="~/assets/images/list_icon01.png" height="30">
-                <p class="font_small_text">예약확정 ({{ item.count.fin }})</p>
+                <p class="font_small_text">예약확정 ({{ item.confirmed_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
                 <img src="~/assets/images/list_icon02.png" height="30">
-                <p class="font_small_text">예약대기 ({{ item.count.ready }})</p>
+                <p class="font_small_text">예약대기 ({{ item.unconfirmed_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
                 <img src="~/assets/images/list_icon03.png" height="30">
-                <p class="font_small_text">예약취소 ({{ item.count.cancel }})</p>
+                <p class="font_small_text">예약취소 ({{ item.deleted_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
                 <img src="~/assets/images/list_icon04.png" height="30">
-                <p class="font_small_text">저장 ({{ item.count.saved }})</p>
+                <p class="font_small_text">저장 ({{ item.saved_number }})</p>
               </div>
             </div>
             </router-link>
 
         </div>
       </div>
+      <div v-else class="text-center py-10 color_gray">등록된 예약이 없습니다.</div>
       </div>
-
     </div>
   </div>
 </template>
@@ -81,13 +83,24 @@
 <script>
 export default {
   layout: 'host',
-
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings';
+      const response = await this.$axios.get(url);
+      console.log(response);
+      this.items = response.data.data;
+      this.loading = false;
+    } catch (e) {
+      // if (e.response.status === '401') {
+      //   console.log(e);
+      //   //this.$toast.error(e.response.data.message);
+      // }
+    }
+  },
   data: () => ({
-    reservationItems: [
-      { id:'123', status:'진행중', title: '[교육] 사찰예절 배움 템플스테이 해맞이...', hit:'311', division:'online', goodsCount:'3', count:{ fin: '4', ready: '5', cancel: '6', saved: '7'} },
-      { id:'123', status:'진행중', title: '[교육] 사찰예절 배움 템플스테이 해맞이...', hit:'311', division:'online', goodsCount:'3', count:{ fin: '4', ready: '5', cancel: '6', saved: '7'} },
+    items: [],
 
-    ],
   }),
 }
 </script>

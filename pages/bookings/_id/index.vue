@@ -3,11 +3,7 @@
     <SubHeader :link="'/bookings'" :title="'예약상세'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div>
-        <v-img
-          aspect-ratio="1.4"
-          :src="getThumbnail(booking.title_images)"
-          :lazy-src="`https://picsum.photos/10/6?image=10`"
-        ></v-img>
+        <BookingDetailSlider :items="booking.title_images"/>
       </div>
       <div class="progrma_subject">
         <h3>[{{ getCategoryName(booking) }}] {{ booking.title }}</h3>
@@ -39,9 +35,9 @@
         <h3 class="font_sub_title"><v-icon>mdi-calendar-text</v-icon> 예약 프로그램을 소개합니다</h3>
         <p class="progrma_text">
           {{ booking.content }}
-          <div>
-              {{ booking.desc }}
-          </div>
+        </p>
+        <p class="progrma_text">
+          {{ booking.desc }}
         </p>
         <div class="area_line"></div>
         <h3 class="font_sub_title mt-5"><v-icon>mdi-whatsapp</v-icon> 예약에 대한 문의사항이 있으신가요?</h3>
