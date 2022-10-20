@@ -241,7 +241,6 @@
         </div>
       </div>
     </div>
-    {{ booking }}
   </div>
 </template>
 <script>
@@ -397,11 +396,16 @@ export default {
         }
         if (this.selectedBookingOption.type == 'date') {
           for (let i = 0; i <  this.availableDateTimes.length; i++) {
+            let name = '제한없음';
+            if (this.availableDateTimes[i].total_personnel > 0) {
+              let name = this.availableDateTimes[i].available_personnel + '/' +  this.availableDateTimes[i].total_personnel;
+            }
+
             events.push({
               id :  this.availableDateTimes[i].id,
               date :  this.availableDateTimes[i].date,
               is_on :  this.availableDateTimes[i].is_on,
-              name:  this.availableDateTimes[i].available_personnel + '/' +  this.availableDateTimes[i].total_personnel,
+              name:  name,
               start:  this.availableDateTimes[i].date,
               end:  this.availableDateTimes[i].date,
               timed: '0',

@@ -92,8 +92,6 @@
           <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="submitForm">예약완료</v-btn>
         </div>
       </div>
-
-      {{ booking }}
     </div>
   </div>
 </template>

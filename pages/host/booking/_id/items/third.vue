@@ -1,6 +1,6 @@
 <template>
   <div class="f_width">
-    <HostSubHeader :title="'예약상품 등록'" />
+    <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/second'" />
     <div class="px-5 mt-16">
       <template>
         <v-progress-linear value="75"></v-progress-linear>

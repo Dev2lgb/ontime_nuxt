@@ -171,8 +171,6 @@
           ></v-switch>
         </div>
       </div>
-
-      {{ form.time_personnels }}
     </div>
   </div>
 </template>

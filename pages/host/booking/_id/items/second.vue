@@ -1,6 +1,6 @@
 <template>
   <div class="f_width">
-    <HostSubHeader :title="'예약상품 등록'" />
+    <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/create'" />
     <div class="px-5 mt-16">
       <template>
         <v-progress-linear value="50"></v-progress-linear>
@@ -16,7 +16,6 @@
       <BookingOptionTime @form-data="getFormData" :errors="errors" v-show="form.type == 'time'" />
       <BookingOptionDate @form-data="getFormData" :errors="errors" v-show="form.type == 'date'" />
 <!--      <BookingOptionTerm @form-data="getFormData" :errors="errors" v-show="form.type == 'term'" />-->
-{{ form }}
       <div class="pt-10">
         <v-btn
           block
