@@ -12,7 +12,7 @@
             당신의 예약관리를 위한 ONTIME<br>
             쉽고 간편한 예약 서비스를 찾고 계시나요?
           </p>
-          <v-btn color="#4676bb" to="/home" x-large dark depressed>서비스 시작하기</v-btn>
+          <v-btn color="#4676bb" to="/home" x-large dark depressed class="mv_btn">서비스 시작하기</v-btn>
         </div>
         <div class="mv_right">
           <img src="~/assets/images/mv1.png" alt="">
