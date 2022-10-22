@@ -7,23 +7,14 @@
           <p><span>관리자</span> 님, 예약내역<br>프로그램을 확인해 주세요.</p>
         </div>
         <div class="host_create">
-          <p style="color:#5b7ade">예약관리 서비스</p>
+
           <HostTabMenu />
         </div>
       </div>
     </div>
 
 <div class="user_dashboard full_height j_start">
-    <div class="select-box">
-      <v-select
-        outlined hide-details="auto"
-        dense
-        v-model="selectedBooking"
-        :items="bookings"
-        item-text="text"
-        item-value="value"
-      ></v-select>
-    </div>
+
 
     <div class="pa-5">
       <h3>[{{ getCategoryName(booking) }}] {{ booking.title }}</h3>
@@ -117,22 +108,7 @@
 <script>
 export default {
   layout: 'host',
-  async fetch() {
-    this.loading = true;
-    try {
-      let urlBookings = '/host/bookings/items';
-      const responseBookings = await this.$axios.get(urlBookings);
-      this.bookings = responseBookings.data;
-      this.selectedBooking = responseBookings.data[0];
 
-      this.loading = false;
-    } catch (e) {
-      if (e.response.status == '401') {
-        console.log(e);
-        this.$toast.error(e.response.data.message);
-      }
-    }
-  },
   data: () => ({
     selectedBooking: {},
     selectedItem: '125',
@@ -180,14 +156,6 @@ export default {
           timed:0,
         })
       }
-      // for (let i = 0; i <  this.schedules.length; i++) {
-      //   console.log(this.schedules[i]);
-      //   // events.push({ start: '2022-09-13', end: '2022-09-13', name: '세미나실1(2)', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      // }
-      //
-      // events.push({ color:'#483dff', start: '2022-09-13', end: '2022-09-13', name: '세미나실1(2)', count: '2', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      // events.push({ color:'#483dff', start: '2022-09-13', end: '2022-09-13', name: '세미나실2(4)', count: '4', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
-      // events.push({ color:'#483dff', start: '2022-09-14', end: '2022-09-14', name: '세미나실2(4)', count: '4', timed:0, customer: { name:'송다윤', phone:'010-1234-1234'}})
       this.events = events
     },
     showEvent() {},
@@ -224,7 +192,7 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          this.$toast.success('숨김처리 됐습니다.');
+          this.$toast.success('처리 됐습니다.');
         }
         this.loading = false;
       } catch (e) {
@@ -254,5 +222,4 @@ export default {
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 .sub_nav {margin-top: -7px;}
 ::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
-.select-box {padding: 0 20px;}
 </style>

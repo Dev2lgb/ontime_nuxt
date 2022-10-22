@@ -25,13 +25,18 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item>
-            <v-list-item-title>내 예약</v-list-item-title>
+            <v-list-item-title>서비스</v-list-item-title>
           </v-list-item>
 
           <v-list-item
+            to="/home"
+          >
+            <v-list-item-title>예약하기</v-list-item-title>
+          </v-list-item>
+          <v-list-item
             to="/auth/modify"
           >
-            <v-list-item-title>프로필 관리</v-list-item-title>
+            <v-list-item-title>예약만들기</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -44,22 +49,32 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item
-            to="/host/home"
-          >
-            <v-list-item-title>관리자로 전환</v-list-item-title>
-          </v-list-item>
-
           <v-list-item>
             <v-list-item-title>English</v-list-item-title>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title>고객센터</v-list-item-title>
+          <v-list-item
+            to="/auth/login"
+            v-show="!this.$auth.loggedIn"
+          >
+            <v-list-item-title>로그인</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/auth/register"
+            v-show="!this.$auth.loggedIn"
+          >
+            <v-list-item-title>회원가입</v-list-item-title>
           </v-list-item>
           <v-list-item
             @click="logout"
+            v-show="this.$auth.loggedIn"
           >
             <v-list-item-title>로그아웃</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/auth/modify"
+            v-show="this.$auth.loggedIn"
+          >
+            <v-list-item-title>프로필 수정</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>

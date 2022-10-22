@@ -7,26 +7,14 @@
         <p><span>관리자</span> 님, 예약관리<br>예약상품을 확인해 주세요.</p>
         </div>
         <div class="host_create">
-          <p style="color:#5b7ade">예약관리 서비스</p>
           <HostTabMenu />
         </div>
       </div>
     </div>
     <div class="user_dashboard full_height j_start">
-      <div class="select-box">
-        <v-select
-          outlined hide-details="auto"
-          dense
-          v-model="selectedBooking"
-          :items="bookings"
-          item-text="text"
-          item-value="value"
-        ></v-select>
-      </div>
-
       <div class="pa-5">
         <h3>등록된 예약 상품 (3)</h3>
-        <v-btn outlined color="blue" class="mt-3" :to="'/host/booking/' + this.selectedBooking + '/items/create'">+ 예약상품 등록</v-btn>
+        <v-btn outlined color="blue" class="mt-3" :to="'/host/booking/' + this.$route.params.id + '/items/create'">+ 예약상품 등록</v-btn>
       </div>
     </div>
   </div>

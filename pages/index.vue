@@ -193,13 +193,13 @@
       <div class="inner">
         <div class="flex j_space a_center">
           <h3 class="book_h3">다양한 분야의 예약관리를<br /><span>온타임으로 해결하세요.</span></h3>
-          <div>
-            <div class="flex j_end a_center">
+          <div class="chip_wrap">
+            <div class="flex j_end a_center item_chips">
               <v-chip color="#f1f1f1"><span class="rec"></span>장소, 시간 없이도 OK</v-chip>
               <v-chip color="#f1f1f1"><span class="rec"></span>프라이빗 모드</v-chip>
               <v-chip color="#f1f1f1"><span class="rec"></span>Email 알림 시스템</v-chip>
             </div>
-            <div class="chip_box flex j_end a_center">
+            <div class="chip_box flex j_end a_center item_chips">
               <v-chip color="#f1f1f1"><span class="rec"></span>다양한 예약 옵션 설정</v-chip>
               <v-chip color="#f1f1f1"><span class="rec"></span>글로벌 타임존 케어</v-chip>
               <v-chip color="#f1f1f1"><span class="rec"></span>간편한 가입절차</v-chip>

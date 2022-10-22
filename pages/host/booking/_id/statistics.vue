@@ -7,35 +7,132 @@
           <p><span>관리자</span> 님, 예약관련하여<br>현황을 확인해 주세요.</p>
         </div>
         <div class="host_create">
-          <p style="color:#5b7ade">예약관리 서비스</p>
           <HostTabMenu />
         </div>
       </div>
     </div>
 
-    <div class="user_dashboard full_height j_start">
-      <div class="select-box">
-        <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservation_items"
-                  item-text="title"
-                  item-value="id"
-        ></v-select>
+    <div class="user_dashboard full_height j_start px-5">
+      <div class="flex j_space a_center">
+        <div class="h_width">
+          <v-select
+            v-model="searchMonth"
+            :items="monthsItems"
+            outlined
+            dense
+            hide-details="auto"
+          >
+          </v-select>
+        </div>
+        <div class="h_width ml-3">
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="search.dates"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="dateRangeText"
+                prepend-inner-icon="mdi-calendar"
+                outlined
+                dense
+                hide-details="auto"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="search.dates"
+              no-title
+              range
+              scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="primary"
+                @click="menu = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.menu.save(search.dates)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+        </div>
+        <v-btn @click="this.$fetch">검색</v-btn>
       </div>
+      {{ countryPersonnels }}
     </div>
   </div>
 </template>
 <script>
 export default {
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      // let urlBookings = '/host/bookings/' + this.$route.params.id + '/statistics?search=';
+      let url = '/host/bookings/' + this.$route.params.id + '/statistics?search=';
+      if (this.search.dates.length > 0) {
+        url += JSON.stringify(this.search);
+      }
+      const response = await this.$axios.get(url);
+      this.countryPersonnels = response.data.countryPersonnels;
+      this.dateChartData = response.data.dateChartData;
+      this.datePersonnels = response.data.datePersonnels;
+      this.optionChartData = response.data.optionChartData;
+      this.optionPersonnels = response.data.optionPersonnels;
+      this.sexAgeChartData = response.data.sexAgeChartData;
+      this.sexAgePersonnels = response.data.sexAgePersonnels;
+
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        this.$toast.error(e.response.data.message);
+      }
+    }
+  },
+  computed: {
+    dateRangeText () {
+      return this.search.dates.join(' ~ ')
+    },
+  },
   data: () => ({
+    menu: false,
+    countryPersonnels : [],
+    dateChartData : [],
+    search: {
+      dates: [],
+    },
     selectedItem: '125',
     reservation_items: [
       { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '125' },
       { title: '[전시] 사찰예절 배움 템플스테이 해맞이', id: '126' },
       { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
     ],
+    searchMonth: '1',
+    monthsItems: [
+      {text : '이번달', value: '1'},
+      {text : '3개월', value: '3'},
+      {text : '6개월', value: '6'},
+    ]
   }),
   methods: {
-
+    setInit(){
+      this.dates.push();
+    }
   },
 }
 </script>

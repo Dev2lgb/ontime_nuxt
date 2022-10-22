@@ -7,20 +7,12 @@
         <p><span>관리자</span> 님, 예약내역<br>상세현황을 확인해 주세요.</p>
         </div>
         <div class="host_create">
-          <p style="color:#5b7ade">예약관리 서비스</p>
           <HostTabMenu />
         </div>
       </div>
     </div>
 
 <div class="user_dashboard full_height j_start">
-    <div class="select-box">
-      <v-select outlined hide-details="auto" dense v-model="selectedItem" :items="reservationItems"
-                item-text="title"
-                item-value="id"
-      ></v-select>
-    </div>
-
       <div class="pa-5">
         <div>
           <v-text-field prepend-inner-icon="mdi-magnify" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
@@ -99,25 +91,23 @@
             <div>
               <v-btn small outlined>엑셀다운</v-btn>
               <v-btn small outlined>일괄승인</v-btn>
-              <v-btn small outlined>공지발송</v-btn>
+              <v-btn small outlined @click="sendNoticePop">공지발송</v-btn>
             </div>
           </div>
         </div>
-        <!-- 예약자 반복카드 -->
-        <div class="matching_card" v-for="booked in bookedBookings" :key="booked.id">
+        <div v-for="(booked, bindex) in bookedBookings" :key="bindex" class="mb-5">
           <div class="matching_list">
             <div class="list_group">
-               <v-checkbox value="memberItem.id" hide-details="auto" class="matching_inp"></v-checkbox>
-               <div class="matching_state">{{ booked.status_name }}</div>
-               <p class="list_title">{{ booked.member }} 외{{  }} 예약 <v-icon>mdi-message-text</v-icon></p>
+              <v-checkbox v-model="selectedIds" :value="booked.id" hide-details="auto" class="matching_inp"></v-checkbox>
+              <div class="matching_state">{{ booked.status_name }}</div>
+              <p class="list_title">{{ booked.member.name }} <v-icon>mdi-message-text</v-icon></p>
             </div>
-            <div class="btn_group">
-              <v-btn small depressed dark color="#c54a41">예약취소</v-btn>&nbsp;
-              <v-btn small depressed dark color="#4caf50">이용완료</v-btn>&nbsp;
-              <v-btn small depressed dark color="#173bb3" @click="toggleOnOff">상세</v-btn>
+            <div class="btn_group mt-3">
+              <v-btn small depressed dark color="#c54a41" @click="cancelBooked(booked.id)">예약취소</v-btn>&nbsp;
+              <v-btn small depressed dark color="#4caf50" @click="confirmBooked(booked.id)">이용완료</v-btn>&nbsp;
             </div>
           </div>
-          <div v-if="isStatusOn" class="matching_hidden">
+          <div class="matching_hidden">
             <div class="hidden_title">
               <p>예약자 정보</p>
             </div>
@@ -125,57 +115,77 @@
               <table>
                 <tr>
                   <th>신청일</th>
-                  <td>{{ memberItem.time }}</td>
+                  <td>{{ booked.created_at.substr(0, 10) }}</td>
                   <th>예약자명</th>
-                  <td>{{ memberItem.name }}</td>
+                  <td>{{ booked.member.name }}</td>
                 </tr>
                 <tr>
                   <th>연락처</th>
-                  <td>{{ memberItem.phone }}</td>
+                  <td>{{ booked.member.ccc_mobile }}</td>
                   <th>이메일</th>
-                  <td>{{ memberItem.email }}</td>
+                  <td>{{ booked.member.email }}</td>
                 </tr>
                 <tr>
-                  <th>예약인원</th>
-                  <td>{{ memberItem.reservation_count }}명</td>
                   <th>국적</th>
-                  <td>{{ memberItem.nation }}</td>
+                  <td>{{ booked.member.timezone }}</td>
+                  <th>성별</th>
+                  <td>{{ booked.member.sex_name }}</td>
                 </tr>
                 <tr>
                   <th>출생연도</th>
-                  <td>{{ memberItem.birth }}</td>
-                  <th>성별</th>
-                  <td>{{ memberItem.gender }}</td>
+                  <td colspan="3">{{ booked.member.birthday_year }}</td>
                 </tr>
               </table>
             </div>
-
             <div class="hidden_title">
               <p>예약 옵션정보</p>
             </div>
             <div class="hidden_table">
+
               <table>
-                <tr v-for="option in memberItem.options" :key="option.id">
-                  <td>{{ option.name }}</td>
-                  <td>{{ option.stime }}</td>
+                <tr v-for="option in booked.items" :key="option.id">
+                  <td>{{ option.option.title }}</td>
+                  <td>{{ option.booking_date }}</td>
                   <td>{{ option.etime }}</td>
                 </tr>
               </table>
             </div>
 
-             <div class="hidden_title">
+            <div class="hidden_title">
               <p>요청사항</p>
             </div>
             <div class="hidden_area">
-              <textarea class="hidden_txtarea">{{ memberItem.memo }}</textarea>
+              <textarea class="hidden_txtarea">{{  }}</textarea>
             </div>
-
 
           </div>
         </div>
-      {{ bookedBookings }}
       </div>
   </div>
+    <v-dialog
+      v-model="isSendNoticePop"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title>예약자에게 안내할 사항을 입력해주세요.</v-card-title>
+        <v-card-subtitle class="mt-3">해당 예약과 관련이 없는 내용을 전송할 경우 별도의 공지없이 이용에 제한될 수 있습니다. (발신 이메일주소는  support@ontimewolrd.kr 입니다.)</v-card-subtitle>
+        <v-card-text>
+          <div>
+            <p class="font-weight-bold">발송 형태</p>
+            <div>
+              <v-checkbox label="이메일" hide-details="auto"></v-checkbox>
+              <v-checkbox label="푸시(앱 사용자에게만 전송)" hide-details="auto"></v-checkbox>
+            </div>
+          </div>
+          <div>
+            <v-textarea outlined class="mt-3"></v-textarea>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn>공지발송</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -197,6 +207,8 @@ export default {
     }
   },
   data: () => ({
+    selectedIds: [],
+    isSendNoticePop: false,
     bookedBookings: [],
     isStatusOn: false,
     date: [],
@@ -233,9 +245,59 @@ export default {
     ],
   }),
   methods: {
-    toggleOnOff: function() {
-    this.isStatusOn = !this.isStatusOn;
-  }
+    async cancelBooked(id) {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/revoke';
+        let method = 'put';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('예약이 취소되었습니다.');
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    async confirmBooked(id) {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/complete';
+        let method = 'put';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('예약 이용이 완료되었습니다.');
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    sendNoticePop() {
+      this.isSendNoticePop = true;
+    }
   },
 }
 </script>

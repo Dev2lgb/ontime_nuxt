@@ -29,9 +29,17 @@
       >
         <v-list-item-group
           v-model="group"
+
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item>
+          <v-list-item
+            to="/"
+          >
+            <v-list-item-title>홈으로</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/host/home"
+          >
             <v-list-item-title>내 예약</v-list-item-title>
           </v-list-item>
 
