@@ -21,168 +21,183 @@
       ></v-select>
     </div>
 
-    <div class="pa-5">
-      <div>
-        <v-text-field prepend-inner-icon="mdi-magnify" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
-        <div class="flex j_space a_center my-3">
-          <div class="h_width">
-            <v-select hide-details="auto" dense outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
-          </div>
-          <div class="h_width ml-3">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :return-value.sync="date"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="date"
-                  prepend-inner-icon="mdi-calendar"
-                  outlined
-                  hide-details="auto"
-                  dense
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="date"
-                no-title
-                range
-                scrollable
+      <div class="pa-5">
+        <div>
+          <v-text-field prepend-inner-icon="mdi-magnify" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
+          <div class="flex j_space a_center my-3">
+            <div class="h_width">
+              <v-select hide-details="auto" dense outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
+            </div>
+            <div class="h_width ml-3">
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :return-value.sync="date"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
               >
-                <v-spacer></v-spacer>
-                <v-btn
-                  text
-                  color="primary"
-                  @click="menu = false"
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    prepend-inner-icon="mdi-calendar"
+                    outlined
+                    hide-details="auto"
+                    dense
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  no-title
+                  range
+                  scrollable
                 >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  text
-                  color="primary"
-                  @click="$refs.menu.save(date)"
-                >
-                  OK
-                </v-btn>
-              </v-date-picker>
-            </v-menu>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="menu = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.menu.save(date)"
+                  >
+                    OK
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="flex j_start a_center f_width">
-        <v-btn-toggle
-          v-model="toggle_one"
-          mandatory
-          group
-          class="outlined_btn_group f_width flex j_space a_center"
-          dense
-          active-class="active"
-        >
-          <v-btn outlined>전체</v-btn>
-          <v-btn outlined>확정</v-btn>
-          <v-btn outlined>대기</v-btn>
-          <v-btn outlined>완료</v-btn>
-          <v-btn outlined>취소</v-btn>
-        </v-btn-toggle>
-      </div>
-      <div class="matching_option">
-        <h3>예약자 (3명)</h3>
-        <div class="flex j_space a_center py-3">
-          <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
-          <div>
-            <v-btn small outlined>엑셀다운</v-btn>
-            <v-btn small outlined>일괄승인</v-btn>
-            <v-btn small outlined>공지발송</v-btn>
+        <div class="flex j_start a_center f_width">
+          <v-btn-toggle
+            v-model="toggle_one"
+            mandatory
+            group
+            class="outlined_btn_group f_width flex j_space a_center"
+            dense
+            active-class="active"
+          >
+            <v-btn outlined>전체</v-btn>
+            <v-btn outlined>확정</v-btn>
+            <v-btn outlined>대기</v-btn>
+            <v-btn outlined>완료</v-btn>
+            <v-btn outlined>취소</v-btn>
+          </v-btn-toggle>
+        </div>
+        <div class="matching_option">
+          <h3>예약자 (3명)</h3>
+          <div class="flex j_space a_center py-3">
+            <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
+            <div>
+              <v-btn small outlined>엑셀다운</v-btn>
+              <v-btn small outlined>일괄승인</v-btn>
+              <v-btn small outlined>공지발송</v-btn>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- 예약자 반복카드 -->
-      <div class="matching_card" v-for="memberItem in memberItems" :key="memberItem.id">
-        <div class="matching_list">
-          <div class="list_group">
-             <v-checkbox value="memberItem.id" hide-details="auto" class="matching_inp"></v-checkbox>
-             <div class="matching_state">{{ memberItem.status }}</div>
-             <p class="list_title">{{ memberItem.name }} 외{{ memberItem.reservation_count-1 }} 예약 <v-icon>mdi-message-text</v-icon></p>
+        <!-- 예약자 반복카드 -->
+        <div class="matching_card" v-for="booked in bookedBookings" :key="booked.id">
+          <div class="matching_list">
+            <div class="list_group">
+               <v-checkbox value="memberItem.id" hide-details="auto" class="matching_inp"></v-checkbox>
+               <div class="matching_state">{{ booked.status_name }}</div>
+               <p class="list_title">{{ booked.member }} 외{{  }} 예약 <v-icon>mdi-message-text</v-icon></p>
+            </div>
+            <div class="btn_group">
+              <v-btn small depressed dark color="#c54a41">예약취소</v-btn>&nbsp;
+              <v-btn small depressed dark color="#4caf50">이용완료</v-btn>&nbsp;
+              <v-btn small depressed dark color="#173bb3" @click="toggleOnOff">상세</v-btn>
+            </div>
           </div>
-          <div class="btn_group">
-            <v-btn small depressed dark color="#c54a41">예약취소</v-btn>&nbsp;
-            <v-btn small depressed dark color="#4caf50">이용완료</v-btn>&nbsp;
-            <v-btn small depressed dark color="#173bb3" @click="toggleOnOff">상세</v-btn>
+          <div v-if="isStatusOn" class="matching_hidden">
+            <div class="hidden_title">
+              <p>예약자 정보</p>
+            </div>
+            <div class="hidden_table">
+              <table>
+                <tr>
+                  <th>신청일</th>
+                  <td>{{ memberItem.time }}</td>
+                  <th>예약자명</th>
+                  <td>{{ memberItem.name }}</td>
+                </tr>
+                <tr>
+                  <th>연락처</th>
+                  <td>{{ memberItem.phone }}</td>
+                  <th>이메일</th>
+                  <td>{{ memberItem.email }}</td>
+                </tr>
+                <tr>
+                  <th>예약인원</th>
+                  <td>{{ memberItem.reservation_count }}명</td>
+                  <th>국적</th>
+                  <td>{{ memberItem.nation }}</td>
+                </tr>
+                <tr>
+                  <th>출생연도</th>
+                  <td>{{ memberItem.birth }}</td>
+                  <th>성별</th>
+                  <td>{{ memberItem.gender }}</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="hidden_title">
+              <p>예약 옵션정보</p>
+            </div>
+            <div class="hidden_table">
+              <table>
+                <tr v-for="option in memberItem.options" :key="option.id">
+                  <td>{{ option.name }}</td>
+                  <td>{{ option.stime }}</td>
+                  <td>{{ option.etime }}</td>
+                </tr>
+              </table>
+            </div>
+
+             <div class="hidden_title">
+              <p>요청사항</p>
+            </div>
+            <div class="hidden_area">
+              <textarea class="hidden_txtarea">{{ memberItem.memo }}</textarea>
+            </div>
+
+
           </div>
         </div>
-        <div v-if="isStatusOn" class="matching_hidden">
-          <div class="hidden_title">
-            <p>예약자 정보</p>
-          </div>
-          <div class="hidden_table">
-            <table>
-              <tr>
-                <th>신청일</th>
-                <td>{{ memberItem.time }}</td>
-                <th>예약자명</th>
-                <td>{{ memberItem.name }}</td>
-              </tr>
-              <tr>
-                <th>연락처</th>
-                <td>{{ memberItem.phone }}</td>
-                <th>이메일</th>
-                <td>{{ memberItem.email }}</td>
-              </tr>
-              <tr>
-                <th>예약인원</th>
-                <td>{{ memberItem.reservation_count }}명</td>
-                <th>국적</th>
-                <td>{{ memberItem.nation }}</td>
-              </tr>
-              <tr>
-                <th>출생연도</th>
-                <td>{{ memberItem.birth }}</td>
-                <th>성별</th>
-                <td>{{ memberItem.gender }}</td>
-              </tr>
-            </table>
-          </div>
-
-          <div class="hidden_title">
-            <p>예약 옵션정보</p>
-          </div>
-          <div class="hidden_table">
-            <table>
-              <tr v-for="option in memberItem.options" :key="option.id">
-                <td>{{ option.name }}</td>
-                <td>{{ option.stime }}</td>
-                <td>{{ option.etime }}</td>
-              </tr>
-            </table>
-          </div>
-
-           <div class="hidden_title">
-            <p>요청사항</p>
-          </div>
-          <div class="hidden_area">
-            <textarea class="hidden_txtarea">{{ memberItem.memo }}</textarea>
-          </div>
-
-
-        </div>
+      {{ bookedBookings }}
       </div>
-    
-    </div>
   </div>
   </div>
 </template>
 <script>
 export default {
   layout: 'host',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/host/bookings/' + this.$route.params.id + '/booked?search=';
+      const response = await this.$axios.get(url);
+      this.bookedBookings = response.data.data;
+
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
+    bookedBookings: [],
     isStatusOn: false,
     date: [],
     menu: false,

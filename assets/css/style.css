@@ -161,6 +161,7 @@ a { text-decoration: none; color:#222; }
 .service_left h3 { font-size:40px; margin-bottom:30px; color:#484848; }
 .service_btn { color:#4676bb; margin-top:20px; display:inline-block; }
 .service_left, .service_right { width:50%; }
+.service_right img { width:100%; }
 .service2_left, .service2_right { width:50%; }
 .service2_left img { width:80%; }
 .service2_right h3 { font-size:40px; margin-bottom:30px; color:#484848; }
@@ -193,3 +194,10 @@ a { text-decoration: none; color:#222; }
 .customer_tel { font-size:23px; font-weight:400; }
 .customer_tel span { color:#50b999; font-weight:bold; }
 .customer_time { font-size:14px; }
+
+.mo_v { display:none; }
+.mv_left { margin-bottom:50px; }
+.mv_left h3 { font-size:50px; }
+.mv_left p { font-size:20px; margin:30px 0; color:#483dff; font-weight:bold; }
+.slider_item { background-color:#ddfdff; padding:80px 0 0; }
+.mv_right img { width:100%; }

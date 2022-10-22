@@ -34,10 +34,11 @@
         <v-btn dark color="#fb8c00" label small class="ma-1" elevation="0">예약 수정</v-btn>
         <v-spacer></v-spacer>
         <v-switch
-          v-model="form.is_show"
+          v-model="booking.is_display"
           true-value="Y"
           false-value="N"
           label="노출"
+          @change=toggleDisplay
           hide-details="auto"
         ></v-switch>
       </div>
@@ -53,7 +54,7 @@
         </div>
         <div class="q_width flex d_col j_center a_center py-3">
           <img src="~/assets/images/list_icon03.png" height="30">
-          <p class="font_small_text">예약취소 ({{ booking.deleted_number }})</p>
+          <p class="font_small_text">예약취소 ({{ booking.revoked_number }})</p>
         </div>
         <div class="q_width flex d_col j_center a_center py-3">
           <img src="~/assets/images/list_icon04.png" height="30">
@@ -148,7 +149,7 @@ export default {
     type: 'month',
     selectedEvent: {},
     form: {
-      is_show: 'Y'
+      is_display: 'Y'
     },
   }),
   mounted () {
@@ -210,6 +211,30 @@ export default {
       if (status) {
         if (status.hasOwnProperty('text_ko')) {
           return status.text_ko;
+        }
+      }
+    },
+    async toggleDisplay() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/toggle/is_display';
+        let method = 'put';
+
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          this.$toast.success('숨김처리 됐습니다.');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
         }
       }
     }

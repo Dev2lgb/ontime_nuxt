@@ -36,7 +36,7 @@
               </div>
               <span class="view_icon">
                 <v-icon>mdi-eye</v-icon>
-                {{ item.hit }}
+                {{ item.views }}
               </span>
             </div>
 

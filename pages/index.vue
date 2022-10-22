@@ -1,6 +1,6 @@
 <template>
   <div class="main_wrap">
-    <div class="header">
+    <div class="header pc_v">
       <div class="inner">
         <div class="header_height flex j_space a_center">
           <div class="logo">
@@ -28,6 +28,9 @@
         </div>
       </div>
     </div>
+    <div class="header mo_v">
+      <MobileMainHeader />
+    </div>
 
     <div class="mv">
       <MainSlider />
@@ -35,7 +38,7 @@
 
     <div class="systems">
       <div class="inner">
-        <div class="flex j_space a_center">
+        <div class="flex j_space a_center system_wrap">
           <div class="systems_item">
             <img src="~/assets/images/system_1.png" alt="">
             <h3><span>숙박</span> 시스템</h3>
@@ -126,7 +129,7 @@
           <div class="service2_right">
             <p class="underline_btn">더 알아보기</p>
             <h3>예약관리가 필요한<br>모든 업종에서 자유롭게!</h3>
-            <div class="my-10 flex j_start a_center">
+            <div class="my-10 flex j_start a_center process_wrap">
               <div class="process_item flex j_center a_center d_col">
                 <div class="circle_icon">
                   <img src="~/assets/images/c_icon1.png" alt="">

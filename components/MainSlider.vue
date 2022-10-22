@@ -1,7 +1,7 @@
 <template>
   <swiper class="swiper pb-10" :options="swiperOption">
     <swiper-slide class="slider_item">
-      <div class="flex j_space a_center inner">
+      <div class="flex j_space a_center inner mv-item">
         <div class="mv_left">
           <h3>
             비대면 시대에<br>
@@ -50,9 +50,6 @@ export default {
 </script>
 
 <style scoped>
-.mv_left { margin-bottom:50px; }
-.mv_left h3 { font-size:50px; }
-.mv_left p { font-size:20px; margin:30px 0; color:#483dff; font-weight:bold; }
-.slider_item { background-color:#ddfdff; padding:80px 0 0; }
+.slider_item { overflow: hidden }
 </style>
 
