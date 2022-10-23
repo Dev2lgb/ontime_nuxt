@@ -1,5 +1,6 @@
 <template>
   <div class="f_width">
+    <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
       <div class="host_area">
@@ -92,10 +93,11 @@
           :type="type"
           locale="ko"
           @change="updateRange"
+          @click:event="pushBookingPage"
           event-color="transparent"
           event-height="50"
         >
-          <template v-slot:event="{ event }" >
+          <template v-slot:event="{ event }">
             <p class="text-center ma-0 date_selector color_main">확정 : {{ event.confirmed }}</p>
             <p class="text-center ma-0 date_selector color_red">대기 : {{ event.unconfirmed }}</p>
           </template>
@@ -110,6 +112,7 @@ export default {
   layout: 'host',
 
   data: () => ({
+    loading:false,
     selectedBooking: {},
     selectedItem: '125',
     reservation_items: [
@@ -140,7 +143,7 @@ export default {
     },
     async updateRange ({ start, end }) {
       const events = []
-
+      this.loading = true;
       let url = '/host/bookings/' + this.$route.params.id + '/calendar/' + start.date + '/' + end.date;
       const response = await this.$axios.get(url);
       this.booking = response.data.booking;
@@ -157,6 +160,7 @@ export default {
         })
       }
       this.events = events
+      this.loading = false;
     },
     showEvent() {},
     getCategoryName(item) {
@@ -205,6 +209,9 @@ export default {
           this.$toast.error(e.response.data.message);
         }
       }
+    },
+    pushBookingPage(event) {
+      this.$router.push('/host/booking/' + this.$route.params.id + '/members?date=' + event.day.date);
     }
   },
 }

@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <div class="global_user_wrap">
+
       <div class="user_size_wrap">
         <Nuxt />
       </div>

@@ -1,5 +1,6 @@
 <template>
   <div class="f_width">
+    <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
       <div class="host_area">
@@ -14,25 +15,26 @@
 
 <div class="user_dashboard full_height j_start">
       <div class="pa-5">
+
         <div>
-          <v-text-field prepend-inner-icon="mdi-magnify" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
+          <v-text-field prepend-inner-icon="mdi-magnify" v-model="search.keyword" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
           <div class="flex j_space a_center my-3">
-            <div class="h_width">
-              <v-select hide-details="auto" dense outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
+            <div class="t_width">
+              <v-select hide-details="auto" dense @change="dateTerm" outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
             </div>
-            <div class="h_width ml-3">
+            <div class="f_width ml-3">
               <v-menu
                 ref="menu"
                 v-model="menu"
                 :close-on-content-click="false"
-                :return-value.sync="date"
+                :return-value.sync="search.dates"
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date"
+                    v-model="dateRangeText"
                     prepend-inner-icon="mdi-calendar"
                     outlined
                     hide-details="auto"
@@ -43,7 +45,7 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  v-model="date"
+                  v-model="search.dates"
                   no-title
                   range
                   scrollable
@@ -59,13 +61,14 @@
                   <v-btn
                     text
                     color="primary"
-                    @click="$refs.menu.save(date)"
+                    @click="$refs.menu.save(search.dates)"
                   >
                     OK
                   </v-btn>
                 </v-date-picker>
               </v-menu>
             </div>
+            <v-btn @click="this.$fetch" class="ml-3" depressed color="#333" dark>검색</v-btn>
           </div>
         </div>
         <div class="flex j_start a_center f_width">
@@ -77,11 +80,11 @@
             dense
             active-class="active"
           >
-            <v-btn outlined>전체</v-btn>
-            <v-btn outlined>확정</v-btn>
-            <v-btn outlined>대기</v-btn>
-            <v-btn outlined>완료</v-btn>
-            <v-btn outlined>취소</v-btn>
+            <v-btn outlined @click="search.status = ''">전체</v-btn>
+            <v-btn outlined @click="search.status = 'confirmed'">확정</v-btn>
+            <v-btn outlined @click="search.status = 'unconfirmed'">대기</v-btn>
+            <v-btn outlined @click="search.status = 'completed'">완료</v-btn>
+            <v-btn outlined @click="search.status = 'revoked'">취소</v-btn>
           </v-btn-toggle>
         </div>
         <div class="matching_option">
@@ -90,7 +93,7 @@
             <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
             <div>
               <v-btn small outlined>엑셀다운</v-btn>
-              <v-btn small outlined>일괄승인</v-btn>
+              <v-btn small outlined @click="checkedApprove">일괄승인</v-btn>
               <v-btn small outlined @click="sendNoticePop">공지발송</v-btn>
             </div>
           </div>
@@ -99,12 +102,12 @@
           <div class="matching_list">
             <div class="list_group">
               <v-checkbox v-model="selectedIds" :value="booked.id" hide-details="auto" class="matching_inp"></v-checkbox>
-              <div class="matching_state">{{ booked.status_name }}</div>
+              <div :class="'matching_state ' + getStatusColor(booked.status_name)">{{ booked.status_name }}</div>
               <p class="list_title">{{ booked.member.name }} <v-icon>mdi-message-text</v-icon></p>
             </div>
             <div class="btn_group mt-3">
-              <v-btn small depressed dark color="#c54a41" @click="cancelBooked(booked.id)">예약취소</v-btn>&nbsp;
-              <v-btn small depressed dark color="#4caf50" @click="confirmBooked(booked.id)">이용완료</v-btn>&nbsp;
+              <v-btn small depressed dark color="#c54a41" @click="cancelBooked(booked.id)" v-show="booked.status_name != '취소'">예약취소</v-btn>&nbsp;
+              <v-btn small depressed dark color="#4caf50" @click="confirmBooked(booked.id)" v-show="booked.status_name != '완료'">이용완료</v-btn>&nbsp;
             </div>
           </div>
           <div class="matching_hidden">
@@ -134,6 +137,8 @@
                 <tr>
                   <th>출생연도</th>
                   <td colspan="3">{{ booked.member.birthday_year }}</td>
+<!--                  <th>예약인원</th>-->
+<!--                  <td>{{ booked.personnel }}</td>-->
                 </tr>
               </table>
             </div>
@@ -141,12 +146,14 @@
               <p>예약 옵션정보</p>
             </div>
             <div class="hidden_table">
-
               <table>
                 <tr v-for="option in booked.items" :key="option.id">
                   <td>{{ option.option.title }}</td>
-                  <td>{{ option.booking_date }}</td>
-                  <td>{{ option.etime }}</td>
+                  <td>
+                    {{ option.booking_date }}
+                    <span v-show="option.booking_time">{{ option.booking_time }}</span>
+                  </td>
+                  <td>{{ option.personnel }}명</td>
                 </tr>
               </table>
             </div>
@@ -155,7 +162,7 @@
               <p>요청사항</p>
             </div>
             <div class="hidden_area">
-              <textarea class="hidden_txtarea">{{  }}</textarea>
+              <textarea class="hidden_txtarea" readonly>{{ booked.memo }}</textarea>
             </div>
 
           </div>
@@ -189,12 +196,25 @@
   </div>
 </template>
 <script>
+import {DateTime} from "luxon";
+DateTime.defaultZoneName = 'Asia/Seoul';
+
 export default {
   layout: 'host',
   async fetch() {
     this.loading = true;
+
     try {
+      if(this.$route.query.date) {
+        this.search.dates = [];
+        this.search.dates.push(this.$route.query.date);
+        this.search.dates.push(this.$route.query.date);
+      }
       let url = '/host/bookings/' + this.$route.params.id + '/booked?search=';
+      if (this.search.dates.length > 0) {
+        url += JSON.stringify(this.search);
+      }
+
       const response = await this.$axios.get(url);
       this.bookedBookings = response.data.data;
 
@@ -207,6 +227,12 @@ export default {
     }
   },
   data: () => ({
+    loading: false,
+    search: {
+      keyword: '',
+      dates: [],
+      status: '',
+    },
     selectedIds: [],
     isSendNoticePop: false,
     bookedBookings: [],
@@ -214,9 +240,13 @@ export default {
     date: [],
     menu: false,
     selectedItem: '125',
-    selectedSearchTermItem: '이번달',
+    selectedSearchTermItem: '',
     searchTermItems: [
-      '이번달', '다음달', '지난달'
+      {text: '전체', value: ''},
+      {text: '이번달' , value: {type: 'last', start: {month: 0}}},
+      {text: '지난달', value: {type: 'last', start: {month: 1}}},
+      {text: '3개월', value: {type: 'this', start: {month: 3}}},
+      {text: '6개월', value: {type: 'this', start: {month: 6}}},
     ],
     reservationItems: [
       { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '125' },
@@ -244,6 +274,11 @@ export default {
       }
     ],
   }),
+  computed: {
+    dateRangeText () {
+      return this.search.dates.join(' ~ ')
+    },
+  },
   methods: {
     async cancelBooked(id) {
       this.loading = true;
@@ -295,9 +330,80 @@ export default {
         }
       }
     },
+    async checkedApprove() {
+      this.loading = true;
+      try {
+        ///host/bookings/35/booked/confirm/24,25
+        let url = '/host/bookings/' + this.$route.params.id + '/booked/confirm/';
+        let ids = '';
+        for(let i = 0; i < this.selectedIds.length; i++) {
+          ids += this.selectedIds[i];
+          if (i < this.selectedIds.length - 1) {
+            ids += ',';
+          }
+        }
+        url += ids;
+
+        let method = 'put';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('승인처리되었습니다.');
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
     sendNoticePop() {
       this.isSendNoticePop = true;
-    }
+    },
+    dateTerm(searches) {
+      this.search.dates = [];
+      //console.log(searches);
+      let now = DateTime.now();
+      let startdate = '';
+      let enddate = '';
+      if (searches.type === 'this') {
+        startdate = now.minus(searches.start).startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.toFormat('yyyy-MM-dd');
+      }
+      if (searches.type === 'last') {
+        now = now.minus(searches.start);
+        startdate = now.startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.endOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+      }
+      if (startdate && enddate)  {
+        this.search.dates = [startdate, enddate];
+      }
+    },
+    leftPad(value) {
+      if (value >= 10) {
+        return value;
+      }
+      return `0${value}`;
+    },
+    toStringByFormatting(source, delimiter = '-') {
+      const year = source.getFullYear();
+      const month = this.leftPad(source.getMonth() + 1);
+      const day = this.leftPad(source.getDate());
+
+      return [year, month, day].join(delimiter);
+    },
+    getStatusColor(status) {
+      if (status == '취소') { return 'cancel'; }
+      if (status == '완료') { return 'complate'; }
+    },
   },
 }
 </script>

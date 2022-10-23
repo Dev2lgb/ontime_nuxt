@@ -1,5 +1,6 @@
 <template>
   <div class="f_width">
+    <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
       <div class="host_area">
@@ -14,17 +15,18 @@
 
     <div class="user_dashboard full_height j_start px-5">
       <div class="flex j_space a_center">
-        <div class="h_width">
+        <div class="t_width">
           <v-select
             v-model="searchMonth"
-            :items="monthsItems"
+            :items="searchTermItems"
             outlined
+            @change="dateTerm"
             dense
             hide-details="auto"
           >
           </v-select>
         </div>
-        <div class="h_width ml-3">
+        <div class="f_width ml-3">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -70,19 +72,116 @@
             </v-date-picker>
           </v-menu>
         </div>
-        <v-btn @click="this.$fetch">검색</v-btn>
+        <v-btn @click="this.$fetch" class="ml-3" depressed color="#333" dark>검색</v-btn>
       </div>
-      {{ countryPersonnels }}
+      <div class="border_a pa-5 mt-5">
+        <h3 class="mb-4">일별 방문자 및 예약자수</h3>
+        <div>
+          <line-chart
+            :chart-options='chartOptions'
+            :chart-data='dateChartData'
+            chart-id='myCustomId'
+          />
+        </div>
+        <div class="mt-3">
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+              <tr>
+                <th class="text-left">
+                  날짜
+                </th>
+                <th class="text-left">
+                  인원
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                v-for="(datePersonnel, dindex) in datePersonnels"
+                :key="dindex"
+              >
+                <td>{{ datePersonnel.booking_date }}</td>
+                <td>{{ datePersonnel.personnel }}</td>
+              </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
+      </div>
+      <div class="border_a pa-5 mt-5">
+        <h3 class="mb-4">예약상품 별 예약현황</h3>
+        <div>
+          <doughnut-chart
+            :chart-options='bookingChartOptions'
+            :chart-data='optionChartData'
+            chart-id='bookingChart'
+          />
+        </div>
+      </div>
+
+      <div class="border_a pa-5 mt-5">
+        <h3 class="mb-4">인구통계 (성별/연령대)</h3>
+        <div>
+          <radar-chart
+            :chart-options='bookingChartOptions'
+            :chart-data='sexAgeChartData'
+            chart-id='bookingChart'
+          />
+        </div>
+      </div>
+
+      <div class="border_a pa-5 mt-5">
+        <h3 class="mb-4">국가별 예약자 현황</h3>
+        <div>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+              <tr>
+                <th class="text-left">
+                  국가
+                </th>
+                <th class="text-left">
+                  인원
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                v-for="(countryPersonnel, cindex) in countryPersonnels"
+                :key="cindex"
+              >
+                <td>{{ countryPersonnel.country }}</td>
+                <td>{{ countryPersonnel.personnel }}</td>
+              </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 <script>
+import {DateTime} from "luxon";
+DateTime.defaultZoneName = 'Asia/Seoul';
+
 export default {
   layout: 'host',
   async fetch() {
     this.loading = true;
     try {
       // let urlBookings = '/host/bookings/' + this.$route.params.id + '/statistics?search=';
+
+      if (this.search.dates.length == 0) {
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        this.search.dates.push(this.toStringByFormatting(firstDay));
+        this.search.dates.push(this.toStringByFormatting(lastDay));
+      }
+
       let url = '/host/bookings/' + this.$route.params.id + '/statistics?search=';
       if (this.search.dates.length > 0) {
         url += JSON.stringify(this.search);
@@ -110,11 +209,22 @@ export default {
     },
   },
   data: () => ({
+    loading: false,
     menu: false,
     countryPersonnels : [],
+    sexAgeChartData:[],
+    optionChartData:[],
     dateChartData : [],
     search: {
       dates: [],
+    },
+    bookingChartOptions: {
+      responsive: true,
+      maintainAspectRatio: false
+    },
+    chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false
     },
     selectedItem: '125',
     reservation_items: [
@@ -122,17 +232,50 @@ export default {
       { title: '[전시] 사찰예절 배움 템플스테이 해맞이', id: '126' },
       { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
     ],
-    searchMonth: '1',
-    monthsItems: [
-      {text : '이번달', value: '1'},
-      {text : '3개월', value: '3'},
-      {text : '6개월', value: '6'},
-    ]
+    searchMonth:  {type: 'last', start: {month: 0}},
+    searchTermItems: [
+      {text: '이번달' , value: {type: 'last', start: {month: 0}}},
+      {text: '지난달', value: {type: 'last', start: {month: 1}}},
+      {text: '3개월', value: {type: 'this', start: {month: 3}}},
+      {text: '6개월', value: {type: 'this', start: {month: 6}}},
+    ],
   }),
   methods: {
     setInit(){
       this.dates.push();
-    }
+    },
+    leftPad(value) {
+      if (value >= 10) {
+        return value;
+      }
+      return `0${value}`;
+    },
+    toStringByFormatting(source, delimiter = '-') {
+      const year = source.getFullYear();
+      const month = this.leftPad(source.getMonth() + 1);
+      const day = this.leftPad(source.getDate());
+
+      return [year, month, day].join(delimiter);
+    },
+    dateTerm(searches) {
+      this.search.dates = [];
+      //console.log(searches);
+      let now = DateTime.now();
+      let startdate = '';
+      let enddate = '';
+      if (searches.type === 'this') {
+        startdate = now.minus(searches.start).startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.toFormat('yyyy-MM-dd');
+      }
+      if (searches.type === 'last') {
+        now = now.minus(searches.start);
+        startdate = now.startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.endOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+      }
+      if (startdate && enddate)  {
+        this.search.dates = [startdate, enddate];
+      }
+    },
   },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-show="loading" class="loading_back" style="background-color:rgba(255,255,255,.9); position:fixed; transition: .3s; left:0; right:0; top:0; bottom:0; z-index:999">
+  <div v-show="loading" class="loading_back" style="background-color:#fff; position:fixed; transition: .3s; left:0; right:0; top:0; bottom:0; z-index:999">
     <v-progress-circular
       :size="30"
       :width="2"
