@@ -273,7 +273,6 @@
         </div>
       </div>
     </div>
-    {{ form }}
   </div>
 </template>
 <script>
@@ -296,9 +295,9 @@ export default {
       this.setBeforeData();
       this.loading = false;
     } catch (e) {
-      if (e.response.status === '401') {
+      if (e.response.status == '401') {
         console.log(e);
-        //this.$toast.error(e.response.data.message);
+        this.$toast.error(e.response.data.message);
       }
     }
   },

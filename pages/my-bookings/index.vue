@@ -13,25 +13,24 @@
       <div v-if="items.length > 0">
         <div class="pa-3 border_b card_action" v-for="(item, i) in items" :key="i">
           <div class="mb-3">
-            <v-chip dark color="#4487fa" label small>Online</v-chip>
-            <v-chip dark color="#28b487" label small>New</v-chip>
-            <v-chip dark color="#ff5722" label small>마감임박</v-chip>
+            <v-chip dark color="#4487fa" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.on_off_line }}</v-chip>
+            <v-chip dark color="#4487fa" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.status }} 상태가와야함</v-chip>
           </div>
           <div class="flex j_space a_center">
             <div class="thumbnail_width">
               <v-img
-                :src="getThumbnail(item)"
+                :src="getThumbnail(item.booking.title_images)"
                 :lazy-src="`https://picsum.photos/10/6?image=10`"
                 aspect-ratio="1"
                 width="80"
                 class="img_radius"
               ></v-img>
             </div>
-            <router-link to="/bookings/13" class="non-deco card_subject">
+            <div class="non-deco card_subject">
               <h3 class="text_title">[{{ getCategoryName(item.booking) }}] {{ item.booking.title }}</h3>
               <p class="ma-0 font_small_text">템플 스테이 예절 교육 집중</p>
-              <p class="ma-0 font_small_text">{{ item.booking_date }} <span v-show="item.booking_time">{{ item.booking_time }}</span></p>
-            </router-link>
+              <p class="ma-0 font_small_text">{{ item.booking_date }} <span v-show="item.booking_time">{{ item.booking_time }}</span> {{ item.personnel }}명</p>
+            </div>
           </div>
         </div>
       </div>
@@ -87,6 +86,13 @@ export default {
     getThumbnail(files) {
       if (files.length > 0) {
         return files[0].url
+      }
+    },
+    getOnOffColor(onoff) {
+      if (onoff == 'ONLINE') {
+        return '#007aff';
+      } else {
+        return '#222'
       }
     }
   },

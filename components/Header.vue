@@ -38,7 +38,7 @@
             <v-list-item-title>홈으로</v-list-item-title>
           </v-list-item>
           <v-list-item
-            to="/bookings"
+            to="/my-bookings"
           >
             <v-list-item-title>내 예약</v-list-item-title>
           </v-list-item>
