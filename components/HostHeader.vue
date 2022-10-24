@@ -65,8 +65,11 @@
             <v-list-item-title>예약자로 전환</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="changeLocale('en')" v-show="this.$i18n.locale == 'ko'">
             <v-list-item-title>English</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="changeLocale('ko')" v-show="this.$i18n.locale == 'en'">
+            <v-list-item-title>Korean</v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-title>고객센터</v-list-item-title>
@@ -84,6 +87,8 @@
 
 
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   middleware: ['auth'],
   data: () => ({
@@ -99,7 +104,12 @@ export default {
   methods: {
     async logout() {
       await this.$auth.logout();
-    }
+    },
+    changeLocale(lan) {
+      this.$i18n.locale = lan;
+      this.setLocale(lan);
+    },
+    ...mapMutations("common",['setLocale']),
   },
 }
 </script>

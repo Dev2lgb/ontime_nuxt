@@ -84,8 +84,8 @@
           </div>
           <div class="area_line"></div>
         </div>
-        <h3 class="font_sub_title my-6"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
-        <div class="border_a pa-3 mb-5">
+        <h3 class="font_sub_title my-6" v-show="booking.info_files"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
+        <div class="border_a pa-3 mb-5" v-show="booking.info_files">
           <div v-for="(file, f) in booking.info_files">
             <v-btn text :href="file.url" target="_blank" color="#0000ff">{{ file.name }}</v-btn>
           </div>
