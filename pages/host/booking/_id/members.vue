@@ -80,19 +80,19 @@
             dense
             active-class="active"
           >
-            <v-btn outlined @click="search.status = ''">전체</v-btn>
-            <v-btn outlined @click="search.status = 'confirmed'">확정</v-btn>
-            <v-btn outlined @click="search.status = 'unconfirmed'">대기</v-btn>
-            <v-btn outlined @click="search.status = 'completed'">완료</v-btn>
-            <v-btn outlined @click="search.status = 'revoked'">취소</v-btn>
+            <v-btn outlined @click="searchStatus('')">전체</v-btn>
+            <v-btn outlined @click="searchStatus('confirmed')">확정</v-btn>
+            <v-btn outlined @click="searchStatus('unconfirmed')">대기</v-btn>
+            <v-btn outlined @click="searchStatus('completed')">완료</v-btn>
+            <v-btn outlined @click="searchStatus('revoked')">취소</v-btn>
           </v-btn-toggle>
         </div>
         <div class="matching_option">
-          <h3>예약자 (3명)</h3>
+          <h3>예약자 ({{ bookedBookings.length }}명)</h3>
           <div class="flex j_space a_center py-3">
             <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
             <div>
-              <v-btn small outlined>엑셀다운</v-btn>
+              <v-btn small outlined @click="excelDownLoad">엑셀다운</v-btn>
               <v-btn small outlined @click="checkedApprove">일괄승인</v-btn>
               <v-btn small outlined @click="sendNoticePop">공지발송</v-btn>
             </div>
@@ -180,16 +180,19 @@
           <div>
             <p class="font-weight-bold">발송 형태</p>
             <div>
-              <v-checkbox label="이메일" hide-details="auto"></v-checkbox>
-              <v-checkbox label="푸시(앱 사용자에게만 전송)" hide-details="auto"></v-checkbox>
+              <v-select
+                v-model="push.type"
+                :items="pushItems"
+              >
+              </v-select>
             </div>
           </div>
           <div>
-            <v-textarea outlined class="mt-3"></v-textarea>
+            <v-textarea outlined class="mt-3" v-model="push.notice"></v-textarea>
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn>공지발송</v-btn>
+          <v-btn @click="submitPush">공지발송</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -211,9 +214,7 @@ export default {
         this.search.dates.push(this.$route.query.date);
       }
       let url = '/host/bookings/' + this.$route.params.id + '/booked?search=';
-      if (this.search.dates.length > 0) {
-        url += JSON.stringify(this.search);
-      }
+      url += JSON.stringify(this.search);
 
       const response = await this.$axios.get(url);
       this.bookedBookings = response.data.data;
@@ -227,6 +228,15 @@ export default {
     }
   },
   data: () => ({
+    pushItems: [
+      { text: '이메일', value: 'email' },
+      { text: '푸시메시지', value: 'push' },
+    ],
+    push: {
+      type: 'email',
+      notice: '',
+      booked_booking_ids: [24, 25]
+    },
     loading: false,
     search: {
       keyword: '',
@@ -280,6 +290,48 @@ export default {
     },
   },
   methods: {
+    async excelDownLoad() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/booked/excel/24,25';
+        const response = await this.$axios.get(url);
+        this.excel = response.data.data;
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '401') {
+          console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    async submitPush(){
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/booked/notice';
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data: this.push
+        })
+        if (response.data.result) {
+          this.$toast.success('메시지가 발송되었습니다.');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    searchStatus(status){
+      this.search.status = status;
+      this.$fetch();
+    },
     async cancelBooked(id) {
       this.loading = true;
       try {

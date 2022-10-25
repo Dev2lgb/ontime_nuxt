@@ -61,9 +61,16 @@
           </div>
         </div>
       </div>
+
       <div class="text-center pt-10 color_gray" v-else>
         진행중인 예약프로그램이 없습니다.
       </div>
+      <v-pagination
+        v-model="pagination.current_page"
+        :length="pagination.last_page"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+      ></v-pagination>
     </div>
   </div>
 </template>
@@ -76,7 +83,7 @@ export default {
       let url = '/bookings';
       const response = await this.$axios.get(url);
 
-
+      this.pagination = response.data.meta;
       this.items = response.data.data;
 
       this.setBeforeData();
@@ -91,6 +98,7 @@ export default {
   data: () => ({
     items: [],
     searchCategory: '',
+    pagination: {},
     searchCategoryItems: [
       { text: '전체', value:'' },
       { text: '교육', value:'1' },
