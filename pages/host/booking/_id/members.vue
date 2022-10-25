@@ -1,9 +1,9 @@
 <template>
-  <div class="f_width">
+  <div class="sizedbox">
     <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
-      <div class="host_area">
+      <div class="host_area layout_format">
         <div class="host_nik">
         <p><span>관리자</span> 님, 예약내역<br>상세현황을 확인해 주세요.</p>
         </div>
@@ -13,14 +13,14 @@
       </div>
     </div>
 
-<div class="user_dashboard full_height j_start">
+<div class="user_dashboard full_height j_start layout_format">
       <div class="pa-5">
 
         <div>
-          <v-text-field prepend-inner-icon="mdi-magnify" v-model="search.keyword" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색"></v-text-field>
+          <v-text-field prepend-inner-icon="mdi-magnify" v-model="search.keyword" outlined dense hide-details="auto" placeholder="예약자명/전화번호 검색" height="50"></v-text-field>
           <div class="flex j_space a_center my-3">
             <div class="t_width">
-              <v-select hide-details="auto" dense @change="dateTerm" outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
+              <v-select  height="50" hide-details="auto" dense @change="dateTerm" outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
             </div>
             <div class="f_width ml-3">
               <v-menu
@@ -34,6 +34,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    height="50"
                     v-model="dateRangeText"
                     prepend-inner-icon="mdi-calendar"
                     outlined
@@ -68,7 +69,7 @@
                 </v-date-picker>
               </v-menu>
             </div>
-            <v-btn @click="this.$fetch" class="ml-3" depressed color="#333" dark>검색</v-btn>
+            <v-btn @click="this.$fetch" class="ml-3" height="50" depressed color="#1976d2" dark>검색</v-btn>
           </div>
         </div>
         <div class="flex j_start a_center f_width">
@@ -92,9 +93,9 @@
           <div class="flex j_space a_center py-3">
             <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
             <div>
-              <v-btn small outlined @click="excelDownLoad">엑셀다운</v-btn>
-              <v-btn small outlined @click="checkedApprove">일괄승인</v-btn>
-              <v-btn small outlined @click="sendNoticePop">공지발송</v-btn>
+              <v-btn small height="40" class="btnTcolor" outlined @click="excelDownLoad">엑셀다운</v-btn>
+              <v-btn small height="40" class="btnTcolor" outlined @click="checkedApprove">일괄승인</v-btn>
+              <v-btn small height="40" class="btnTcolor" outlined @click="sendNoticePop">공지발송</v-btn>
             </div>
           </div>
         </div>
@@ -470,8 +471,9 @@ export default {
 .progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 25px;}
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 .sub_nav {margin-top: -7px;}
-::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
+::v-deep .sub_nav .v-slide-group__wrapper {background: #0087e1;}
 .select-box {padding: 0 20px;}
 
 .matching_option {margin: 20px 0; border-bottom: 2px solid #eee; padding-bottom: 5px;}
+.btnTcolor {color: #838383;}
 </style>

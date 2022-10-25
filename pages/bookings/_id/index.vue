@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sizedbox layout_format">
     <SubHeader :link="'/bookings'" :title="'예약상세'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div>

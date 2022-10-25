@@ -1,9 +1,9 @@
 <template>
   <div class="fixed_header">
     <v-app-bar
-      class="host_area"
+      class="host_area layout_format"
       elevation="0"
-      color="#173bb3"
+      color="#0099ff"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" x-large  color="#fff"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>

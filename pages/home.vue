@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="user_dashboard full_height j_start pa-5">
-      <div class="user_form">
+      <div class="user_form layout_format">
         <div class="user_nik">
           <p><span>홍길동</span> {{$t('_home.hello')}}<br>{{$t('_home.find_program')}}</p>
         </div>

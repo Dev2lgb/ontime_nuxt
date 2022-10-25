@@ -1,8 +1,8 @@
 <template>
-  <div class="f_width">
+  <div class="sizedbox">
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
-      <div class="host_area">
+      <div class="host_area layout_format">
         <div class="host_nik">
         <p><span>관리자</span> 님, 예약관련하여<br>메세지를 확인해 주세요.</p>
         </div>
@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="user_dashboard full_height j_start">
+    <div class="user_dashboard full_height j_start layout_format">
       <div class="pa-5">
         <h3>진행중인 메세지만 표시됩니다.</h3>
         <v-btn text color="blue" class="pa-0">메세지창 편집</v-btn>
@@ -45,6 +45,6 @@ export default {
 .progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 25px;}
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 .sub_nav {margin-top: -7px;}
-::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
+::v-deep .sub_nav .v-slide-group__wrapper {background: #0087e1;}
 .select-box {padding: 0 20px;}
 </style>

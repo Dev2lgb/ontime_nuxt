@@ -11,7 +11,7 @@
         @change="changeBooking"
       ></v-select>
     </div>
-    <v-tabs class="sub_nav" height="50" slider-color="#fff" color="#fff" dark>
+    <v-tabs class="sub_nav" height="50" slider-color="#03a9f4" color="#fff" dark>
       <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/dashboard'">대시보드</v-tab>
       <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/members'">예약현황</v-tab>
       <v-tab :link="true" :to="'/host/booking/' + this.$route.params.id + '/message'">메시지</v-tab>

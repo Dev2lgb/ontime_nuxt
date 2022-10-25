@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="layout_format">
     <SubHeader :link="'/home'" :title="'예약리스트'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">

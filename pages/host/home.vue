@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="sizedbox">
     <HostHeader />
     <div class="host_head pa-5">
-      <div class="host_area">
+      <div class="host_area layout_format">
         <div class="host_nik">
         <p><span>{{ $store.$auth.user.name }}</span> 님, 환영합니다.<br>예약 프로그램을 확인해 주세요.</p>
         </div>
@@ -20,14 +20,14 @@
 
     <div class="user_dashboard full_height j_start pa-5">
 
-    <div class="host_area">
+    <div class="host_area layout_format">
       <div class="progrma_area">
         <p><v-icon color="#111">mdi-calendar-text</v-icon> 내 예약목록</p>
         <p><span class="font-weight-bold">{{ items.length }}개</span> 예약접수 진행중</p>
       </div>
 
       <div class="progrma_list" v-if="items.length > 0">
-          <div class="reservation_item mb-3" v-for="(item, index) in items" :key="item.index">
+          <div class="reservation_item" v-for="(item, index) in items" :key="item.index">
             <router-link :to="'/host/booking/' + item.id + '/dashboard'" class="non-deco">
             <div class="flex j_space a_center">
               <div>
@@ -106,7 +106,8 @@ export default {
 </script>
 
 <style scoped>
-.reservation_item {border-bottom: 1px solid #ddd; }
+.host_create>p {margin-bottom: 34px;}
+.reservation_item {border-bottom: 1px solid #ebebeb; margin-bottom: 24px;}
 .reservation_status_items > div { background-color:#ddd; width:calc(25% - 20px); border-radius: 10px}
 .progrma_area {display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 20px;}
 .progrma_area p {margin: 0;}
@@ -124,7 +125,7 @@ export default {
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 
 .list_title { width:calc(100% - 70px); padding-right:5px; }
-.list_btbt { width:80px; background: #ef911b; text-align:center; line-height:35px; color: #fff; border-radius: 10px; font-size: 12px; height: 35px; }
+.list_btbt { width:80px; background: #ef911b; text-align:center; line-height:35px; color: #fff; border-radius: 4px; font-size: 12px; height: 35px; }
 .list_btbt:hover {background: #df871a;}
 
 .text-ellipsis { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }

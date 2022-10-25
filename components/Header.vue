@@ -1,7 +1,7 @@
 <template>
   <div class="fixed_header">
     <v-app-bar
-     class="host_area"
+     class="host_area layout_format"
       elevation="0"
       color="#fff"
     >

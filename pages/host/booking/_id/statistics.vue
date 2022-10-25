@@ -1,9 +1,9 @@
 <template>
-  <div class="f_width">
+  <div class="sizedbox">
     <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
-      <div class="host_area">
+      <div class="host_area layout_format">
         <div class="host_nik">
           <p><span>관리자</span> 님, 예약관련하여<br>현황을 확인해 주세요.</p>
         </div>
@@ -14,7 +14,8 @@
     </div>
 
     <div class="user_dashboard full_height j_start px-5">
-      <div class="flex j_space a_center">
+      <div class="sizedBox-20"></div>
+      <div class="flex j_space a_center layout_format">
         <div class="t_width">
           <v-select
             v-model="searchMonth"
@@ -23,10 +24,11 @@
             @change="dateTerm"
             dense
             hide-details="auto"
+            height="50"
           >
           </v-select>
         </div>
-        <div class="f_width ml-3">
+        <div class="f_width ml-3 ">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -46,6 +48,7 @@
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                height="50"
               ></v-text-field>
             </template>
             <v-date-picker
@@ -72,8 +75,9 @@
             </v-date-picker>
           </v-menu>
         </div>
-        <v-btn @click="this.$fetch" class="ml-3" depressed color="#333" dark>검색</v-btn>
+        <v-btn @click="this.$fetch" class="ml-3" height="50" depressed color="#1976d2" dark>검색</v-btn>
       </div>
+      <div class="layout_format">
       <div class="border_a pa-5 mt-5">
         <h3 class="mb-4">일별 방문자 및 예약자수</h3>
         <div>
@@ -158,6 +162,7 @@
             </template>
           </v-simple-table>
         </div>
+      </div>
       </div>
 
     </div>
@@ -288,6 +293,6 @@ export default {
 .progrma_option {background: #f5f5f5; border-radius: 10px; padding: 8px 0; margin-top: 25px;}
 .progrma_option p {margin-top: 10px; margin-bottom: 0;}
 .sub_nav {margin-top: -7px;}
-::v-deep .sub_nav .v-slide-group__wrapper {background: #173bb3;}
+::v-deep .sub_nav .v-slide-group__wrapper {background: #0087e1;}
 .select-box {padding: 0 20px;}
 </style>

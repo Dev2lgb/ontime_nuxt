@@ -2,7 +2,7 @@
   <div>
     <HostSubHeader :title="'예약만들기'" />
     <div class="f_width user_padding">
-      <div class="host_area">
+      <div class="host_area layout_format">
         <div class="user_nik">
           <p><span>ON<span>TIME</span></span> 예약 프로그램 만들기<br>예약생성 진행중 (2/4)</p>
         </div>

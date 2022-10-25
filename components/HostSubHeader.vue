@@ -24,6 +24,6 @@ export default {
 </script>
 
 <style>
-.host_sub_header { background-color:#173bb3 }
+.host_sub_header { background-color:#0099ff; }
 .font_white { color:#fff; }
 </style>
