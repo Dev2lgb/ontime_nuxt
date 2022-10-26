@@ -1,7 +1,14 @@
 <template>
-  <div class="f_width">
+  <div>
     <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/second'" />
-    <div class="px-5 mt-16">
+   <div class="f_width user_padding">
+      <div class="host_area layout_format">
+        <div class="user_nik">
+          <p><span>ON<span>TIME</span></span> 예약 상품 만들기<br>상품생성 진행중 (3/4)</p>
+        </div>
+
+        <div class="proceeding">
+
       <template>
         <v-progress-linear value="75"></v-progress-linear>
       </template>
@@ -12,9 +19,14 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+
+    <div class="titleform">
+      <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>예약상품 휴무정보</span>
+    </div>
+
+    <div class="">
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">예약 가능 기간 중 휴무일이 있나요?</p>
+        <p class="font-weight-bold ma-0 mb-3">1. 예약 가능 기간 중 휴무일이 있나요?</p>
         <div>
           <v-btn-toggle
             color="primary"
@@ -26,15 +38,15 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              class="select_btn btn_spac"
+              large
               value="N"
             >
               휴무일이 없어요.
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1"
+              class="select_btn btn_spac"
+              large
               value="Y"
             >
               지정된 요일에 휴무일이 있어요
@@ -43,7 +55,8 @@
         </div>
         <div v-show="form.is_na_day == 'Y'" class="mt-3 ">
           <div class="mb-5">
-            <p class="font_small_text mb-1">휴무일 주기 선택</p>
+            <p class="font_small_text mb-1">- 휴무일 주기 선택</p>
+            <v-checkbox hide-details="auto" v-model="allCheck" class="mt-3" label="매주" true-value="Y" false-value="N" value="allWeek"></v-checkbox>
             <div class="flex j_start a_center mt-2 ">
               <v-btn-toggle
                 color="primary"
@@ -57,8 +70,8 @@
                 <v-btn
                   v-for="weekItem in weekItems"
                   :key="weekItem.value"
-                  style="border:1px solid #ccc; border-radius:10px"
-                  class="ma-1"
+                  class="select_btn btn_spac"
+                   large
                   :disabled="allCheck == 'Y'"
                   :value="weekItem.value"
                 >
@@ -66,10 +79,10 @@
                 </v-btn>
               </v-btn-toggle>
             </div>
-            <v-checkbox hide-details="auto" v-model="allCheck" class="mt-3" label="매주" true-value="Y" false-value="N" value="allWeek"></v-checkbox>
+
           </div>
 
-          <p class="font_small_text mb-1">휴무일 요일 선택</p>
+          <p class="font_small_text mb-1">- 휴무일 요일 선택</p>
           <div class="mb-3">
             <v-btn-toggle
               color="primary"
@@ -83,22 +96,21 @@
               <v-btn
                 v-for="weekendItem in weekendItems"
                 :key="weekendItem.value"
-                style="border:1px solid #ccc; border-radius:10px"
-                class="ma-1"
+                class="select_btn btn_spac"
 
                 :value="weekendItem.value"
               >
                 {{ weekendItem.text }}
               </v-btn>
             </v-btn-toggle>
-            <div class="my-3">
+            <div class="date-addone">
               <v-btn
                 block
                 depressed
                 tile
                 large
                 dark
-                color="#4455ff"
+                color="#1976d2"
                 @click="addHoliday"
               >휴무일 추가</v-btn>
             </div>
@@ -109,7 +121,7 @@
             </div>
           </div>
 
-          <p class="font_small_text mb-1">그 외 휴무일을 날짜로 선택해주세요.</p>
+          <p class="font_small_text">그 외 휴무일을 날짜로 선택해주세요.</p>
           <div>
             <v-menu
               ref="menu"
@@ -124,6 +136,7 @@
                 <v-combobox
                   v-model="form.na_days"
                   multiple
+                  height="50"
                   chips
                   small-chips
                   placeholder="휴무일 날짜 직접 입력"
@@ -169,15 +182,17 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           @click="nextForm"
           :to="'/host/booking/' + this.$route.params.id + '/items/fourth'"
         >다음 단계로 이동</v-btn>
       </div>
     </div>
 
+      </div>
+   </div>
   </div>
 </template>
 <script>
@@ -309,4 +324,7 @@ export default {
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
 ::v-deep .col_content_btn { height:auto !important; }
 ::v-deep .col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; }
+.select_btn {border: 1px solid #ddd!important; padding: 16px!important; }
+.info-text {font-size: 13px; border: 1px solid #ddd; padding: 20px 16px; margin: 14px 0 25px;}
+.date-addone {margin: 30px 0 40px;}
 </style>

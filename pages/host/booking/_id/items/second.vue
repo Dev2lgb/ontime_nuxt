@@ -1,7 +1,14 @@
 <template>
-  <div class="f_width">
+  <div>
     <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/create'" />
-    <div class="px-5 mt-16">
+    <div class="f_width user_padding">
+      <div class="host_area layout_format">
+        <div class="user_nik">
+          <p><span>ON<span>TIME</span></span> 예약 상품 만들기<br>상품생성 진행중 (2/4)</p>
+        </div>
+
+        <div class="proceeding">
+
       <template>
         <v-progress-linear value="50"></v-progress-linear>
       </template>
@@ -12,7 +19,7 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+    <div class="">
       <BookingOptionTime @form-data="getFormData" :errors="errors" v-show="form.type == 'time'" />
       <BookingOptionDate @form-data="getFormData" :errors="errors" v-show="form.type == 'date'" />
 <!--      <BookingOptionTerm @form-data="getFormData" :errors="errors" v-show="form.type == 'term'" />-->
@@ -21,11 +28,13 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           @click="nextForm"
         >다음 단계로 이동</v-btn>
+      </div>
+    </div>
       </div>
     </div>
 

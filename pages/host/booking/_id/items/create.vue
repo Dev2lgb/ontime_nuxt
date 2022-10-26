@@ -1,7 +1,14 @@
 <template>
-  <div class="f_width">
+  <div>
     <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/'" />
-    <div class="px-5 mt-16">
+    <div class="f_width user_padding">
+      <div class="host_area layout_format">
+        <div class="user_nik">
+          <p><span>ON<span>TIME</span></span> 예약 상품 만들기<br>상품생성 진행중 (1/4)</p>
+        </div>
+
+        <div class="proceeding">
+
       <template>
         <v-progress-linear value="25"></v-progress-linear>
       </template>
@@ -12,9 +19,14 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+
+    <div class="titleform">
+      <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>예약정보</span>
+    </div>
+
+    <div class="">
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">지금 선택하신 상품은 어떤 예약인가요?</p>
+        <p class="font-weight-bold ma-0 mb-3">1. 지금 선택하신 상품은 어떤 예약인가요?</p>
         <div>
           <v-btn-toggle
             color="primary"
@@ -27,24 +39,20 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              class="ma-1 col_content_btn"
-              block
+              class="ma-1 col_content_btn select_btn"
               value="time"
             >
-              <p class="font-weight-bold ma-0 mb-2">날짜&시간 선택형 예약</p>
+              <p>날짜&시간 선택형 예약</p>
               <p>
                 관리자는 원하는 날짜를 시간 또는 분 단위로 나누어 예약을 받아요.<br/>
                 예약자는 원하는 상품의 날짜와 시간을 선택할 수 있어요.
               </p>
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
-              block
-              class="ma-1 col_content_btn"
+              class="ma-1 col_content_btn select_btn"
               value="date"
             >
-              <p class="font-weight-bold ma-0 mb-2">날짜 선택형 예약</p>
+              <p>날짜 선택형 예약</p>
               <p>
                 관리자는 시간 설정 없이 하루 단위로만 예약을 받아요.<br/>
                 예약자는 원하는 상품의 날짜만 선택하면 돼요.
@@ -66,7 +74,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">예약 상품의 이름을 입력해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-3">2. 예약 상품의 이름을 입력해주세요.</p>
         <div>
           <v-text-field
             placeholder="예약 상품명 입력"
@@ -88,7 +96,7 @@
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">예약 상품 소개글을 간단히 입력해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-3">3. 예약 상품 소개글을 간단히 입력해주세요.</p>
         <div>
           <v-text-field
             placeholder="예약 상품 소개 글 입력"
@@ -114,12 +122,14 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           @click="nextForm"
         >다음 단계로 이동</v-btn>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </template>
@@ -208,6 +218,11 @@ export default {
 .active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
 .deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
+
 ::v-deep .col_content_btn { height:auto !important; }
-::v-deep .col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; }
+::v-deep .col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; flex: auto!important; white-space: normal!important;}
+.select_btn {border: 1px solid #ddd!important; padding: 16px!important; width: 100%;}
+.select_btn p {margin: 0; font-weight: 400;}
+.select_btn p:first-child {margin-bottom: 10px!important; font-weight: 600;}
+.select_btn p:last-child {font-size: 13px;letter-spacing: -0px; }
 </style>

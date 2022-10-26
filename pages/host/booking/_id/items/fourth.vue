@@ -1,7 +1,14 @@
 <template>
-  <div class="f_width">
+  <div>
     <HostSubHeader :title="'예약상품 등록'" :link="'/host/booking/' + this.$route.params.id + '/items/third'" />
-    <div class="px-5 mt-16">
+    <div class="f_width user_padding">
+      <div class="host_area layout_format">
+        <div class="user_nik">
+          <p><span>ON<span>TIME</span></span> 예약 상품 만들기<br>상품생성 진행중 (4/4)</p>
+        </div>
+
+        <div class="proceeding">
+
       <template>
         <v-progress-linear value="100"></v-progress-linear>
       </template>
@@ -12,9 +19,14 @@
         <p class="q_width text-center font_small_text">추가정보</p>
       </div>
     </div>
-    <div class="pa-5">
+
+    <div class="titleform">
+      <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>예약상품 시간정보</span>
+    </div>
+
+    <div class="">
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">기준 시간대를 선택해주세요.</p>
+        <p class="font-weight-bold ma-0 mb-3">1. 기준 시간대를 선택해주세요.</p>
         <div>
           <v-select
             v-model=form.timezone
@@ -26,11 +38,12 @@
             dense
             hide-details="auto"
             placeholder="기준시간대 선택"
+            height="50"
           ></v-select>
         </div>
       </div>
       <div class="mb-7">
-        <p class="font-weight-bold ma-0 mb-3">현지시간 비교기능을 사용하나요?</p>
+        <p class="font-weight-bold ma-0 mb-3">2. 현지시간 비교기능을 사용하나요?</p>
         <div>
           <v-btn-toggle
             color="primary"
@@ -43,23 +56,25 @@
             class="d-flex flex-wrap justify-start align-center"
           >
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
+              class="select_btn btn_spac"
+              large
               value="N"
             >
               아니요
             </v-btn>
             <v-btn
-              style="border:1px solid #ccc; border-radius:10px"
+              class="select_btn btn_spac"
+              large
               value="Y"
             >
               네, 예약자의 현지 시간대로 보여주세요.
             </v-btn>
           </v-btn-toggle>
-            <p class="border_a pa-3 mt-3">
-              시차 걱정 없이 해외 접속자와의 예약을 편하게 이어가세요!<br>
-              ※ 현지시간 비교기능 사용 시, 예약자가 선택한 도시 기준으로 일정과 시간이 변환 표시됩니다.<br>
-              ※ 해외 접속자와 화상회의, 온라인 이벤트를 준비하시는 경우 해당 기능을 넣는 것을 추천합니다.
-            </p>
+            <div class="info-text">
+              <p>시차 걱정 없이 해외 접속자와의 예약을 편하게 이어가세요!</p>
+              - 현지시간 비교기능 사용 시, 예약자가 선택한 도시 기준으로 일정과 시간이 변환 표시<br>
+              - 해외 접속자와 화상회의, 온라인 이벤트를 준비하시는 경우 해당 기능을 넣는 것을 추천
+            </div>
         </div>
         <div class="mb-7">
           <p class="font-weight-bold ma-0 mb-5">3. 예약 신청 가능한 기간이 따로 있나요?</p>
@@ -76,14 +91,14 @@
             >
               <v-btn
                 large
-                class="input_pd"
+                class="select_btn btn_spac"
                 value="N"
               >
                   아니요, 없어요
               </v-btn>
               <v-btn
                 large
-                class="input_pd"
+                class="select_btn btn_spac"
                 value="Y"
               >
                 네, 있어요
@@ -91,7 +106,7 @@
             </v-btn-toggle>
           </div>
           <div class="mb-1" v-show="form.is_booking_available_period == 'Y'">
-            <p class="font_small_text mb-1">예약 신청 가능일자 선택</p>
+            <p class="font_small_text">예약 신청 가능일자 선택</p>
             <div class="flex j_start a_center">
               <v-menu
                 ref="menu"
@@ -107,6 +122,8 @@
                     v-model="form.booking_available_period"
                     :error-messages="errors.booking_available_period"
                     prepend-icon="mdi-calendar"
+                    outlined
+                    hide-details="auto"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -153,15 +170,15 @@
               class="d-flex flex-wrap justify-start align-center"
             >
               <v-btn
-                large
-                class="input_pd"
+                class="select_btn btn_spac"
+                 large
                 value="N"
               >
                 아니요, 없어요
               </v-btn>
               <v-btn
-                large
-                class="input_pd"
+                class="select_btn btn_spac"
+                 large
                 value="Y"
               >
                 네, 있어요
@@ -174,6 +191,7 @@
               :error-messages="errors.booking_available_hour"
               :items="minTimeItems"
               outlined
+              hide-details="auto"
               item-text="text"
               item-value="value"
             ></v-select>
@@ -185,11 +203,13 @@
           block
           depressed
           tile
-          large
+          x-large
           dark
-          color="#4455ff"
+          color="#1976d2"
           @click="nextForm()"
         >새 예약상품 등록완료</v-btn>
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -291,4 +311,7 @@ export default {
 .absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
 ::v-deep .col_content_btn { height:auto !important; }
 ::v-deep .col_content_btn .v-btn__content { flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align:left; }
+.select_btn {border: 1px solid #ddd!important; padding: 16px!important; }
+.info-text {font-size: 13px; border: 1px solid #ddd; padding: 20px 16px; margin: 14px 0 25px;}
+.info-text p {font-size: 15px; font-weight: 500; color: #009688;}
 </style>

@@ -19,6 +19,7 @@
           v-model="searchCategory"
           :items="searchCategoryItems"
           hide-details="auto"
+          height="50"
           outlined
           dense
         ></v-select>
@@ -65,6 +66,7 @@
       <div class="text-center pt-10 color_gray" v-else>
         진행중인 예약프로그램이 없습니다.
       </div>
+      <div class="sizedBox-20"></div>
       <v-pagination
         v-model="pagination.current_page"
         :length="pagination.last_page"

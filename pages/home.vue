@@ -72,16 +72,16 @@ export default {
 <style scoped>
   .user_nik {margin: 60px 0 50px;}
   .user_nik p {font-size: 24px; font-weight: 500; letter-spacing: -1px;}
-  .user_nik p span {font-weight: bold; color: #435689;}
+  .user_nik p span {font-weight: bold; color: #28b487;}
   .program_form {margin: 10px 0;}
   .program_form ul {padding: 0; margin-bottom: 20px;}
   .program_form ul li {list-style: none; display: inline-block; font-size: 16px; margin-right: 10px; color: #888;}
-  .program_form ul li:first-child {color: #435689; font-weight: 600;}
+  .program_form ul li:first-child {color: #28b487; font-weight: 600;}
   .program_form ul li:last-child a {text-decoration: none; color: #888;}
   .progrma_search {position: relative;}
-  .search_input {width: 100%; height: 60px; border: 2px solid #435689; border-radius: 10px; padding: 10px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
+  .search_input {width: 100%; height: 60px; border: 2px solid #28b487; padding: 10px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
   .search_input::placeholder {color: #ccc;}
-  .search_input:focus-within {outline: #435689}
+  .search_input:focus-within {outline: #28b487}
   .img_button {background: url(~/assets/images/search.png) center no-repeat; border: none; width: 35px; height: 40px; cursor: pointer; background-size: 27px; position: absolute; right: 26px; top: 10px;}
   .area_line {width: 100%; height: 14px; background: #f7f8fa; margin: 40px auto;}
   .reservation_state {display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;}

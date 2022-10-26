@@ -210,6 +210,7 @@ a { text-decoration: none; color:#222; }
 .slider_item { background-color:#ddfdff; padding:80px 0 0; }
 .mv_right img { width:100%; }
 
+.btn_spac span{letter-spacing: 0; font-size: 13px;}
 
 /* padding 공통영역 */
 .sizedBox-20 {height: 20px;}

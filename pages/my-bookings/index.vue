@@ -13,8 +13,10 @@
       <div v-if="items.length > 0">
         <div class="pa-3 border_b card_action" v-for="(item, i) in items" :key="i">
           <div class="mb-3">
-            <v-chip dark color="#4487fa" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.on_off_line }}</v-chip>
-            <v-chip dark color="#4487fa" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.status }} 상태가와야함</v-chip>
+            <v-chip dark color="#03a9f4" label small>{{ item.booking.on_off_line }}</v-chip>
+            <v-chip dark color="#00bcd4" label small>{{ item.booking.status }} 상태가와야함</v-chip>
+            <!-- <v-chip dark color="#03a9f4" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.on_off_line }}</v-chip>
+            <v-chip dark color="#00bcd4" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.status }} 상태가와야함</v-chip> -->
           </div>
           <div class="flex j_space a_center">
             <div class="thumbnail_width">

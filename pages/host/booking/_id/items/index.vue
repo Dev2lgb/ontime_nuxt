@@ -14,7 +14,7 @@
     <div class="user_dashboard full_height j_start layout_format">
       <div class="pa-5">
         <h3>등록된 예약 상품 (3)</h3>
-        <v-btn outlined color="blue" class="mt-3" :to="'/host/booking/' + this.$route.params.id + '/items/create'">+ 예약상품 등록</v-btn>
+        <v-btn dark color="#4487fa" class="mt-5" :to="'/host/booking/' + this.$route.params.id + '/items/create'" elevation="0">+ 예약상품 등록</v-btn>
       </div>
     </div>
   </div>

@@ -505,8 +505,8 @@ export default {
 .img_radius { border-radius: 10px; }
 
 .user_nik {margin: 60px 0 50px;}
-.user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px;}
-.user_nik p span { color: #4487fa;}
+.user_nik p {font-size: 28px; font-weight: 500; letter-spacing: -1px; margin-bottom: 0;}
+.user_nik p span { color: #4487fa; font-weight: 600;}
 .user_nik p span span {color: #28b487;}
 
 .select_hide_option {margin-top: 30px;}

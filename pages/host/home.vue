@@ -54,19 +54,19 @@
 
             <div class="flex j_space a_center mb-5 progrma_option">
               <div class="q_width flex d_col j_center a_center py-3">
-                <img src="~/assets/images/list_icon01.png" height="30">
+                <img src="~/assets/images/deadline.png" height="30">
                 <p class="font_small_text">예약확정 ({{ item.confirmed_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
-                <img src="~/assets/images/list_icon02.png" height="30">
+                <img src="~/assets/images/deadline2.png" height="30">
                 <p class="font_small_text">예약대기 ({{ item.unconfirmed_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
-                <img src="~/assets/images/list_icon03.png" height="30">
+                <img src="~/assets/images/deadline3.png" height="30">
                 <p class="font_small_text">예약취소 ({{ item.deleted_number }})</p>
               </div>
               <div class="q_width flex d_col j_center a_center py-3">
-                <img src="~/assets/images/list_icon04.png" height="30">
+                <img src="~/assets/images/deadline4.png" height="30">
                 <p class="font_small_text">저장 ({{ item.saved_number }})</p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex j_start a_center host_sub_header">
+  <div class="flex j_start a_center host_sub_header layout_format">
     <div>
       <v-btn
         fab

@@ -14,21 +14,21 @@
         </p>
         <div class="flex j_space a_center mb-5 progrma_option">
           <div class="q_width flex d_col j_center a_center py-3">
-            <img src="~/assets/images/progrma_icon01.png" height="40">
+            <img src="~/assets/images/progrma_icon1.png" height="40">
             <p class="font_small_text">6시간 이용가능</p>
           </div>
           <div class="q_width flex d_col j_center a_center py-3">
-            <img src="~/assets/images/progrma_icon02.png" height="40">
+            <img src="~/assets/images/progrma_icon2.png" height="40">
             <p class="font_small_text" v-show="booking.on_off_line == 'ONLINE'">온라인 진행</p>
             <p class="font_small_text" v-show="booking.on_off_line == 'OFFLINE'">오프라인 진행</p>
           </div>
           <div class="q_width flex d_col j_center a_center py-3">
-            <img src="~/assets/images/progrma_icon03.png" height="40">
+            <img src="~/assets/images/progrma_icon3.png" height="40">
             <p class="font_small_text" v-show="booking.is_booking_confirm == 'N'">예약즉시 확정</p>
             <p class="font_small_text" v-show="booking.is_booking_confirm == 'Y'">승인후 확정</p>
           </div>
           <div class="q_width flex d_col j_center a_center py-3">
-            <img src="~/assets/images/progrma_icon04.png" height="40">
+            <img src="~/assets/images/progrma_icon4.png" height="40">
             <p class="font_small_text">실시간 응대가능</p>
           </div>
         </div>
