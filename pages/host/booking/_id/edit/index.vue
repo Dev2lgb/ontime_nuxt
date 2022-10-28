@@ -1,10 +1,10 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'"/>
+    <HostSubHeader :title="'예약수정하기'" :link="'/host/home'"/>
     <div class="f_width user_padding">
       <div class="host_area layout_format">
         <div class="user_nik">
-          <p><span>ON<span>TIME</span></span> 예약 프로그램 수정<br>예약수정 진행중 (1/4)</p>
+          <p><span>ON<span>TIME</span></span> 예약 프로그램 수정하기<br>예약수정 진행중 (1/4)</p>
         </div>
 
         <div class="proceeding">
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div>
-          <BookingForm1 :data="form" :errors="errors" @form-data="getFormData" />
+          <BookingForm1 :data="form" :mode="'edit'" :errors="errors" @form-data="getFormData" />
 
           <div class="pt-10">
             <v-btn
@@ -48,6 +48,7 @@ export default {
       let url = '/bookings/' + this.$route.params.id;
       const response = await this.$axios.get(url);
       this.form = response.data.data.booking;
+      this.clearBookingEditForm();
 
       this.loading = false;
     } catch (e) {
@@ -75,8 +76,8 @@ export default {
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          this.setBookingForm(JSON.stringify(this.form));
-          this.$router.push('/host/booking/second');
+          this.setBookingEditForm(JSON.stringify(this.form));
+          this.$router.push('/host/booking/' + this.$route.params.id + '/edit/second');
         }
         this.loading = false;
       } catch (e) {
@@ -89,7 +90,7 @@ export default {
         }
       }
     },
-    ...mapMutations("common",['setBookingForm']),
+    ...mapMutations("common",['setBookingEditForm', 'clearBookingEditForm']),
 
   },
 }

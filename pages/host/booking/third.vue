@@ -79,9 +79,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.sns_logo { width:60px; }
-.sns_input { width:calc(100% - 70px); }
-.input_pd {padding: 24px 16px!important; border: 1px solid #ddd!important;}
-</style>

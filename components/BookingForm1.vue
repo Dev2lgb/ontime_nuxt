@@ -245,7 +245,7 @@
 <script>
 
 export default {
-  props: ['data', 'errors'],
+  props: ['data', 'errors', 'mode'],
   async fetch() {
     this.loading = true;
     try {
@@ -356,8 +356,14 @@ export default {
       this.form.tags.splice(index, 1);
     },
     setBeforeData() {
-      if (this.$store.state.common.bookingForm) {
-        this.form = JSON.parse(this.$store.state.common.bookingForm);
+      if (this.mode == 'edit') {
+        if (this.$store.state.common.bookingEditForm) {
+          this.form = JSON.parse(this.$store.state.common.bookingEditForm);
+        }
+      } else {
+        if (this.$store.state.common.bookingForm) {
+          this.form = JSON.parse(this.$store.state.common.bookingForm);
+        }
       }
     },
   },

@@ -170,10 +170,19 @@ export default {
     },
 
     setBeforeData() {
-      if (this.$store.state.common.bookingForm) {
-        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
-        if (this.form.multiple_option_count > 0) {
-          this.selectedMaxMinOption = 'Y'
+      if (this.mode == 'edit') {
+        if (this.$store.state.common.bookingEditForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingEditForm));
+          if (this.form.multiple_option_count > 0) {
+            this.selectedMaxMinOption = 'Y'
+          }
+        }
+      } else {
+        if (this.$store.state.common.bookingForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
+          if (this.form.multiple_option_count > 0) {
+            this.selectedMaxMinOption = 'Y'
+          }
         }
       }
     }

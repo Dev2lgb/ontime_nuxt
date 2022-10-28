@@ -170,8 +170,14 @@ export default {
       }
     },
     setBeforeData() {
-      if (this.$store.state.common.bookingForm) {
-        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
+      if (this.mode == 'edit') {
+        if (this.$store.state.common.bookingEditForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingEditForm));
+        }
+      } else {
+        if (this.$store.state.common.bookingForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingForm));
+        }
       }
     }
   },
