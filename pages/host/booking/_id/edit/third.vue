@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'" />
+    <HostSubHeader :title="'예약만들기'" />
     <div class="f_width user_padding">
       <div class="host_area layout_format">
         <div class="user_nik">
@@ -69,7 +69,7 @@
                 class="d-flex flex-wrap justify-start align-center"
               >
                 <v-btn
-                 large
+                  large
                   class="input_pd"
                   value="Y"
                 >

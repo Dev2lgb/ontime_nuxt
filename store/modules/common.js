@@ -4,6 +4,7 @@
 export const common = {
   namespaced: true,
   state: () => ({
+    bookingEditForm: localStorage.getItem("bookingEditForm"),
     bookingForm: localStorage.getItem("bookingForm"),
     bookingOptionForm: localStorage.getItem("bookingOptionForm"),
     userBookingForm: localStorage.getItem("userBookingForm"),
@@ -53,6 +54,14 @@ export const common = {
       localStorage.removeItem('bookingForm');
       state.bookingForm = '';
     },
+    setBookingEditForm(state, p) {
+      localStorage.setItem("bookingEditForm", p);
+      state.bookingEditForm = p;
+    },
+    clearBookingEditForm(state) {
+      localStorage.removeItem('bookingEditForm');
+      state.bookingEditForm = '';
+    },
     setBookingOptionForm(state, p) {
       localStorage.setItem("bookingOptionForm", p);
       state.bookingOptionForm = p;
@@ -82,6 +91,9 @@ export const common = {
     },
     bookingForm: (state) => {
       return state.bookingForm;
+    },
+    bookingEditForm: (state) => {
+      return state.bookingEditForm;
     },
     bookingOptionForm: (state) => {
       return state.bookingOptionForm;
