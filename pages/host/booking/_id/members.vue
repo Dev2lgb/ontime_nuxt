@@ -174,8 +174,8 @@
       v-model="isSendNoticePop"
       max-width="400"
     >
-      <v-card>
-        <v-card-title>예약자에게 안내할 사항을 입력해주세요.</v-card-title>
+      <v-card class="dia_massage">
+        <p class="dia_title">예약자에게 안내할 사항을 입력해주세요.</p>
         <v-card-subtitle class="mt-3">해당 예약과 관련이 없는 내용을 전송할 경우 별도의 공지없이 이용에 제한될 수 있습니다. (발신 이메일주소는  support@ontimewolrd.kr 입니다.)</v-card-subtitle>
         <v-card-text>
           <div>
@@ -189,11 +189,11 @@
             </div>
           </div>
           <div>
-            <v-textarea outlined class="mt-3" v-model="push.notice"></v-textarea>
+            <v-textarea outlined class="mt-3" v-model="push.notice" placeholder="입력해주세요." hide-details="auto"></v-textarea>
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="submitPush">공지발송</v-btn>
+          <v-btn @click="submitPush" large elevation="0" color="#0099ff" dark width="100%">공지발송</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -476,4 +476,6 @@ export default {
 
 .matching_option {margin: 20px 0; border-bottom: 2px solid #eee; padding-bottom: 5px;}
 .btnTcolor {color: #838383;}
+.dia_massage {padding: 25px 10px;}
+.dia_title {font-size: 1.1rem; font-weight: 500; letter-spacing: 0.0125em; padding: 0 24px;}
 </style>

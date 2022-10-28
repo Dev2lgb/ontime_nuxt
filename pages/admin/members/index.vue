@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div class="flex j_start a_center">
+    <h3 class="mb-3 fontW"><v-icon>mdi-comment-account-outline</v-icon> 회원정보 조회</h3>
+    <div class="flex j_start a_center line_area">
       <div class="basic_width">
         <v-select
           v-model="selectedSearch"
           :items="searchItems"
           hide-details="auto"
+          height="50"
           outlined
           dense
         ></v-select>
@@ -26,7 +28,9 @@
               prepend-inner-icon="mdi-calendar"
               outlined
               dense
+              placeholder="날짜선택"
               class="ml-3"
+              height="50"
               hide-details="auto"
               readonly
               v-bind="attrs"
@@ -58,15 +62,18 @@
         </v-menu>
       </div>
       <div class="q_width">
-        <v-text-field outlined dense hide-details="auto" class="mx-3"></v-text-field>
+        <v-text-field outlined dense hide-details="auto" class="mx-3" height="50" placeholder="검색어입력"></v-text-field>
       </div>
-      <v-btn>검색</v-btn>
+      <v-btn height="50" elevation="0" color="#2ab588" dark>검색</v-btn>
     </div>
-    <div class="py-5">
-      <v-btn>푸시발송</v-btn>
-      <v-btn>엑셀다운</v-btn>
+    <div class="btn_margin flex j_space">
+      <h3 class="fontW"><v-icon>mdi-account-search</v-icon> 회원 리스트</h3>
+      <div>
+        <v-btn elevation="0" color="#03a9f4" dark>푸시발송</v-btn>
+      <v-btn elevation="0" color="#00bcd4" dark>엑셀다운</v-btn>
+      </div>
     </div>
-    <div>
+    <div class="table_in">
       <v-data-table
         v-model="selected"
         :headers="headers"
@@ -74,7 +81,6 @@
         :single-select="false"
         item-key="name"
         show-select
-        class="elevation-1"
       >
       </v-data-table>
     </div>
@@ -151,4 +157,8 @@ export default {
 <style scoped>
 .basic_width { width:150px; }
 .adm_dash_item { width:calc((100% / 6)  - 20px); }
+.btn_margin {margin: 40px 0 20px;}
+.fontW {font-weight: 400;}
+.table_in {border-top: 4px solid #ddd}
+.line_area {border: 1px solid #ddd; padding: 20px 30px;}
 </style>
