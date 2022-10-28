@@ -14,9 +14,7 @@
         <div class="pa-3 border_b card_action" v-for="(item, i) in items" :key="i">
           <div class="mb-3">
             <v-chip dark color="#03a9f4" label small>{{ item.booking.on_off_line }}</v-chip>
-            <v-chip dark color="#00bcd4" label small>{{ item.booking.status }} 상태가와야함</v-chip>
-            <!-- <v-chip dark color="#03a9f4" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.on_off_line }}</v-chip>
-            <v-chip dark color="#00bcd4" label small :color="getOnOffColor(item.booking.on_off_line)">{{ item.booking.status }} 상태가와야함</v-chip> -->
+            <v-chip dark :color="getStatusColor(item.status_name)" label small>{{ item.status_name }}</v-chip>
           </div>
           <div class="flex j_space a_center">
             <div class="thumbnail_width">
@@ -30,8 +28,8 @@
             </div>
             <div class="non-deco card_subject">
               <h3 class="text_title">[{{ getCategoryName(item.booking) }}] {{ item.booking.title }}</h3>
-              <p class="ma-0 font_small_text">템플 스테이 예절 교육 집중</p>
-              <p class="ma-0 font_small_text">{{ item.booking_date }} <span v-show="item.booking_time">{{ item.booking_time }}</span> {{ item.personnel }}명</p>
+              <p class="ma-0 font_small_text">{{ item.booking.content}}</p>
+              <v-chip v-for="option in item.items" small class="mr-1" :key="option.id">{{ option.booking_date }} <span class="ml-1" v-show="option.booking_time">{{ option.booking_time }}</span> ({{ option.personnel }}명)</v-chip>
             </div>
           </div>
         </div>
@@ -95,6 +93,17 @@ export default {
         return '#007aff';
       } else {
         return '#222'
+      }
+    },
+    getStatusColor(status) {
+      if (status == '취소') {
+        return 'red';
+      }
+      if (status == '확정') {
+        return '#28b487';
+      }
+      if (status == '완료') {
+        return '#222';
       }
     }
   },

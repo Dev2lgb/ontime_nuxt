@@ -34,6 +34,7 @@
         >
           <v-list-item
             to="/"
+            v-show="!isMobile()"
           >
             <v-list-item-title>홈으로</v-list-item-title>
           </v-list-item>
@@ -108,6 +109,18 @@ export default {
     changeLocale(lan) {
       this.$i18n.locale = lan;
       this.setLocale(lan);
+    },
+    isMobile() {
+      var user = navigator.userAgent;
+      var is_mobile = false;
+      if( user.indexOf("iPhone") > -1
+        || user.indexOf("Android") > -1
+        || user.indexOf("iPad") > -1
+        || user.indexOf("iPod") > -1
+      ) {
+        is_mobile = true;
+      }
+      return is_mobile;
     },
     ...mapMutations("common",['setLocale']),
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'" />
+    <HostSubHeader :title="'예약만들기'" />
     <div class="f_width user_padding">
       <div class="host_area layout_format">
         <div class="user_nik">
@@ -37,14 +37,14 @@
                 class="d-flex flex-wrap justify-start align-center"
               >
                 <v-btn
-                   large
+                  large
                   class="input_pd"
                   value="Y"
                 >
                   <span class="font-weight-bold">발송</span>
                 </v-btn>
                 <v-btn
-                   large
+                  large
                   class="input_pd"
                   value="N"
                 >
@@ -106,10 +106,10 @@
                 v-model="questionDialog"
                 max-width="300"
               >
-              <div class="back_white">
-                <v-btn block large @click="addQuestionItem('solo')">단답형 질문</v-btn>
-                <v-btn block large @click="addQuestionItem('multiple')">항목선택형 질문</v-btn>
-              </div>
+                <div class="back_white">
+                  <v-btn block large @click="addQuestionItem('solo')">단답형 질문</v-btn>
+                  <v-btn block large @click="addQuestionItem('multiple')">항목선택형 질문</v-btn>
+                </div>
               </v-dialog>
             </div>
           </div>
