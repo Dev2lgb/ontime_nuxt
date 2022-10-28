@@ -35,7 +35,6 @@
         </div>
       </div>
     </div>
-    {{ form }}
   </div>
 </template>
 <script>

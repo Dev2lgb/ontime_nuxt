@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약만들기'" :link="'/host/home'" />
+    <HostSubHeader :title="'예약만들기'" :link="'/host/booking'" />
     <div class="f_width user_padding">
       <div class="host_area layout_format">
         <div class="user_nik">
@@ -49,7 +49,6 @@ export default {
     getFormData(data) {
       this.form = data;
     },
-
     async nextForm() {
       this.loading = true;
       try {

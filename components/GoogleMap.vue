@@ -26,6 +26,11 @@ export default {
       this.setPlace(this.coordinate)
     }
   },
+  watch: {
+    coordinate(val) {
+      this.setPlace(val)
+    }
+  },
   data: () => ({
     markers: [],
     place: null,

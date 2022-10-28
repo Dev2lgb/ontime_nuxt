@@ -3,12 +3,17 @@
     <v-row class="justify-center content-center">
       <div class="vCardLoginBg">
         <v-col class="pa-0">
-          <v-card flat>
+          <v-card flat v-if="!isMobile()">
             <NuxtLink to="/">
               <div class="loginLogo">
                 <img src="~/assets/images/logo.png" alt="logo" />
               </div>
             </NuxtLink>
+          </v-card>
+          <v-card flat v-else>
+            <div class="loginLogo">
+              <img src="~/assets/images/logo.png" alt="logo" />
+            </div>
           </v-card>
           <v-card flat>
             <div class="loginTextB">
@@ -41,6 +46,18 @@ export default {
     errors:[],
   }),
   methods: {
+    isMobile() {
+      var user = navigator.userAgent;
+      var is_mobile = false;
+      if( user.indexOf("iPhone") > -1
+        || user.indexOf("Android") > -1
+        || user.indexOf("iPad") > -1
+        || user.indexOf("iPod") > -1
+      ) {
+        is_mobile = true;
+      }
+      return is_mobile;
+    },
     async findPassWordSubmit() {
       this.loading = true;
       try {
