@@ -67,12 +67,12 @@
         진행중인 예약프로그램이 없습니다.
       </div>
       <div class="sizedBox-20"></div>
-      <v-pagination
-        v-model="pagination.current_page"
-        :length="pagination.last_page"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-      ></v-pagination>
+      <div class="text-center">
+        <v-pagination
+          v-model="pagination.page"
+          :length="pagination.last_page"
+        ></v-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -83,9 +83,12 @@ export default {
     this.loading = true;
     try {
       let url = '/bookings';
+      url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
       const response = await this.$axios.get(url);
 
-      this.pagination = response.data.meta;
+      this.pagination.page = response.data.meta.current_page;
+      this.pagination.last_page = response.data.meta.last_page;
+      this.pagination.total = response.data.meta.total;
       this.items = response.data.data;
 
       this.setBeforeData();
@@ -100,7 +103,10 @@ export default {
   data: () => ({
     items: [],
     searchCategory: '',
-    pagination: {},
+    pagination: {
+      page : 1,
+      per_page: 5,
+    },
     searchCategoryItems: [
       { text: '전체', value:'' },
       { text: '교육', value:'1' },
@@ -110,6 +116,9 @@ export default {
       { text: '행사', value:'5' },
     ],
   }),
+  watch: {
+    pagination: { handler() { this.$fetch(); }, deep: true },
+  },
   methods: {
     getCategoryName(item) {
       if (item.category_text) {

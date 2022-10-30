@@ -2,9 +2,10 @@
   <div class="text-center">
     <v-pagination
       v-model="page"
-      :length="length"
+      :length="pagination.last_page"
       circle
     ></v-pagination>
+    {{ last_page }}
   </div>
 </template>
 
@@ -12,10 +13,6 @@
 export default {
   props: ['pagination'],
   watch : {
-    pagination(val) {
-      this.page = val.page;
-      this.length = val.last_page;
-    },
     page(val) {
       this.$emit('page-data', val);
     }
@@ -24,6 +21,7 @@ export default {
     return {
       page: 1,
       length: 1,
+      last_page: 1,
     }
   },
 }

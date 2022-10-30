@@ -32,7 +32,7 @@
               <v-chip v-for="option in item.items" small class="mr-1" :key="option.id">{{ option.booking_date }} <span class="ml-1" v-show="option.booking_time">{{ option.booking_time }}</span> ({{ option.personnel }}명)</v-chip>
             </div>
             <div class="flex d_col j_center a_center">
-              <v-btn small depressed>예약취소</v-btn>
+              <v-btn small depressed @click="cancelBooked(item.booking_id, item.id)">예약취소</v-btn>
               <v-btn small depressed class="mt-3">문의하기</v-btn>
             </div>
           </div>
@@ -40,6 +40,14 @@
       </div>
       <div class="text-center pt-10 color_gray" v-else>
         진행중인 예약이 없습니다.
+      </div>
+      <div class="mt-3">
+        <div class="text-center">
+          <v-pagination
+            v-model="pagination.page"
+            :length="pagination.last_page"
+          ></v-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -51,10 +59,14 @@ export default {
     this.loading = true;
     try {
       let url = '/my/bookings';
+      url += '?itemsPerPage=' + this.pagination.itemsPerPage + '&page=' + this.pagination.page;
       const response = await this.$axios.get(url);
 
       this.items = response.data.data;
-      this.count = this.items.length;
+      this.count = response.data.total;
+      this.pagination.page = response.data.current_page;
+      this.pagination.last_page = response.data.last_page;
+      this.pagination.total = response.data.total;
 
       this.loading = false;
     } catch (e) {
@@ -68,6 +80,10 @@ export default {
   data: () => ({
     items:[],
     count: 0,
+    pagination: {
+      page:1,
+      itemsPerPage: 5,
+    },
     searchCategory: '',
     searchCategoryItems: [
       { text: '전체', value:'' },
@@ -78,7 +94,35 @@ export default {
       { text: '행사', value:'5' },
     ],
   }),
+  watch: {
+    pagination: { handler() { this.$fetch(); }, deep: true },
+  },
   methods: {
+    async cancelBooked(booking_id,id) {
+      this.loading = true;
+      try {
+        let url = '/my/bookings/' + booking_id + '/booked/' + id + '/revoke';
+        let method = 'put';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('예약이 취소되었습니다.');
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
     getCategoryName(item) {
       if (item.category_text) {
         return item.category_text;
@@ -90,13 +134,6 @@ export default {
     getThumbnail(files) {
       if (files.length > 0) {
         return files[0].url
-      }
-    },
-    getOnOffColor(onoff) {
-      if (onoff == 'ONLINE') {
-        return '#007aff';
-      } else {
-        return '#222'
       }
     },
     getStatusColor(status) {

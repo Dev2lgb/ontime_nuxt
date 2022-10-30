@@ -184,8 +184,7 @@ export default {
         if (response.data.result) {
           this.clearUserBookingOptionForm();
           // this.setUserBookingOptionFinData(JSON.stringify(response.data.data.booking));
-          this.$toast.success('예약 신청이 완료되었습니다.');
-          this.$router.push('/bookings/' + this.$route.params.id + '/options/fin');
+          this.$router.push('/bookings/' + this.$route.params.id + '/options/fin?id=' + response.data.items.id);
         } else {
           this.clearUserBookingOptionForm();
           this.$toast.error(response.data.message);
@@ -213,9 +212,10 @@ export default {
       }
     },
     deleteItem(index) {
-
+      this.form.items.splice(index, 1);
+      this.items.splice(index, 1);
     },
-    ...mapMutations("common",['setUserBookingOptionFinData','clearUserBookingOptionForm']),
+    ...mapMutations("common",['setUserBookingOptionForm','clearUserBookingOptionForm']),
   },
 }
 </script>

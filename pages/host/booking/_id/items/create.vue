@@ -26,7 +26,6 @@
 
         <div class="">
           <OptionForm1  :data="form" :errors="errors" @form-data="getFormData" />
-        {{ form }}
           <div class="pt-10">
             <v-btn
               block

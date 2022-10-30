@@ -89,7 +89,7 @@
           </v-btn-toggle>
         </div>
         <div class="matching_option">
-          <h3>예약자 ({{ bookedBookings.length }}명)</h3>
+          <h3>예약자 ({{ pagination.total }}명)</h3>
           <div class="flex j_space a_center py-3">
             <v-checkbox label="전체선택" v-model="selectAll" dense hide-details="auto"></v-checkbox>
             <div>
@@ -102,7 +102,7 @@
         <div v-for="(booked, bindex) in bookedBookings" :key="bindex" class="mb-5">
           <div class="matching_list">
             <div class="list_group">
-              <v-checkbox v-model="selectedIds" :value="booked.id" hide-details="auto" class="matching_inp"></v-checkbox>
+              <v-checkbox v-model="selectedIds" :value="booked.id" multiple hide-details="auto" class="matching_inp"></v-checkbox>
               <div :class="'matching_state ' + getStatusColor(booked.status_name)">{{ booked.status_name }}</div>
               <p class="list_title">{{ booked.member.name }} <v-icon>mdi-message-text</v-icon></p>
             </div>
@@ -169,7 +169,12 @@
           </div>
         </div>
 
-        <Pagenation :pagination="pagination" @page-data="getPage" />
+        <div class="text-center">
+          <v-pagination
+            v-model="pagination.page"
+            :length="pagination.last_page"
+          ></v-pagination>
+        </div>
       </div>
   </div>
     <v-dialog
@@ -199,6 +204,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </div>
 </template>
 <script>
@@ -216,7 +222,8 @@ export default {
         this.search.dates.push(this.$route.query.date);
         this.search.dates.push(this.$route.query.date);
       }
-      let url = '/host/bookings/' + this.$route.params.id + '/booked?itemsPerPage=5';
+      let url = '/host/bookings/' + this.$route.params.id + '/booked';
+      url += '?itemsPerPage=' + this.pagination.itemsPerPage + '&page=' + this.pagination.page;
       if (Object.keys(this.search).length > 0) url += '&search=' + JSON.stringify(this.search);
 
       const response = await this.$axios.get(url);
@@ -253,7 +260,10 @@ export default {
       dates: [],
       status: '',
     },
-    pagination: {},
+    pagination: {
+      page:1,
+      itemsPerPage: 5,
+    },
     selectedIds: [],
     isSendNoticePop: false,
     bookedBookings: [],
