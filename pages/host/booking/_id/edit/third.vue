@@ -20,6 +20,7 @@
         </div>
         <div>
           <BookingForm3 :data="form" :mode="'edit'" :errors="errors" @form-data="getFormData" />
+          {{ form }}
           <div class="pt-10">
             <v-btn
               block

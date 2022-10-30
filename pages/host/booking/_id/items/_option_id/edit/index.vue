@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HostSubHeader :title="'예약상품 수정'" :link="'/host/booking/' + this.$route.params.id + '/items/'" />
+    <HostSubHeader :title="'예약상품 수정'" :link="'/host/booking/' + this.$route.params.id + '/items'" />
     <div class="f_width user_padding">
       <div class="host_area layout_format">
         <div class="user_nik">
@@ -25,8 +25,7 @@
         </div>
 
         <div class="">
-          <OptionForm1  :data="form" :errors="errors" @form-data="getFormData" />
-          {{ form }}
+          <OptionForm1  :data="form" :errors="errors" :mode="'edit'" @form-data="getFormData" />
           <div class="pt-10">
             <v-btn
               block
@@ -52,10 +51,11 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let url = '/bookings/' + this.$route.params.id + '/options/' + this.$route.params.option_id;
+      let url = '/host/bookings/' + this.$route.params.id + '/options/' + this.$route.params.option_id;
       const response = await this.$axios.get(url);
-      this.form = response.data.data.booking;
-      this.clearBookingEditForm();
+      console.log(response);
+      this.form = response.data.options[0];
+      this.clearBookingOptionEditForm();
 
       this.loading = false;
     } catch (e) {
@@ -88,11 +88,14 @@ export default {
 
         this.form.booking_id = this.$route.params.id;
 
+        if (this.form.online_text) {
+          this.form.online_id = 0;
+        }
         const response = await this.$axios({
           url: url, method: method, data:this.form
         })
         if (response.data.result) {
-          this.setBookingOptionForm(JSON.stringify(this.form));
+          this.setBookingOptionEditForm(JSON.stringify(this.form));
           this.$router.push('/host/booking/' + this.$route.params.id + '/items/' + this.$route.params.option_id + '/edit/second');
         }
         this.loading = false;
@@ -107,7 +110,7 @@ export default {
         }
       }
     },
-    ...mapMutations("common",['setBookingOptionForm']),
+    ...mapMutations("common",['setBookingOptionEditForm']),
   },
 }
 </script>

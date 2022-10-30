@@ -56,6 +56,10 @@ export default {
         let url = '/host/bookings/1';
         let method = 'post';
 
+        if (this.form.online_text) {
+          this.form.online_id = 0;
+        }
+
         const response = await this.$axios({
           url: url, method: method, data:this.form
         })

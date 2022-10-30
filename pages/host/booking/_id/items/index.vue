@@ -13,7 +13,7 @@
     </div>
     <div class="user_dashboard full_height j_start layout_format">
       <div class="pa-5">
-        <h3>등록된 예약 상품 (3)</h3>
+        <h3>등록된 예약 상품 ({{ bookingOptionItems.length }})</h3>
         <v-btn dark color="#4487fa" class="mt-5" :to="'/host/booking/' + this.$route.params.id + '/items/create'" elevation="0">+ 예약상품 등록</v-btn>
 
         <div class="mt-5">
@@ -21,15 +21,15 @@
             <h3>{{ item.title }}</h3>
             <p>{{ item.desc }}</p>
             <div class="flex j_start a_center">
-              <v-btn depressed class="mr-3">삭제</v-btn>
-              <v-btn depressed :to="item.id + '/edit/'">정보수정</v-btn>
+              <v-btn depressed class="mr-3" @click="deleteOption(item.id)">삭제</v-btn>
+              <v-btn depressed :to="'items/' + item.id + '/edit/'">정보수정</v-btn>
               <v-spacer></v-spacer>
               <v-switch
                 v-model="item.is_display"
                 true-value="Y"
                 false-value="N"
                 label="노출"
-                @change=toggleDisplay
+                @change="toggleDisplay(item.id)"
                 hide-details="auto"
               ></v-switch>
             </div>
@@ -74,14 +74,42 @@ export default {
     bookingOptionItems: [],
   }),
   methods: {
-    async toggleDisplay() {
+    async deleteOption(id) {
       this.loading = true;
       try {
-        let url = '/host/bookings/' + this.$route.params.id + '/toggle/is_display';
+        let url = '/host/bookings/' + this.$route.params.id + '/options/' + id;
+        let method = 'delete';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('예약상품이 삭제되었습니다.');
+          this.$fetch();
+        } else {
+          this.$toast.error(response.data.message);
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    async toggleDisplay(id) {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/options/' + id + '/toggle/is_display';
         let method = 'put';
 
         const response = await this.$axios({
-          url: url, method: method, data:this.form
+          url: url, method: method, data:''
         })
         if (response.data.result) {
           this.$toast.success('처리 됐습니다.');

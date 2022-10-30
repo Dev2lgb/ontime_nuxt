@@ -119,13 +119,12 @@
           * 운영시간은 예약자 안내와 정보제공을 위한 것으로 예약 선택에 영향을 주지 않습니다.
         </div>
       </div>
-
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['data', 'errors'],
+  props: ['data', 'errors', 'mode'],
   async fetch() {
     this.loading = true;
     try {
@@ -151,7 +150,15 @@ export default {
     timezoneItems: [],
     categoryItems: [],
     callingCodeItems: [],
-    timeItems: ['00:00', '01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'],
+    timeItems: [
+      '00:00',
+      '01:00',
+      '02:00',
+      '03:00',
+      '04:00',
+      '05:00',
+      '06:00'
+      ,'07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'],
   }),
   watch: {
     data(val) {
@@ -173,6 +180,8 @@ export default {
       if (this.mode == 'edit') {
         if (this.$store.state.common.bookingEditForm) {
           this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingEditForm));
+          this.form.operating_start_time = this.form.operating_start_time.substr(0, 5);
+          this.form.operating_end_time = this.form.operating_end_time.substr(0, 5);
         }
       } else {
         if (this.$store.state.common.bookingForm) {

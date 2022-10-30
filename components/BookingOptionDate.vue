@@ -219,7 +219,7 @@
 
 <script>
 export default {
-  props: ['errors', 'res_form'],
+  props: ['errors', 'res_form', 'mode'],
   watch: {
     form: {
       deep: true,
@@ -276,21 +276,41 @@ export default {
   }),
   methods: {
     setBeforeData() {
-      if (localStorage.getItem('bookingOptionForm')) {
-        this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
-        if (this.form.date_personnel > 0) {
-          this.is_date_personnel = 'Y';
+      if (this.mode == 'edit') {
+        if (localStorage.getItem('bookingOptionEditForm')) {
+          this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionEditForm')))
+          if (this.form.date_personnel > 0) {
+            this.is_date_personnel = 'Y';
+          }
+          if (this.form.min_booking_number > 0 || this.form.min_booking_number > 0) {
+            this.is_booking_number = 'Y';
+          }
+          if (this.form.max_booking_personnel_number == 0) {
+            this.is_max_booking_personnel_number = 'Y';
+            this.selectedMaxMinOption = 'N';
+          }
+          if (this.form.max_booking_personnel_number > 0) {
+            this.is_max_booking_personnel_number = 'Y';
+            this.selectedMaxMinOption = 'Y';
+          }
         }
-        if (this.form.min_booking_number > 0 || this.form.min_booking_number > 0) {
-          this.is_booking_number = 'Y';
-        }
-        if (this.form.max_booking_personnel_number == 0) {
-          this.is_max_booking_personnel_number = 'Y';
-          this.selectedMaxMinOption = 'N';
-        }
-        if (this.form.max_booking_personnel_number > 0) {
-          this.is_max_booking_personnel_number = 'Y';
-          this.selectedMaxMinOption = 'Y';
+      } else {
+        if (localStorage.getItem('bookingOptionForm')) {
+          this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+          if (this.form.date_personnel > 0) {
+            this.is_date_personnel = 'Y';
+          }
+          if (this.form.min_booking_number > 0 || this.form.min_booking_number > 0) {
+            this.is_booking_number = 'Y';
+          }
+          if (this.form.max_booking_personnel_number == 0) {
+            this.is_max_booking_personnel_number = 'Y';
+            this.selectedMaxMinOption = 'N';
+          }
+          if (this.form.max_booking_personnel_number > 0) {
+            this.is_max_booking_personnel_number = 'Y';
+            this.selectedMaxMinOption = 'Y';
+          }
         }
       }
     },

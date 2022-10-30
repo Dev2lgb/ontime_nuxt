@@ -274,6 +274,7 @@ export default {
       selectedMethod: 'offline', //예약방법
       tags: [],
       address: '',
+      online_id: 0,
       title_images: [],
     },
     tagInput: '',

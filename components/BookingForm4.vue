@@ -127,6 +127,7 @@
 <script>
 
 export default {
+  props: ['data', 'errors', 'mode'],
   data: () => ({
     questionDialog: false,
     selectedMail: 'N',

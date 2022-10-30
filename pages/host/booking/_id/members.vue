@@ -216,8 +216,8 @@ export default {
         this.search.dates.push(this.$route.query.date);
         this.search.dates.push(this.$route.query.date);
       }
-      let url = '/host/bookings/' + this.$route.params.id + '/booked?page=' + this.pagination.page;
-      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
+      let url = '/host/bookings/' + this.$route.params.id + '/booked?itemsPerPage=5';
+      if (Object.keys(this.search).length > 0) url += '&search=' + JSON.stringify(this.search);
 
       const response = await this.$axios.get(url);
       this.bookedBookings = response.data.data;

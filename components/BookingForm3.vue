@@ -120,7 +120,7 @@
 
 <script>
 export default {
-  props: ['data', 'errors'],
+  props: ['data', 'errors', 'mode'],
   data: () => ({
     selectedMinTime: 'N',
     selectedTerm: 'N',
