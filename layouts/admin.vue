@@ -4,7 +4,9 @@
       <div class="admin_header">
         <div class="inner">
           <h3 class="flex j_start a_center">
+            <router-link to="/">
             <img src="~/assets/images/logo.png" alt="">
+            </router-link>
             <span class="font_title">시스템 관리자</span>
           </h3>
         </div>
@@ -12,15 +14,9 @@
       <div class="admin_gnb">
       <div class="inner">
         <div class="flex j_start a_center">
-          <v-btn-toggle
-            mandatory
-            color="#2fb78b"
-            group
-          >
-            <v-btn to="/admin" class="admin_nav_btn_width">대시보드</v-btn>
-            <v-btn to="/admin/members" class="admin_nav_btn_width">회원관리</v-btn>
-            <v-btn to="/admin/bookings" class="admin_nav_btn_width">예약관리</v-btn>
-          </v-btn-toggle>
+          <v-btn to="/admin" :exact="true" class="admin_nav_btn_width" tile depressed>대시보드</v-btn>
+          <v-btn to="/admin/members" :exact="true" class="admin_nav_btn_width mx-3" tile depressed>회원관리</v-btn>
+          <v-btn to="/admin/bookings" :exact="true" class="admin_nav_btn_width" tile depressed>예약관리</v-btn>
         </div>
       </div>
       </div>

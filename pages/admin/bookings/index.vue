@@ -3,28 +3,21 @@
     <h3 class="mb-3 fontW"><v-icon>mdi-checkbox-multiple-marked-circle-outline</v-icon> 예약정보 조회</h3>
     <div class="flex j_start a_center line_area">
       <div class="basic_width">
-        <v-select
-          v-model="selectedSearch"
-          :items="searchItems"
-          hide-details="auto"
-          height="50"
-          outlined
-          dense
-        ></v-select>
+        <v-select  height="50" hide-details="auto" dense @change="dateTerm" outlined v-model="selectedSearchTermItem" :items="searchTermItems"></v-select>
       </div>
       <div class="q_width">
         <v-menu
           ref="menu"
           v-model="menu"
           :close-on-content-click="false"
-          :return-value.sync="dates"
+          :return-value.sync="search.dates"
           transition="scale-transition"
           offset-y
           min-width="auto"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dates"
+              v-model="dateRangeText"
               prepend-inner-icon="mdi-calendar"
               outlined
               dense
@@ -38,7 +31,7 @@
             ></v-text-field>
           </template>
           <v-date-picker
-            v-model="dates"
+            v-model="search.dates"
             no-title
             scrollable
             range
@@ -54,7 +47,7 @@
             <v-btn
               text
               color="primary"
-              @click="$refs.menu.save(dates)"
+              @click="$refs.menu.save(search.dates)"
             >
               OK
             </v-btn>
@@ -62,35 +55,79 @@
         </v-menu>
       </div>
       <div class="q_width">
-        <v-text-field outlined dense hide-details="auto" class="mx-3" height="50" placeholder="검색어입력"></v-text-field>
+        <v-text-field v-model="search.keyword" outlined dense hide-details="auto" class="mx-3" height="50" placeholder="검색어입력"></v-text-field>
       </div>
-      <v-btn height="50" elevation="0" color="#2ab588" dark>검색</v-btn>
+      <v-btn height="50" elevation="0" color="#2ab588" dark @click="$fetch()">검색</v-btn>
     </div>
     <div class="btn_margin flex j_space">
       <h3 class="fontW"><v-icon>mdi-clipboard-outline</v-icon> 예약 리스트</h3>
       <div>
-      <v-btn elevation="0" color="#00bcd4" dark>엑셀다운</v-btn>
+      <v-btn elevation="0" color="#00bcd4" @click="excelDown" dark>엑셀다운</v-btn>
       </div>
     </div>
     <div class="table_in">
       <v-data-table
         v-model="selected"
         :headers="headers"
-        :items="desserts"
+        :items="items"
         :single-select="false"
-        item-key="name"
+        item-key="id"
         show-select
       >
       </v-data-table>
     </div>
+    {{ items }}
   </div>
 </template>
 <script>
+import {DateTime} from "luxon";
+DateTime.defaultZoneName = 'Asia/Seoul';
+
 export default {
   layout: 'admin',
+  async fetch() {
+    this.loading = true;
+    try {
+      let url = '/admin/bookings?search=';
+      if (this.search) {
+        url += JSON.stringify(this.search);
+      }
+      const response = await this.$axios.get(url);
+
+      this.items = response.data.data;
+      this.count = this.items.length;
+
+      this.loading = false;
+    } catch (e) {
+      console.log(e);
+      if (e.response.status === '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
+    }
+  },
+  computed: {
+    dateRangeText () {
+      return this.search.dates.join(' ~ ')
+    },
+  },
   data: () => ({
+    selectedSearchTermItem: '',
+    searchTermItems: [
+      {text: '전체', value: ''},
+      {text: '이번달' , value: {type: 'last', start: {month: 0}}},
+      {text: '지난달', value: {type: 'last', start: {month: 1}}},
+      {text: '3개월', value: {type: 'this', start: {month: 3}}},
+      {text: '6개월', value: {type: 'this', start: {month: 6}}},
+    ],
+    items: [],
+    errors: [],
     dates: [],
     selected: [],
+    search: {
+      dates: [],
+      keyword: '',
+    },
     headers: [
       {
         text: '예약명',
@@ -106,48 +143,43 @@ export default {
       { text: '생성일시', value: 'iron' },
     ],
     menu: false,
-    searchItems: [
-      { text: '이번달', value: '이번달' },
-      { text: '저번달', value: '저번달' },
-      { text: '이번달', value: '이번달' }
-    ],
-    selectedSearch: '이번달',
-    chartData: {
-      labels: [ 'January', 'February', 'March'],
-      datasets: [
-        {
-          label: 'Data One',
-          backgroundColor: '#f87979',
-          data: [40, 20, 12]
-        }
-      ]
-    },
-    chartOptions: {
-      responsive: true,
-      maintainAspectRatio: false
-    },
-    barChartData: {
-      labels: [ 'January', 'February', 'March'],
-      datasets: [
-        {
-          label: '남자',
-          backgroundColor: '#f87979',
-          data: [40, 20, 12]
-        },
-        {
-          label: '여자',
-          backgroundColor: '#f87979',
-          data: [40, 20, 12]
-        }
-      ]
-    },
-    barChartOptions: {
-      responsive: true,
-      maintainAspectRatio: false
-    },
   }),
   methods: {
+    async excelDown() {
+      this.loading = true;
+      try {
+        let url = '/admin/bookings/export';
+        const response = await this.$axios.get(url);
+        this.excel = response.data;
 
+        this.loading = false;
+      } catch (e) {
+        console.log(e);
+        if (e.response.data.status == '401') {
+          console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    dateTerm(searches) {
+      this.search.dates = [];
+      //console.log(searches);
+      let now = DateTime.now();
+      let startdate = '';
+      let enddate = '';
+      if (searches.type === 'this') {
+        startdate = now.minus(searches.start).startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.toFormat('yyyy-MM-dd');
+      }
+      if (searches.type === 'last') {
+        now = now.minus(searches.start);
+        startdate = now.startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.endOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+      }
+      if (startdate && enddate)  {
+        this.search.dates = [startdate, enddate];
+      }
+    },
   },
 }
 </script>
