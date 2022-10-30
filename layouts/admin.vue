@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <vue-confirm-dialog></vue-confirm-dialog>
     <div>
       <div class="admin_header">
         <div class="inner">

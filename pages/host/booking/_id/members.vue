@@ -91,7 +91,7 @@
         <div class="matching_option">
           <h3>예약자 ({{ bookedBookings.length }}명)</h3>
           <div class="flex j_space a_center py-3">
-            <v-checkbox label="전체선택" dense hide-details="auto"></v-checkbox>
+            <v-checkbox label="전체선택" v-model="selectAll" dense hide-details="auto"></v-checkbox>
             <div>
               <v-btn small height="40" class="btnTcolor" outlined @click="excelDownLoad">엑셀다운</v-btn>
               <v-btn small height="40" class="btnTcolor" outlined @click="checkedApprove">일괄승인</v-btn>
@@ -168,6 +168,8 @@
 
           </div>
         </div>
+
+        <Pagenation :pagination="pagination" @page-data="getPage" />
       </div>
   </div>
     <v-dialog
@@ -214,11 +216,15 @@ export default {
         this.search.dates.push(this.$route.query.date);
         this.search.dates.push(this.$route.query.date);
       }
-      let url = '/host/bookings/' + this.$route.params.id + '/booked?search=';
-      url += JSON.stringify(this.search);
+      let url = '/host/bookings/' + this.$route.params.id + '/booked?page=' + this.pagination.page;
+      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
 
       const response = await this.$axios.get(url);
       this.bookedBookings = response.data.data;
+
+      this.pagination.page = response.data.current_page;
+      this.pagination.last_page = response.data.last_page;
+      this.pagination.total = response.data.total;
 
       this.loading = false;
     } catch (e) {
@@ -227,6 +233,9 @@ export default {
         this.$toast.error(e.response.data.message);
       }
     }
+  },
+  watch: {
+    pagination: { handler() { this.$fetch(); }, deep: true },
   },
   data: () => ({
     pushItems: [
@@ -244,6 +253,7 @@ export default {
       dates: [],
       status: '',
     },
+    pagination: {},
     selectedIds: [],
     isSendNoticePop: false,
     bookedBookings: [],
@@ -259,51 +269,37 @@ export default {
       {text: '3개월', value: {type: 'this', start: {month: 3}}},
       {text: '6개월', value: {type: 'this', start: {month: 6}}},
     ],
-    reservationItems: [
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '125' },
-      { title: '[전시] 사찰예절 배움 템플스테이 해맞이', id: '126' },
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
-    ],
-    memberItems: [
-      {
-        id:'12', status: '확정', name: '홍길동', phone:'010-1234-5678', email: 'test@test.com', birth:'1976', gender:'남성', nation:'Canada', reservation_count:'3',
-        time: '2022-08-15 18:00',
-        memo: '비가오면 못갈수도 있어요.',
-        options: [
-          { name: '템플 스테이 예절교육 집중 1', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'},
-          { name: '템플 스테이 예절교육 집중 2', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'}
-        ],
-      },
-      {
-        id:'13', status: '확정', name: '홍길동', phone:'010-1234-5678', email: 'test@test.com', birth:'1976', gender:'남성', nation:'Canada', reservation_count:'3',
-        time: '2022-08-15 18:00',
-        memo: '비가오면 못갈수도 있어요.',
-        options: [
-          { name: '템플 스테이 예절교육 집중 1', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'},
-          { name: '템플 스테이 예절교육 집중 2', stime: '2022-08-20 16:00', etime: '2022-08-20 18:00'}
-        ],
-      }
-    ],
   }),
   computed: {
     dateRangeText () {
       return this.search.dates.join(' ~ ')
     },
+    selectAll: {
+      get: function () {
+        return this.items ? this.selectedIds.length == this.bookedBookings.length : false;
+      },
+      set: function (value) {
+        var selectedIds = [];
+        if (value) {
+          this.bookedBookings.forEach(function (items) {
+            selectedIds.push(items.id);
+          });
+        }
+        this.selectedIds = selectedIds;
+      }
+    }
   },
   methods: {
+    getPage(data) {
+      this.pagination.page = data;
+    },
     async excelDownLoad() {
-      this.loading = true;
-      try {
-        let url = '/host/bookings/' + this.$route.params.id + '/booked/excel/24,25';
-        const response = await this.$axios.get(url);
-        this.excel = response.data.data;
-        this.loading = false;
-      } catch (e) {
-        if (e.response.status == '401') {
-          console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
+      let url = process.env.BASEURL + '/api/host/bookings/' + this.$route.params.id + '/booked/excel/';
+      const ids = this.selectedIds.join();
+      if (ids) {
+        url += ids
       }
+      location.href = url;
     },
     async submitPush(){
       this.loading = true;
@@ -333,30 +329,31 @@ export default {
       this.search.status = status;
       this.$fetch();
     },
+
     async cancelBooked(id) {
       this.loading = true;
-      try {
-        let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/revoke';
-        let method = 'put';
+        try {
+          let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/revoke';
+          let method = 'put';
 
-        const response = await this.$axios({
-          url: url, method: method, data:''
-        })
-        if (response.data.result) {
-          this.$toast.success('예약이 취소되었습니다.');
-          this.$fetch();
+          const response = await this.$axios({
+            url: url, method: method, data:''
+          })
+          if (response.data.result) {
+            this.$toast.success('예약이 취소되었습니다.');
+            this.$fetch();
+          }
+          this.loading = false;
+        } catch (e) {
+          if (e.response.status == '422') {
+            this.errors = e.response.data.errors;
+            this.$toast.error(e.response.data.message);
+          }
+          if (e.response.status == '401') {
+            // console.log(e);
+            this.$toast.error(e.response.data.message);
+          }
         }
-        this.loading = false;
-      } catch (e) {
-        if (e.response.status == '422') {
-          this.errors = e.response.data.errors;
-          this.$toast.error(e.response.data.message);
-        }
-        if (e.response.status == '401') {
-          // console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
-      }
     },
     async confirmBooked(id) {
       this.loading = true;
@@ -386,16 +383,11 @@ export default {
     async checkedApprove() {
       this.loading = true;
       try {
-        ///host/bookings/35/booked/confirm/24,25
         let url = '/host/bookings/' + this.$route.params.id + '/booked/confirm/';
-        let ids = '';
-        for(let i = 0; i < this.selectedIds.length; i++) {
-          ids += this.selectedIds[i];
-          if (i < this.selectedIds.length - 1) {
-            ids += ',';
-          }
+        const ids = this.selectedIds.join();
+        if (ids) {
+          url += ids
         }
-        url += ids;
 
         let method = 'put';
 

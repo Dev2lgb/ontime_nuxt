@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    <vue-confirm-dialog></vue-confirm-dialog>
     <div class="global_user_wrap">
-
       <div class="user_size_wrap">
         <Nuxt />
       </div>

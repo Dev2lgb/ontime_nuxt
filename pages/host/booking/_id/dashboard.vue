@@ -114,12 +114,7 @@ export default {
   data: () => ({
     loading:false,
     selectedBooking: {},
-    selectedItem: '125',
-    reservation_items: [
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '125' },
-      { title: '[전시] 사찰예절 배움 템플스테이 해맞이', id: '126' },
-      { title: '[교육] 사찰예절 배움 템플스테이 해맞이', id: '127' },
-    ],
+    selectedItem: '',
     focus: '',
     booking: {},
     schedules: {},

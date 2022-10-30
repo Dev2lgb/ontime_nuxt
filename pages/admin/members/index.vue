@@ -228,10 +228,8 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let url = '/admin/members?search=';
-      if (this.search) {
-        url += JSON.stringify(this.search);
-      }
+      let url = '/admin/members';
+      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
       const response = await this.$axios.get(url);
       let urlInit = 'auth/register';
       const responseInit = await this.$axios.get(urlInit);
@@ -368,20 +366,9 @@ export default {
       }
     },
     async excelDown() {
-      this.loading = true;
-      try {
-        let url = '/admin/members/export';
-        const response = await this.$axios.get(url);
-        this.excel = response.data;
-
-        this.loading = false;
-      } catch (e) {
-        console.log(e);
-        if (e.response.data.status == '401') {
-          console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
-      }
+      let url = process.env.BASEURL + '/api/admin/members/export';
+      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
+      location.href = url;
     },
     async submitForm() {
       this.loading = true;

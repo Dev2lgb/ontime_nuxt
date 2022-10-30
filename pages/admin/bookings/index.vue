@@ -88,10 +88,8 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let url = '/admin/bookings?search=';
-      if (this.search) {
-        url += JSON.stringify(this.search);
-      }
+      let url = '/admin/bookings';
+      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
       const response = await this.$axios.get(url);
 
       this.items = response.data.data;
@@ -146,20 +144,9 @@ export default {
   }),
   methods: {
     async excelDown() {
-      this.loading = true;
-      try {
-        let url = '/admin/bookings/export';
-        const response = await this.$axios.get(url);
-        this.excel = response.data;
-
-        this.loading = false;
-      } catch (e) {
-        console.log(e);
-        if (e.response.data.status == '401') {
-          console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
-      }
+      let url = process.env.BASEURL + '/api/admin/bookings/export';
+      if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
+      location.href = url;
     },
     dateTerm(searches) {
       this.search.dates = [];

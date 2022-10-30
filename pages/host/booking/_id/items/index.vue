@@ -15,6 +15,26 @@
       <div class="pa-5">
         <h3>등록된 예약 상품 (3)</h3>
         <v-btn dark color="#4487fa" class="mt-5" :to="'/host/booking/' + this.$route.params.id + '/items/create'" elevation="0">+ 예약상품 등록</v-btn>
+
+        <div class="mt-5">
+          <div class="mb-5 border_a pa-3" v-for="item in bookingOptionItems" :key="item.id">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
+            <div class="flex j_start a_center">
+              <v-btn depressed class="mr-3">삭제</v-btn>
+              <v-btn depressed :to="item.id + '/edit/'">정보수정</v-btn>
+              <v-spacer></v-spacer>
+              <v-switch
+                v-model="item.is_display"
+                true-value="Y"
+                false-value="N"
+                label="노출"
+                @change=toggleDisplay
+                hide-details="auto"
+              ></v-switch>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -30,6 +50,12 @@ export default {
       let url = '/host/bookings/items';
       const response = await this.$axios.get(url);
       this.bookings = response.data;
+
+      let urlOptions = '/host/bookings/' + this.$route.params.id + '/options';
+      const responseOptions = await this.$axios.get(urlOptions);
+      this.bookingOptionItems = responseOptions.data;
+      this.bookingOptionCount = responseOptions.data.length;
+
       console.log(response);
       this.loading = false;
     } catch (e) {
@@ -39,14 +65,39 @@ export default {
       }
     }
   },
+
   mounted() {
   },
   data: () => ({
     selectedBooking: '125',
     bookings: [],
+    bookingOptionItems: [],
   }),
   methods: {
+    async toggleDisplay() {
+      this.loading = true;
+      try {
+        let url = '/host/bookings/' + this.$route.params.id + '/toggle/is_display';
+        let method = 'put';
 
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          this.$toast.success('처리 됐습니다.');
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
   },
 }
 </script>

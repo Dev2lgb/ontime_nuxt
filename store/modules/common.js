@@ -7,8 +7,10 @@ export const common = {
     bookingEditForm: localStorage.getItem("bookingEditForm"),
     bookingForm: localStorage.getItem("bookingForm"),
     bookingOptionForm: localStorage.getItem("bookingOptionForm"),
+    bookingOptionEditForm: localStorage.getItem("bookingOptionEditForm"),
     userBookingForm: localStorage.getItem("userBookingForm"),
     userBookingOptionForm: localStorage.getItem("userBookingOptionForm"),
+    userBookingFinData: localStorage.getItem("userBookingFinData"),
 
     locale: localStorage.getItem("locale") ?? 'ko',
     _CONST_: {
@@ -46,9 +48,18 @@ export const common = {
       localStorage.removeItem('userBookingForm');
       state.bookingOptionForm = '';
     },
+    setUserBookingOptionFinData(state, p) {
+      localStorage.setItem("userBookingFinData", p);
+      state.userBookingFinData = p;
+    },
     setBookingForm(state, p) {
       localStorage.setItem("bookingForm", p);
       state.bookingForm = p;
+    },
+
+    clearUserBookingOptionFinData(state) {
+      localStorage.removeItem('userBookingFinData');
+      state.userBookingFinData = '';
     },
     clearBookingForm(state) {
       localStorage.removeItem('bookingForm');
@@ -69,6 +80,14 @@ export const common = {
     clearBookingOptionForm(state) {
       localStorage.removeItem('bookingOptionForm');
       state.bookingOptionForm = '';
+    },
+    setBookingOptionEditForm(state, p) {
+      localStorage.setItem("bookingOptionEditForm", p);
+      state.bookingOptionEditForm = p;
+    },
+    clearBookingOptionEditForm(state) {
+      localStorage.removeItem('bookingOptionEditForm');
+      state.bookingOptionEditForm = '';
     },
     clearUserBookingOptionForm(state) {
       localStorage.removeItem('userBookingOptionForm');
@@ -98,11 +117,17 @@ export const common = {
     bookingOptionForm: (state) => {
       return state.bookingOptionForm;
     },
+    bookingOptionEditForm: (state) => {
+      return state.bookingOptionEditForm;
+    },
     userBookingForm: (state) => {
       return state.userBookingForm;
     },
     userBookingOptionForm: (state) => {
       return state.userBookingOptionForm;
+    },
+    userBookingFinData: (state) => {
+      return state.userBookingFinData;
     },
   },
 };

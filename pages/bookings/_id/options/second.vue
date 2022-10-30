@@ -5,7 +5,7 @@
       <div class="user_nik">
         <p>[{{ getCategoryName(booking) }}] {{ booking.title }}</p>
       </div>
-      <p class="ma-0">아라 예약정보를 다시한번 확인해주세요.</p>
+      <p class="ma-0">아래 예약정보를 다시한번 확인해주세요.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
 
       <div>
@@ -183,8 +183,9 @@ export default {
         })
         if (response.data.result) {
           this.clearUserBookingOptionForm();
+          // this.setUserBookingOptionFinData(JSON.stringify(response.data.data.booking));
           this.$toast.success('예약 신청이 완료되었습니다.');
-          this.$router.push('/home');
+          this.$router.push('/bookings/' + this.$route.params.id + '/options/fin');
         } else {
           this.clearUserBookingOptionForm();
           this.$toast.error(response.data.message);
@@ -214,7 +215,7 @@ export default {
     deleteItem(index) {
 
     },
-    ...mapMutations("common",['clearUserBookingOptionForm']),
+    ...mapMutations("common",['setUserBookingOptionFinData','clearUserBookingOptionForm']),
   },
 }
 </script>
