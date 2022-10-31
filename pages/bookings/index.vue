@@ -7,22 +7,22 @@
       </div>
 
       <div class="progrma_search">
-        <input type="text" class="search_input" placeholder="어떤 예약에 참여하고 싶으신가요?">
-        <input type="button" class="img_button" title="검색">
+        <input type="text" v-model="search.keyword" class="search_input" placeholder="어떤 예약에 참여하고 싶으신가요?">
+        <input type="button" class="img_button" @click="this.$fetch" title="검색">
       </div>
 
       <div class="progrma_area">
         <p><span class="font-weight-bold">{{ items.length }}개</span>의 프로그램</p>
-        <v-select
-          class="select_reset"
-          prepend-inner-icon="mdi-filter-variant"
-          v-model="searchCategory"
-          :items="searchCategoryItems"
-          hide-details="auto"
-          height="50"
-          outlined
-          dense
-        ></v-select>
+<!--        <v-select-->
+<!--          class="select_reset"-->
+<!--          prepend-inner-icon="mdi-filter-variant"-->
+<!--          v-model="searchCategory"-->
+<!--          :items="searchCategoryItems"-->
+<!--          hide-details="auto"-->
+<!--          height="50"-->
+<!--          outlined-->
+<!--          dense-->
+<!--        ></v-select>-->
       </div>
 
       <div v-if="items.length > 0">
@@ -58,7 +58,7 @@
             </router-link>
           </div>
           <div class="bookmark_width flex j_center a_center">
-            <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
+            <v-btn fab small depressed dark color="#ddd" @click="AddBookmarks(item.id)"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
           </div>
         </div>
       </div>
@@ -84,6 +84,7 @@ export default {
     try {
       let url = '/bookings';
       url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
+      if (Object.keys(this.search).length > 0) url += '&search=' + JSON.stringify(this.search);
       const response = await this.$axios.get(url);
 
       this.pagination.page = response.data.meta.current_page;
@@ -107,6 +108,7 @@ export default {
       page : 1,
       per_page: 5,
     },
+    search: {},
     searchCategoryItems: [
       { text: '전체', value:'' },
       { text: '교육', value:'1' },
@@ -131,7 +133,36 @@ export default {
       if (files.length > 0) {
         return files[0].url
       }
-    }
+    },
+    async AddBookmarks(id) {
+      this.loading = true;
+      try {
+        let url = '/my/bookings/bookmarks';
+        let data = {
+          booking_id : id
+        };
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data: data
+        })
+        if (response.data.result) {
+          this.$toast.success('위시리스트에 추가됐습니다.');
+        } else {
+          this.$toast.error(response.data.message);
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
   },
 }
 </script>

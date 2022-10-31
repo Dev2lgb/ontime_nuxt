@@ -8,9 +8,9 @@
           <p class="sub_txt">전달받으신 코드를 입력하시면 해당<br>예약 페이지로 바로 이동 하실 수 있습니다.</p>
         </div>
         <div class="code_search">
-          <v-text-field outlined class="inpBottom vinpuT" placeholder="예약코드를 입력해주세요." hide-details="auto"/>
+          <v-text-field outlined class="inpBottom vinpuT" v-model="form.code" placeholder="예약코드를 입력해주세요." hide-details="auto"/>
           <div class="sized_box_h"></div>
-          <v-btn x-large width="100%" height="60" elevation="0" color="#28b487" dark class="clear_btn">입장하기</v-btn>
+          <v-btn x-large width="100%" height="60" elevation="0" @click="submit" color="#28b487" dark class="clear_btn">입장하기</v-btn>
           <NuxtLink to="/">전체예약 확인하기</NuxtLink>
         </div>
       </div>
@@ -21,10 +21,42 @@
 export default {
   layout: 'user',
   data: () => ({
-
+    form: {
+      code: '',
+    }
   }),
   methods: {
+    async submit() {
+      this.loading = true;
+      try {
+        let url = '/bookings/code';
+        let data = [];
+        let method = 'post';
 
+        const response = await this.$axios({
+          url: url, method: method, data:this.form
+        })
+        if (response.data.result) {
+          console.log(response.data);
+
+
+          // this.$toast.success('회원정보 수정이 완료됐습니다.');
+          this.$router.push('/bookings/' + response.data.data.id);
+        } else {
+          this.$toast.error(response.data.message);
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
   },
 }
 </script>

@@ -76,6 +76,7 @@
           <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
         </div>
       </div>
+      {{ items }}
       <!-- -->
 
     </div>
@@ -84,6 +85,28 @@
 <script>
 export default {
   layout: 'user',
+  async fetch() {
+    this.loading = true;
+    try {
+      // alert('test');
+      let url = '/my/bookings/bookmarks';
+      // url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
+      const response = await this.$axios.get(url);
+
+      console.log(response);
+      // this.pagination.page = response.data.meta.current_page;
+      // this.pagination.last_page = response.data.meta.last_page;
+      // this.pagination.total = response.data.meta.total;
+      this.items = response.data.bookingBookmarks;
+
+      this.loading = false;
+    } catch (e) {
+      // if (e.response.status == '401') {
+      //   console.log(e);
+      //   //this.$toast.error(e.response.data.message);
+      // }
+    }
+  },
   data: () => ({
     searchCategory: '',
     searchCategoryItems: [

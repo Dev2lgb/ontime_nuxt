@@ -4,44 +4,44 @@
     <div class="flex j_start a_center line_area">
       <div class="basic_width">
         <v-select
-          v-model="selectedSearch"
-          :items="searchItems"
+          v-model="searchMonth"
+          :items="searchTermItems"
           outlined
+          @change="dateTerm"
           dense
-          height="50"
           hide-details="auto"
-        ></v-select>
+          height="50"
+        >
+        </v-select>
       </div>
-      <div class="q_width">
+      <div class="q_width ml-3">
         <v-menu
           ref="menu"
           v-model="menu"
           :close-on-content-click="false"
-          :return-value.sync="dates"
+          :return-value.sync="search.dates"
           transition="scale-transition"
           offset-y
           min-width="auto"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dates"
+              v-model="dateRangeText"
               prepend-inner-icon="mdi-calendar"
               outlined
               dense
-              class="ml-3"
-              placeholder="날짜선택"
-              height="50"
               hide-details="auto"
               readonly
               v-bind="attrs"
               v-on="on"
+              height="50"
             ></v-text-field>
           </template>
           <v-date-picker
-            v-model="dates"
+            v-model="search.dates"
             no-title
-            scrollable
             range
+            scrollable
           >
             <v-spacer></v-spacer>
             <v-btn
@@ -54,13 +54,14 @@
             <v-btn
               text
               color="primary"
-              @click="$refs.menu.save(dates)"
+              @click="$refs.menu.save(search.dates)"
             >
               OK
             </v-btn>
           </v-date-picker>
         </v-menu>
       </div>
+      <v-btn @click="this.$fetch" class="ml-3" height="50" depressed color="#1976d2" dark>검색</v-btn>
     </div>
 
     <div class="py-10">
@@ -100,7 +101,7 @@
             <h3 class="fontW">국적통계</h3>
             <doughnut-chart
               :chart-options='chartOptions'
-              :chart-data='chartData'
+              :chart-data='countryChartData'
               chart-id='myCustomId'
             />
           </div>
@@ -110,16 +111,14 @@
               <thead>
               <tr>
                 <th>국적</th>
-                <th>점유율</th>
                 <th>회원수</th>
               </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Korea</td>
-                  <td>10</td>
-                  <td>20</td>
-                </tr>
+              <tr v-for="item in countryPersonnels" :key="item.country">
+                <td>{{ item.country }}</td>
+                <td>{{ item.count }}</td>
+              </tr>
               </tbody>
               </template>
             </v-simple-table>
@@ -132,7 +131,7 @@
             <h3 class="fontW">연령대별 통계</h3>
             <bar-chart
               :chart-options='barChartOptions'
-              :chart-data='barChartData'
+              :chart-data='sexAgeChartData'
               chart-id='myCustomId'
             />
           </div>
@@ -141,38 +140,90 @@
               <template v-slot:default>
                 <thead>
                 <tr>
-                  <th>국적</th>
-                  <th>점유율</th>
-                  <th>회원수</th>
+                  <th>연령대</th>
+                  <th>남성</th>
+                  <th>여성</th>
+                  <th>합계</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>Korea</td>
-                  <td>10</td>
-                  <td>20</td>
+                <tr v-for="item in sexAgePersonnels" :key="item.age">
+                  <td>{{ item.age }}</td>
+                  <td>{{ item.male }}</td>
+                  <td>{{ item.female }}</td>
+                  <td>{{ item.sum }}</td>
                 </tr>
                 </tbody>
               </template>
             </v-simple-table>
           </div>
         </div>
+        <div class="mt-5 border_a pa-10">
+          <h3 class="fontW">예약현황</h3>
+          <line-chart
+            :chart-options='barChartOptions'
+            :chart-data='monthChartData'
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {DateTime} from "luxon";
+DateTime.defaultZoneName = 'Asia/Seoul';
+
 export default {
   layout: 'admin',
+  async fetch() {
+    this.loading = true;
+    try {
+      // let urlBookings = '/host/bookings/' + this.$route.params.id + '/statistics?search=';
+
+      if (this.search.dates.length == 0) {
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        this.search.dates.push(this.toStringByFormatting(firstDay));
+        this.search.dates.push(this.toStringByFormatting(lastDay));
+      }
+
+      let url = '/admin/dashboard';
+      if (this.search.dates.length > 0) {
+        url += '?search=' + JSON.stringify(this.search);
+      }
+      const response = await this.$axios.get(url);
+      this.countryChartData = response.data.countryChartData;
+      this.countryPersonnels = response.data.countryPersonnels;
+      this.monthChartData = response.data.monthChartData;
+      this.sexAgeChartData = response.data.sexAgeChartData;
+      this.sexAgePersonnels = response.data.sexAgePersonnels;
+
+      this.loading = false;
+    } catch (e) {
+      if (e.response.status == '401') {
+        console.log(e);
+        this.$toast.error(e.response.data.message);
+      }
+    }
+  },
   data: () => ({
-    dates: [],
+    search: {
+      dates: [],
+    },
+    countryChartData: [],
+    monthChartData: [],
+    countryPersonnels: [],
+    sexAgeChartData: [],
+    sexAgePersonnels: [],
     menu: false,
-    searchItems: [
-      { text: '이번달', value: '이번달' },
-      { text: '저번달', value: '저번달' },
-      { text: '이번달', value: '이번달' }
+    searchMonth:  {type: 'last', start: {month: 0}},
+    searchTermItems: [
+      {text: '이번달' , value: {type: 'last', start: {month: 0}}},
+      {text: '지난달', value: {type: 'last', start: {month: 1}}},
+      {text: '3개월', value: {type: 'this', start: {month: 3}}},
+      {text: '6개월', value: {type: 'this', start: {month: 6}}},
     ],
-    selectedSearch: '이번달',
     chartData: {
       labels: [ 'January', 'February', 'March'],
       datasets: [
@@ -207,8 +258,47 @@ export default {
       maintainAspectRatio: false
     },
   }),
+  computed: {
+    dateRangeText () {
+      return this.search.dates.join(' ~ ')
+    },
+  },
   methods: {
+    setInit(){
+      this.dates.push();
+    },
+    leftPad(value) {
+      if (value >= 10) {
+        return value;
+      }
+      return `0${value}`;
+    },
+    toStringByFormatting(source, delimiter = '-') {
+      const year = source.getFullYear();
+      const month = this.leftPad(source.getMonth() + 1);
+      const day = this.leftPad(source.getDate());
 
+      return [year, month, day].join(delimiter);
+    },
+    dateTerm(searches) {
+      this.search.dates = [];
+      //console.log(searches);
+      let now = DateTime.now();
+      let startdate = '';
+      let enddate = '';
+      if (searches.type === 'this') {
+        startdate = now.minus(searches.start).startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.toFormat('yyyy-MM-dd');
+      }
+      if (searches.type === 'last') {
+        now = now.minus(searches.start);
+        startdate = now.startOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+        enddate = now.endOf(Object.keys(searches.start)[0]).toFormat('yyyy-MM-dd');
+      }
+      if (startdate && enddate)  {
+        this.search.dates = [startdate, enddate];
+      }
+    },
   },
 }
 </script>

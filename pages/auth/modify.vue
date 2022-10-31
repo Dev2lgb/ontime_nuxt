@@ -226,10 +226,10 @@ export default {
     deleteSubmit() {
       this.$confirm(
         {
-          message: '정말 탈퇴하시겠습니까?',
+          message: '담당자 확인 후 탈퇴처리되며 탈퇴처리 후 모든 데이터는 삭제 됩니다. 정말로 탈퇴하시겠습니까?',
           button: {
-            no: '아니오',
-            yes: '네'
+            no: '취소',
+            yes: '탈퇴요청'
           },
           /**
            * Callback Function
