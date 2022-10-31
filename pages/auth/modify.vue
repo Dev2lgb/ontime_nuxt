@@ -223,6 +223,26 @@ export default {
         }
       }
     },
+    deleteSubmit() {
+      this.$confirm(
+        {
+          message: '정말 탈퇴하시겠습니까?',
+          button: {
+            no: '아니오',
+            yes: '네'
+          },
+          /**
+           * Callback Function
+           * @param {Boolean} confirm
+           */
+          callback: confirm => {
+            if (confirm) {
+              this.$auth.logout();
+            }
+          }
+        }
+      )
+    },
   },
 }
 </script>
