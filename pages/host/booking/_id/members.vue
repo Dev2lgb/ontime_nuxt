@@ -133,7 +133,7 @@
                   <th>국적</th>
                   <td>{{ booked.member.timezone }}</td>
                   <th>성별</th>
-                  <td>{{ booked.member.sex_name }}</td>
+                  <td>{{ booked.member.sex_name.name_ko }}</td>
                 </tr>
                 <tr>
                   <th>출생연도</th>
