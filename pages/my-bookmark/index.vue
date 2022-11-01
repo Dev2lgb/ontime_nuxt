@@ -7,77 +7,58 @@
       </div>
 
       <div class="progrma_area">
-        <p><span class="font-weight-bold">2개</span>의 프로그램</p>
-        <v-select
-          class="select_reset"
-          prepend-inner-icon="mdi-filter-variant"
-          v-model="searchCategory"
-          :items="searchCategoryItems"
-          hide-details="auto"
-          outlined
-          dense
-        ></v-select>
+        <p><span class="font-weight-bold">{{ items.length }}개</span>의 프로그램</p>
+<!--        <v-select-->
+<!--          class="select_reset"-->
+<!--          prepend-inner-icon="mdi-filter-variant"-->
+<!--          v-model="searchCategory"-->
+<!--          :items="searchCategoryItems"-->
+<!--          hide-details="auto"-->
+<!--          outlined-->
+<!--          dense-->
+<!--        ></v-select>-->
+      </div>
+      <div v-if="items.length > 0">
+        <div class="pa-3 border_b card_action" v-for="(item, index) in items" :key="index" >
+          <div>
+            <v-chip dark color="#4487fa" class="mb-3" label small v-show="item.booking.on_off_line == 'ONLINE'">
+              {{ item.booking.on_off_line }}
+            </v-chip>
+            <v-chip dark color="#333" class="mb-3"  label small v-show="item.booking.on_off_line == 'OFFLINE'">
+              {{ item.booking.on_off_line }}
+            </v-chip>
+          </div>
+          <div class="flex j_space a_center">
+            <div class="thumbnail_width">
+              <v-img
+                :src="getThumbnail(item.booking.title_images)"
+                :lazy-src="`https://picsum.photos/10/6?image=10`"
+                aspect-ratio="1"
+                width="80"
+                class="img_radius"
+              ></v-img>
+            </div>
+            <router-link :to="'/bookings/' + item.booking.id" class="non-deco card_subject">
+              <h3 class="text_title">[{{ getCategoryName(item.booking) }}] {{ item.booking.title }}</h3>
+              <p class="color_main font_small_text tag_text">
+                <span v-for="(tag, tagIndex) in item.booking.tags" :key="tagIndex + 't'">
+                  {{ tag }}
+                </span>
+              </p>
+              <p class="desc">
+                {{  item.booking.content }}
+              </p>
+            </router-link>
+          </div>
+          <div class="bookmark_width flex j_center a_center">
+<!--            <v-btn fab small depressed dark color="#ddd" @click="AddBookmarks(item.id)"><v-icon>mdi-bookmark-outline</v-icon></v-btn>-->
+          </div>
+        </div>
       </div>
 
-      <div class="pa-3 border_b card_action">
-        <div>
-          <v-chip dark color="#4487fa" label small>Online</v-chip>
-          <v-chip dark color="#28b487" label small>New</v-chip>
-          <v-chip dark color="#ff5722" label small>마감임박</v-chip>
-        </div>
-        <div class="flex j_space a_center">
-          <div class="thumbnail_width">
-            <v-img
-              :src="`https://picsum.photos/500/300?image=10`"
-              :lazy-src="`https://picsum.photos/10/6?image=10`"
-              aspect-ratio="1"
-              width="80"
-              class="img_radius"
-            ></v-img>
-          </div>
-          <router-link to="/bookings/13" class="non-deco card_subject">
-            <h3 class="text_title">[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
-            <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
-            <p class="desc">
-              온전한 나만의 시간 + 간단한 티타임(선택가능) + 자유일정의 휴식형 프로그램을 경험하실 수 있습니 ...
-            </p>
-          </router-link>
-        </div>
-        <div class="bookmark_width flex j_center a_center">
-          <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
-        </div>
+      <div class="text-center pt-10 color_gray" v-else>
+        위시리스트가 없습니다.
       </div>
-
-      <!-- 카드반복 -->
-      <div class="pa-3 border_b card_action">
-        <div>
-          <v-chip dark color="#4487fa" label small>Online</v-chip>
-          <v-chip dark color="#28b487" label small>New</v-chip>
-        </div>
-        <div class="flex j_space a_center">
-          <div class="thumbnail_width">
-            <v-img
-              :src="`https://picsum.photos/500/300?image=10`"
-              :lazy-src="`https://picsum.photos/10/6?image=10`"
-              aspect-ratio="1"
-              width="80"
-              class="img_radius"
-            ></v-img>
-          </div>
-          <router-link to="/bookings/13" class="non-deco card_subject">
-            <h3 class="text_title">[교육] 사찰예절 배움 템플스테이 해맞이...</h3>
-            <p class="color_main font_small_text tag_text">#자연휴식형 #친환경 #힐링</p>
-            <p class="desc">
-              온전한 나만의 시간 + 간단한 티타임(선택가능) + 자유일정의 휴식형 프로그램을 경험하실 수 있습니 ...
-            </p>
-          </router-link>
-        </div>
-        <div class="bookmark_width flex j_center a_center">
-          <v-btn fab small depressed dark color="#ddd"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
-        </div>
-      </div>
-      {{ items }}
-      <!-- -->
 
     </div>
   </div>
@@ -108,6 +89,7 @@ export default {
     }
   },
   data: () => ({
+    items: [],
     searchCategory: '',
     searchCategoryItems: [
       { text: '전체', value:'' },
@@ -119,6 +101,18 @@ export default {
     ],
   }),
   methods: {
+    getCategoryName(item) {
+      if (item.category_text) {
+        return item.category_text;
+      } else {
+        // return item.category_name.name_ko
+      }
+    },
+    getThumbnail(files) {
+      if (files.length > 0) {
+        return files[0].url
+      }
+    },
 
   },
 }
