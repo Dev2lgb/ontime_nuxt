@@ -10,7 +10,7 @@
           <ul>
             <li>예약검색</li>
             <li>I</li>
-            <li><NuxtLink to="bookings">예약프로그램 보기</NuxtLink></li>
+            <li><NuxtLink to="/bookings">예약프로그램 보기</NuxtLink></li>
           </ul>
           <div class="progrma_search">
             <input type="text" v-model="search.keyword" class="search_input" placeholder="프로그램명을 검색 해주세요.">
