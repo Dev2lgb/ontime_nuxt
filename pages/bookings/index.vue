@@ -84,6 +84,11 @@ export default {
     try {
       let url = '/bookings';
       url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
+
+      if (this.$route.query) {
+        this.search.keyword = this.$route.query.keyword;
+      }
+
       if (Object.keys(this.search).length > 0) url += '&search=' + JSON.stringify(this.search);
       const response = await this.$axios.get(url);
 

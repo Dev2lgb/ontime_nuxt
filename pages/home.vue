@@ -13,8 +13,8 @@
             <li><NuxtLink to="bookings">예약프로그램 보기</NuxtLink></li>
           </ul>
           <div class="progrma_search">
-            <input type="text" class="search_input" placeholder="프로그램명을 검색 해주세요.">
-            <input type="button" class="img_button" title="검색">
+            <input type="text" v-model="search.keyword" class="search_input" placeholder="프로그램명을 검색 해주세요.">
+            <input type="button" class="img_button" @click="searchBookings" title="검색">
           </div>
         </div>
         <div class="area_line"></div>
@@ -65,7 +65,15 @@ export default {
   },
   data: () => ({
     items: [],
+    search: {
+      keyword: '',
+    }
   }),
+  methods: {
+    searchBookings() {
+      this.$router.push('/bookings?keyword=' + this.search.keyword);
+    }
+  },
 }
 </script>
 
