@@ -4,15 +4,15 @@
       <div class="flex j_space a_center inner mv-item">
         <div class="mv_left">
           <h3>
-            비대면 시대에<br>
-            최적화된 예약 서비스,<br>
-            ONTIME!
+            누구나 자유롭게<br>
+            가장 쉬운 무료 예약관리 서비스
           </h3>
+          <img src="~/assets/images/logo.png" alt="" class="main_logo">
           <p>
-            당신의 예약관리를 위한 ONTIME<br>
-            쉽고 간편한 예약 서비스를 찾고 계시나요?
+            간편한 예약 서비스를 찾고 계시나요?<br>
+            지금 바로 온타임하세요!
           </p>
-          <v-btn color="#4676bb" to="/home" x-large dark depressed class="mv_btn">서비스 시작하기</v-btn>
+          <v-btn color="#00cc99" to="/home" x-large dark depressed class="mv_btn">서비스 시작하기</v-btn>
         </div>
         <div class="mv_right">
           <img src="~/assets/images/mv1.png" alt="">
@@ -51,5 +51,6 @@ export default {
 
 <style scoped>
 .slider_item { overflow: hidden }
+.main_logo {height: 45px; margin-top: 20px;}
 </style>
 

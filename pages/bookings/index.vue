@@ -183,7 +183,10 @@ export default {
 .user_nik p span {font-weight: 800; color: #28b487;}
 .user_nik p span span {color: #4487fa;}
 .progrma_search {position: relative;}
-.search_input {width: 100%; height: 60px; border: 2px solid #435689; border-radius: 10px; padding: 10px; /*background: url(/_nuxt/assets/images/search.png)no-repeat; box-sizing: border-box; background-position: right 24px center; background-size: 35px;*/}
+.search_input {    width: 100%;
+    height: 60px;
+    border: 2px solid #28b487;
+    padding: 10px;}
 .search_input::placeholder {color: #ccc;}
 .search_input:focus-within {outline: #435689}
 .img_button {background: url(~/assets/images/search.png) center no-repeat; border: none; width: 35px; height: 40px; cursor: pointer; background-size: 27px; position: absolute; right: 26px; top: 10px;}

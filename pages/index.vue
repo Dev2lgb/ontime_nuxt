@@ -49,13 +49,13 @@
             <h3><span>액티비티</span> 시스템</h3>
             <p>해외 현지거래를 하는 많은 여행사 및 랜드사를 위한 판매관리 통합 시스템</p>
           </div>
-          <div class="systems_item">
+          <!-- <div class="systems_item">
             <img src="~/assets/images/system_3.png" alt="">
             <h3><span>공연</span> 시스템</h3>
             <p>콘서트공연 및입장권 등의 실시간
               티켓 판매와 관리가 필요한 업체를
               위한 시스템  </p>
-          </div>
+          </div> -->
           <div class="systems_item">
             <img src="~/assets/images/system_4.png" alt="">
             <h3><span>공유</span> 시스템</h3>
@@ -82,16 +82,16 @@
           </div>
           <div class="join_right">
             <h3>
-              어디를 선택해야<br />
+              어떤 플랫폼을 활용해야<br />
               <span>이 걱정들이 해결될까요?</span>
             </h3>
             <div class="flex j_start a_center">
               <div>
-                <p>엑셀 등 수기로 하는 예약관리</p>
-                <p>해외 예약자의 시차 관리 어려움</p>
-                <p>원하는 사람에게만 예약 받기</p>
+                <p><img src="~/assets/images/check_main.png" alt="" class="chimg" /> 엑셀 등 수기로 하는 예약관리</p>
+                <p><img src="~/assets/images/check_main.png" alt="" class="chimg" /> 해외 예약자의 시차 관리 어려움</p>
+                <p><img src="~/assets/images/check_main.png" alt="" class="chimg" /> 원하는 사람에게만 예약 받기</p>
               </div>
-              <v-btn color="#50b999" to="/auth/register" class="join_btn" x-large dark depressed>무료회원 가입하기</v-btn>
+              <v-btn color="#0099ff" to="/auth/register" class="join_btn" x-large dark depressed>무료회원 가입하기</v-btn>
             </div>
           </div>
         </div>
@@ -107,11 +107,11 @@
               위한 가장 좋은<br />
               예약 서비스 선택
             </h3>
-            <p>
+            <p class="pstyle">
               하나의 계정으로 이용하는 무료 온라인 예약관리 시스템<br />
               다양한 기능을 통해 예약을 쉽고 편하게 관리해보세요.
             </p>
-            <router-link to="" class="service_btn">바로 시작하기</router-link>
+            <v-btn color="#00cc99" to="/auth/register" class="join_btn" x-large dark depressed>바로 시작하기</v-btn>
           </div>
           <div class="service_right">
             <img src="~/assets/images/notebook.png" alt="">
@@ -156,7 +156,7 @@
               </div>
             </div>
 
-            <p class="s2_text">단! 5분 간편한 예약만들기와 예약 옵션별 시간과 장소를<br />
+            <p class="s2_text">단, 5분! 간편한 예약만들기와 예약 옵션별 시간과 장소를<br />
               자유롭게 설정하고, 예약자 정보를 보다 쉽게 관리합니다.</p>
             <p class="s2_text2">예약을 만들어 예약코드와 링크를 예약자에게 전달하세요.</p>
           </div>
@@ -174,13 +174,13 @@
               느끼고 계신다면<br />
               온타임으로!
             </h3>
-            <p>
+            <p class="pstyle">
               ONTIME은 심플하지만 다양한 기능으로<br />
               맞춤형 예약페이지를 개선할 수 있도록 지원합니다.<br />
               예약 옵션별 시간과 장소를 자유롭게 설정하고,<br />
               예약자 정보를 보다 쉽고 편하게 관리해보세요.
             </p>
-            <router-link to="" class="service_btn">바로 시작하기</router-link>
+            <v-btn color="#0099ff" to="/auth/register" class="join_btn" x-large dark depressed>바로 시작하기</v-btn>
           </div>
           <div class="service_right">
             <img src="~/assets/images/service_2.png" alt="">
@@ -195,14 +195,14 @@
           <h3 class="book_h3">다양한 분야의 예약관리를<br /><span>온타임으로 해결하세요.</span></h3>
           <div class="chip_wrap">
             <div class="flex j_end a_center item_chips">
-              <v-chip color="#f1f1f1"><span class="rec"></span>장소, 시간 없이도 OK</v-chip>
-              <v-chip color="#f1f1f1"><span class="rec"></span>프라이빗 모드</v-chip>
-              <v-chip color="#f1f1f1"><span class="rec"></span>Email 알림 시스템</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>장소, 시간 없이도 OK</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>프라이빗 모드</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>Email 알림 시스템</v-chip>
             </div>
             <div class="chip_box flex j_end a_center item_chips">
-              <v-chip color="#f1f1f1"><span class="rec"></span>다양한 예약 옵션 설정</v-chip>
-              <v-chip color="#f1f1f1"><span class="rec"></span>글로벌 타임존 케어</v-chip>
-              <v-chip color="#f1f1f1"><span class="rec"></span>간편한 가입절차</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>다양한 예약 옵션 설정</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>글로벌 타임존 케어</v-chip>
+              <v-chip color="#f1f1f1" class="ma-4-0"><span class="rec"></span>간편한 가입절차</v-chip>
             </div>
           </div>
         </div>
@@ -214,17 +214,17 @@
               <h3>예약만들기</h3>
             </div>
             <div>
-              <img src="~/assets/images/btn_left.png" alt="">
+              <img src="~/assets/images/btn_left.png" alt="" class="img-max">
             </div>
           </router-link>
 
           <router-link to="/home" class="half_btn right flex j_space a_start">
             <div class="h_btn_title">
-              <p>예약관리을 참여하신다면</p>
+              <p>예약에 참여하신다면</p>
               <h3>예약하기</h3>
             </div>
             <div>
-              <img src="~/assets/images/btn_right.png" alt="">
+              <img src="~/assets/images/btn_right.png" alt="" class="img-max">
             </div>
           </router-link>
         </div>
@@ -246,15 +246,14 @@
       <div class="footer_body inner flex j_space a_center">
         <div class="f_left">
           <p>
-            상호명 : 온타임  I  대표:홍길동  I  사업자등록번호: 012-34-56789  I  통신판매업신고 : 제0000-서울영등포-0000호
-            I  주소 : 서울시 영등포구 양평로 33길 49 4층 405호
-            이메일 : ontimeworld.manager@gmail.com
+            <span>오프너디오씨 주식회사</span><br>
+            대표 : 황성민  l  사업자등록번호 : 211-88-95288  l  통신판매업신고 : 제2022-서울성동-00813호<br>
+            주소 : 서울시 성동구 아차산로17길 48(SK V1 CENTER), 513호  l  이메일 : ontimeworld.manager@gmail.com
           </p>
-          <p class="color_gray">Copyright© 2022 All rights reserved by ONTIME.</p>
+          <p class="color_gray">Copyright©2022 All rights reserved by OPENER DOC Co., Ltd.</p>
         </div>
         <div class="text-right f_right">
-          <p class="customer_tel">고객지원 <span>1000-0000</span></p>
-          <p class="customer_time">운영시간 10:00 ~ 18:00  I  점심시간 12:00 ~ 13:00 (주말,공휴일 제외)</p>
+         <v-btn color="#919191" to="" class="join_btn" x-large dark depressed>고객문의</v-btn>
         </div>
       </div>
     </div>
@@ -278,5 +277,9 @@ export default {
 </script>
 
 <style>
-
+  .chimg {height: 20px;vertical-align: bottom;margin-right: 4px;}
+  .pstyle {margin-bottom: 30px;}
+  .ma-4-0 {margin: 0 4px;}
+  .img-max {max-height: 158px;}
+  .f_left p span {font-weight: 600;}
 </style>
