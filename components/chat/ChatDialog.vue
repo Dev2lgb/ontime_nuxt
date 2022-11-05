@@ -3,7 +3,8 @@
     <template v-if="isButton" v-slot:activator="{ on, attrs }">
       <!--v-btn color="primary" dark v-bind="attrs" v-on="on">메시지</v-btn-->
       <v-badge bordered icon="mdi-bell" overlap class="dashBtn" :content="unreadCount" :value="unreadCount > 0">
-        <v-btn v-bind="attrs" v-on="on" small elevation="0" dark color="#d39046" class="snsFont2"><span>메시지</span></v-btn>
+        <!-- <v-btn v-bind="attrs" v-on="on" small elevation="0" dark color="#d39046" class="snsFont2"><span>메시지</span></v-btn> -->
+        <v-btn v-bind="attrs" v-on="on" small depressed class="mt-3">문의하기</v-btn>
       </v-badge>
     </template>
 
@@ -31,8 +32,8 @@
               </v-list-item-title>
               <v-list-item-subtitle :class="`d-flex justify-${item.type === 'me' ? 'end' : 'start'}`">
                 {{ item.type === 'partner' ? partner.name : '' }}<br/>
-<!--                {{ $dayjsFormat(item.created_at, 'YY.MM.DD HH:mm') }}-->
-                {{ item.created_at }}
+                {{ $dayjs(item.created_at).tz('Asia/Seoul').format('YY.MM.DD HH:mm') }}
+                <!--{{ item.created_at }}-->
               </v-list-item-subtitle>
             </v-list-item-content>
             <!-- <v-list-item-avatar v-if="item.type === 'me'"> <v-img :src="item.avatar"/> </v-list-item-avatar> -->
@@ -71,7 +72,7 @@ export default {
   //props: {'partnerId', 'isButton'},
   props: {
     partnerId: {type: Number, default: null},
-    contractId: {type: Number, default: null},
+    bookingId: {type: Number, default: null},
     isButton: {type: Boolean, default: true},
     unreadCount: {type: Number, default: 0},
   },
@@ -90,7 +91,7 @@ export default {
     },
     channelName() {
       let result = [Number(this.$auth.user.id), Number(this.partnerId)].sort((a, b) => a - b).join('_');
-      result += '_' + this.contractId;
+      result += '_' + this.bookingId;
       return result;
     }
   },
@@ -139,7 +140,7 @@ export default {
         }
       });
 
-      const data = await this.$axios.$get('/chats/' + this.partnerId + '/' + this.contractId);
+      const data = await this.$axios.$get('/chats/' + this.partnerId + '/' + this.bookingId);
       this.partner = data.partner;
       this.chats = data.chats;
       this.contract = data.contract;
@@ -160,7 +161,7 @@ export default {
         const chat = {
           type: 'me', from_user_id: this.$auth.user.id, to_user_id: this.partnerId,
           created_at: new Date(), message: message,
-          contract_id: this.contractId
+          booking_id: this.bookingId
         };
         this.chats.push(chat);
         this.message = '';

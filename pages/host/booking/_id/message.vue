@@ -16,12 +16,15 @@
       <div class="pa-5">
         <h3>진행중인 메세지만 표시됩니다.</h3>
         <v-btn text color="blue" class="pa-0">메세지창 편집</v-btn>
+        <chat-dialog ref="chatDialog" :partner-id="4" :booking-id="41" :is-button="true"/>
       </div>
     </div>
   </div>
 </template>
 <script>
+import ChatDialog from "../../../../components/chat/ChatDialog";
 export default {
+  components: {ChatDialog},
   layout: 'host',
   data: () => ({
     selectedItem: '125',
