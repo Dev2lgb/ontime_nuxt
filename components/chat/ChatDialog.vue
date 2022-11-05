@@ -15,9 +15,11 @@
 
       <div class="chat-title-info">
         <v-avatar class="profile" color="grey">
-          <v-img :alt="`${partner.company_name} avatar`" :src="partner.logo_url"/>
+          <v-img :src="(booking.title_images) ? booking.title_images[0].url: null"/>
         </v-avatar>
-        <h3>{{ partner.company_name }}</h3>
+        <h3>[{{ booking.category_text }}]{{ booking.title }}</h3>
+        <br/>
+        <v-card-subtitle> {{booking.content}} </v-card-subtitle>
       </div>
 
       <v-card-text ref="container" style="height: 500px;">
@@ -116,7 +118,7 @@ export default {
       dialog: false, counter: 1000,
       rules: {length: len => v => (v || '').length <= len || `메시지는 ${len}자 이하로 입력하여 주십시오.`},
       partner: {}, message: '', chats: [],
-      contract: {}
+      booking: {}
     }
   },
   methods: {
@@ -143,7 +145,7 @@ export default {
       const data = await this.$axios.$get('/chats/' + this.partnerId + '/' + this.bookingId);
       this.partner = data.partner;
       this.chats = data.chats;
-      this.contract = data.contract;
+      this.booking = data.booking;
 
       //this.$nextTick(() => this.scrollToEnd());
       setTimeout(() => {
