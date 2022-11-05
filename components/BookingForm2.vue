@@ -145,7 +145,11 @@ export default {
     }
   },
   data: () => ({
-    form: {},
+    form: {
+      instagram_url : 'https://www.instagram.com/',
+      facebook_url : 'https://facebook.com/',
+      youtube_url : 'https://www.youtube.com/',
+    },
     errors: [],
     timezoneItems: [],
     categoryItems: [],

@@ -183,8 +183,6 @@ export default {
         })
 
         if (response.data.result) {
-
-
           this.clearUserBookingOptionForm();
           this.$router.push('/bookings/' + this.$route.params.id + '/options/fin?id=' + response.data.data.id);
         } else {
