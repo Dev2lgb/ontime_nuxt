@@ -36,23 +36,18 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let bookedId = '';
-      console.log(this.$route.query.id);
-      if (this.$route.query.id) {
-        bookedId = this.$route.query.id;
-      }
+      let bookedId = this.$route.params.id;
 
       let url = '/my/bookings/' + bookedId;
       const response = await this.$axios.get(url);
       this.booking = response.data.data.booking;
 
-
       this.loading = false;
     } catch (e) {
-      // if (e.response.status == '401') {
-      //   console.log(e);
-      //   //this.$toast.error(e.response.data.message);
-      // }
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
     }
   },
   data: () => ({

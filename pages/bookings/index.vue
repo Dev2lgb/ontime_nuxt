@@ -85,7 +85,7 @@ export default {
       let url = '/bookings';
       url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
 
-      if (this.$route.query) {
+      if (this.$route.query.keyword) {
         this.search.keyword = this.$route.query.keyword;
       }
 

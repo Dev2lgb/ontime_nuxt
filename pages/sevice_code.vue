@@ -11,7 +11,7 @@
           <v-text-field outlined class="inpBottom vinpuT" v-model="form.code" placeholder="예약코드를 입력해주세요." hide-details="auto"/>
           <div class="sized_box_h"></div>
           <v-btn x-large width="100%" height="60" elevation="0" @click="submit" color="#28b487" dark class="clear_btn">입장하기</v-btn>
-          <NuxtLink to="/">전체예약 확인하기</NuxtLink>
+          <NuxtLink to="/bookings">전체예약 확인하기</NuxtLink>
         </div>
       </div>
     </div>

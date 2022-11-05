@@ -181,10 +181,12 @@ export default {
         const response = await this.$axios({
           url: url, method: method, data:this.form
         })
+
         if (response.data.result) {
+
+
           this.clearUserBookingOptionForm();
-          // this.setUserBookingOptionFinData(JSON.stringify(response.data.data.booking));
-          this.$router.push('/bookings/' + this.$route.params.id + '/options/fin?id=' + response.data.items.id);
+          this.$router.push('/bookings/' + this.$route.params.id + '/options/fin?id=' + response.data.data.id);
         } else {
           this.clearUserBookingOptionForm();
           this.$toast.error(response.data.message);
@@ -193,14 +195,14 @@ export default {
         this.loading = false;
       } catch (e) {
         // console.log(e);
-        if (e.response.status == '422') {
-          this.errors = e.response.data.errors;
-          this.$toast.error(e.response.data.message);
-        }
-        if (e.response.status == '401') {
-          // console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
+        // if (e.response.status == '422') {
+        //   this.errors = e.response.data.errors;
+        //   this.$toast.error(e.response.data.message);
+        // }
+        // if (e.response.status == '401') {
+        //   // console.log(e);
+        //   this.$toast.error(e.response.data.message);
+        // }
       }
     },
     getCategoryName(item) {
