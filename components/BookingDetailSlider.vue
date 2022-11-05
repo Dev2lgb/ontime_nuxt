@@ -1,15 +1,19 @@
 <template>
-  <swiper class="swiper pb-10" :options="swiperOption">
-    <swiper-slide class="slider_item" v-for="(item, i) in items" :key="i">
-      <div>
-        <v-img
-          aspect-ratio="1.4"
-          :src="item.url"
-          :lazy-src="`https://picsum.photos/10/6?image=10`"
-        ></v-img>
-      </div>
-    </swiper-slide>
-  </swiper>
+  <div style="position:relative;">
+    <swiper class="swiper pb-10" :options="swiperOption">
+      <swiper-slide class="slider_item" v-for="(item, i) in items" :key="i">
+        <div>
+          <v-img
+            aspect-ratio="1.4"
+            :src="item.url"
+            :lazy-src="`https://picsum.photos/10/6?image=10`"
+          ></v-img>
+        </div>
+      </swiper-slide>
+    </swiper>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
 </template>
 
 <script>
@@ -30,10 +34,10 @@ export default {
         //   el: '.swiper-pagination',
         //   clickable: true
         // },
-        // navigation: {
-        //   nextEl: '.swiper-button-next',
-        //   prevEl: '.swiper-button-prev'
-        // }
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
       }
     }
   },

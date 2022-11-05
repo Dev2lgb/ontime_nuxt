@@ -94,31 +94,7 @@ export default {
     pagination: { handler() { this.$fetch(); }, deep: true },
   },
   methods: {
-    async cancelBooked(booking_id,id) {
-      this.loading = true;
-      try {
-        let url = '/my/bookings/' + booking_id + '/booked/' + id + '/revoke';
-        let method = 'put';
 
-        const response = await this.$axios({
-          url: url, method: method, data:''
-        })
-        if (response.data.result) {
-          this.$toast.success('예약이 취소되었습니다.');
-          this.$fetch();
-        }
-        this.loading = false;
-      } catch (e) {
-        if (e.response.status == '422') {
-          this.errors = e.response.data.errors;
-          this.$toast.error(e.response.data.message);
-        }
-        if (e.response.status == '401') {
-          // console.log(e);
-          this.$toast.error(e.response.data.message);
-        }
-      }
-    },
     getCategoryName(item) {
       if (item.category_text) {
         return item.category_text;

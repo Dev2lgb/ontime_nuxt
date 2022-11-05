@@ -1,7 +1,7 @@
 <template>
   <swiper class="swiper pb-10" :options="swiperOption">
     <swiper-slide class="slider_item" v-for="(item, i) in items" :key="i">
-      <div >
+      <router-link class="non-deco" :to="'/my-bookings/' + item.booking_id" >
         <v-img
           aspect-ratio="1.4"
           :src="getThumbnail(item.booking.title_images)"
@@ -12,7 +12,7 @@
           <p class="ma-0 font_small_text">템플 스테이 예절 교육 집중</p>
           <p class="ma-0 font_small_text">{{ item.booking_date }} <span v-show="item.booking_time">{{ item.booking_time }}</span></p>
         </div>
-      </div>
+      </router-link>
     </swiper-slide>
   </swiper>
 </template>
