@@ -54,11 +54,11 @@
           </div>
           <div class="flex j_start a_center h_width pa-2">
             <img src="~/assets/images/p_icon03.png" height="30">&emsp;
-            <p class="ma-0 ml-1">{{ booking.ccc_telephone }}</p>
+            <a :href="'tel:' + booking.ccc_telephone" class="non-deco ma-0 ml-1">{{ booking.ccc_telephone }}</a>
           </div>
           <div class="flex j_start a_center h_width pa-2">
             <img src="~/assets/images/p_icon04.png" height="30">&emsp;
-            <p class="ma-0 ml-1">{{ booking.homepage_url }}</p>
+            <a :href="booking.homepage_url" target="_blank" class="non-deco ma-0 ml-1">{{ booking.homepage_url }}</a>
           </div>
         </div>
         <div class="area_line"></div>
@@ -82,10 +82,10 @@
               <p class="mt-3">{{ booking.address }}</p>
             </template>
           </div>
-          <div class="area_line"></div>
+          <div class="area_line" v-show="isShow(booking.info_files)"></div>
         </div>
-        <h3 class="font_sub_title my-6" v-show="booking.info_files"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
-        <div class="border_a pa-3 mb-5" v-show="booking.info_files">
+        <h3 class="font_sub_title my-6" v-show="isShow(booking.info_files)"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
+        <div class="border_a pa-3 mb-5" v-show="isShow(booking.info_files)">
           <div v-for="(file, f) in booking.info_files">
             <v-btn text :href="file.url" target="_blank" color="#0000ff">{{ file.name }}</v-btn>
           </div>
@@ -96,7 +96,11 @@
           <div class="flex j_start a_center">
             <v-btn depressed outlined large>문의하기</v-btn>
             <v-btn depressed dark class="ml-3" color="#28b487" :to="'/bookings/' + this.$route.params.id + '/options'" large>예약하기</v-btn>
-        </div>
+          </div>
+          <div class="flex j_end a_center">
+            <v-btn fab small depressed dark color="#ddd" @click="share()"><v-icon>mdi-share-variant</v-icon></v-btn>
+            <v-btn fab small depressed dark color="#ddd" class="ml-3" @click="AddBookmarks"><v-icon>mdi-bookmark-outline</v-icon></v-btn>
+          </div>
       </div>
     </div>
     </div>
@@ -122,7 +126,13 @@ export default {
       }
     }
   },
+  computed: {
+    webShareApiSupported() {
+      return navigator.share
+    }
+  },
   data: () => ({
+    url: '',
     searchCategory: '',
     booking: {},
     searchCategoryItems: [
@@ -147,7 +157,70 @@ export default {
       if (Array.isArray(files)) {
         return files[0].url
       }
-    }
+    },
+    isShow(items) {
+      if (Array.isArray(items) && items.length === 0 ) {
+        return false;
+      }
+      return true;
+    },
+    isMobile() {
+      var user = navigator.userAgent;
+      var is_mobile = false;
+      if( user.indexOf("iPhone") > -1
+        || user.indexOf("Android") > -1
+        || user.indexOf("iPad") > -1
+        || user.indexOf("iPod") > -1
+      ) {
+        is_mobile = true;
+      }
+      return is_mobile;
+    },
+    share(){
+      if (this.isMobile()) {
+        this.shareViaWebShare();
+      } else {
+        this.url = location.href;
+        this.$copyText(this.url);
+        this.$toast.success("복사되었습니다.");
+      }
+    },
+    shareViaWebShare() {
+      navigator.share({
+        title: this.booking.title,
+        text: this.booking.desc,
+        url: location.href,
+      })
+    },
+    async AddBookmarks() {
+      this.loading = true;
+      try {
+        let url = '/my/bookings/bookmarks';
+        let data = {
+          booking_id : this.$route.params.id
+        };
+        let method = 'post';
+
+        const response = await this.$axios({
+          url: url, method: method, data: data
+        })
+        if (response.data.result) {
+          this.$toast.success('위시리스트에 추가됐습니다.');
+        } else {
+          this.$toast.error(response.data.message);
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
   },
 }
 </script>

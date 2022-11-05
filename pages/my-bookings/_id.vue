@@ -1,6 +1,6 @@
 <template>
   <div class="sizedbox layout_format">
-    <SubHeader :link="'/home'" :title="'예약완료'"/>
+    <SubHeader :link="'/my-bookings'" :title="'나의 부킹내역'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
         <v-chip dark color="#03a9f4" label small>{{ booking.on_off_line }}</v-chip>
@@ -65,7 +65,7 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let bookedId = this.$route.query.id;
+      let bookedId = this.$route.params.id;
 
       let url = '/my/bookings/' + bookedId;
       const response = await this.$axios.get(url);

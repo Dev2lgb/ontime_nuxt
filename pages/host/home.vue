@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'host',
   async fetch() {
@@ -88,7 +90,8 @@ export default {
     try {
       let url = '/host/bookings';
       const response = await this.$axios.get(url);
-      console.log(response);
+
+      this.clearBookingForm();
       this.items = response.data.data;
       this.loading = false;
     } catch (e) {
@@ -102,6 +105,9 @@ export default {
     items: [],
 
   }),
+  methods: {
+    ...mapMutations("common",['clearBookingForm']),
+  },
 }
 </script>
 

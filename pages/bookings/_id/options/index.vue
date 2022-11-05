@@ -237,7 +237,7 @@
           </div>
         </div>
         <div class="flex j_space a_center mt-10">
-          <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="nextForm">다음단계</v-btn>
+          <v-btn class="next_btn" :disabled="form.date_times.length == 0" x-large depressed block color="#28b487" @click="nextForm">다음단계</v-btn>
         </div>
       </div>
     </div>
@@ -251,7 +251,6 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      localStorage.removeItem('userBookingOptionForm');
       let urlBooking = '/bookings/' + this.$route.params.id;
       const responseBooking = await this.$axios.get(urlBooking);
       this.booking = responseBooking.data.data.booking;
@@ -513,6 +512,6 @@ export default {
 .user_num {margin-bottom: 14px;}
 .user_num p {font-size: 14px; color: #ff5722;}
 
-.next_btn {font-size: 15px;}
+.next_btn {font-size: 15px; color:#fff; }
 ::v-deep .v-event > div { color:#333 !important; text-align:center; }
 </style>
