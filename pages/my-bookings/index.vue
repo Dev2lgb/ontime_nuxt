@@ -33,7 +33,8 @@
             </div>
             <div class="flex d_col j_center a_center">
               <v-btn small depressed @click="cancelBooked(item.booking_id, item.id)">예약취소</v-btn>
-              <v-btn small depressed class="mt-3">문의하기</v-btn>
+              <!--v-btn small depressed class="mt-3">문의하기</v-btn-->
+              <chat-dialog :partner-id="item.host_id" :booking-id="item.booking.id" :is-button="true"/>
             </div>
           </div>
         </div>
@@ -53,7 +54,9 @@
   </div>
 </template>
 <script>
+import ChatDialog from "../../components/chat/ChatDialog";
 export default {
+  components: {ChatDialog},
   layout: 'user',
   async fetch() {
     this.loading = true;
