@@ -21,7 +21,7 @@
       <h3>[{{ getCategoryName(booking) }}] {{ booking.title }}</h3>
       <v-btn text small class="pa-0 mt-1" @click="copySomething(booking.url)"> {{ booking.url }} <v-icon small class="ml-1">mdi-content-copy</v-icon></v-btn>
       <div class="flex j_start a_center wrap my-3">
-        <v-btn dark color="#4487fa" height="40" label small class="ma-1" elevation="0" :to="'/host/booking/' + this.$route.params.id + '/members'">예약 보기</v-btn>
+        <v-btn dark color="#4487fa" height="40" label small class="ma-1" elevation="0" :to="'/bookings/' + this.$route.params.id">예약 보기</v-btn>
         <v-btn dark color="#44acfa" height="40" label small class="ma-1" elevation="0" @click="copySomething(booking.id_code)">{{ booking.code_id }}예약코드 복사</v-btn>
         <v-btn dark color="#fb8c00" height="40" label small class="ma-1" elevation="0" :to="'/host/booking/' + this.$route.params.id + '/edit'">예약 수정</v-btn>
         <v-spacer></v-spacer>

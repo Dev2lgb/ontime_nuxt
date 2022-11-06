@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;">
-    <swiper class="swiper pb-10" :options="swiperOption">
+    <swiper class="swiper" :options="swiperOption">
       <swiper-slide class="slider_item" v-for="(item, i) in items" :key="i">
         <div>
           <v-img

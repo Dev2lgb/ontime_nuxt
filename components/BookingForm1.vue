@@ -89,7 +89,7 @@
           class="d-flex flex-wrap justify-start align-center"
         >
           <v-item
-            v-slot="{ active, toggle, index }"
+            v-slot="{ active, index }"
             v-for="(f, i) in urls" :key="i"
             width="70px"
             height="70px"
@@ -102,8 +102,6 @@
                 <v-icon>mdi-close-circle</v-icon>
               </v-btn>
               <v-img
-                @click="toggle"
-                lazy-src="https://picsum.photos/id/11/10/6"
                 height="70"
                 width="70"
                 :src="f.src"
@@ -130,13 +128,12 @@
             class="ma-1"
             :value="item.value"
           >
-
-                  <span v-if="$i18n.locale === 'ko' || !$i18n.locale">
-                    {{ item.text_ko }}
-                  </span>
+            <span v-if="$i18n.locale === 'ko' || !$i18n.locale">
+              {{ item.text_ko }}
+            </span>
             <span v-else>
-                    {{ item.text_en }}
-                  </span>
+              {{ item.text_en }}
+            </span>
           </v-btn>
         </v-btn-toggle>
       </div>
@@ -239,6 +236,7 @@
         ></v-text-field>
       </div>
     </div>
+    {{ form }}
   </div>
 </template>
 
@@ -286,6 +284,9 @@ export default {
   watch: {
     data(val) {
       this.form = val;
+      for (let i=0; i < val.title_images.length; i++) {
+        this.urls.push({src: val.title_images[i].url});
+      }
     },
     form(val){
       this.$emit('form-data', val);
@@ -370,3 +371,10 @@ export default {
   },
 }
 </script>
+
+
+<style scoped>
+.active_border { border:4px solid #ff0000; position:absolute; left:0; top:0; right:0; bottom:0; }
+.deleteImageBtn { position:absolute; right:0px; top:0px; z-index: 9; }
+.absolute_bottom { position:absolute; bottom:0; left:0; right:0; }
+</style>

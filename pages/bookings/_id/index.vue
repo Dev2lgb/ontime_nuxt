@@ -107,6 +107,8 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'user',
   async fetch() {
@@ -117,7 +119,7 @@ export default {
 
       this.booking = response.data.data.booking;
 
-      // this.setBeforeData();
+      this.clearUserBookingOptionForm();
       this.loading = false;
     } catch (e) {
       if (e.response.status === '401') {
@@ -221,6 +223,7 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['clearUserBookingOptionForm']),
   },
 }
 </script>

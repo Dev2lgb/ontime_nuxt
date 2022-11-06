@@ -89,6 +89,7 @@
                 :events="events"
                 :type="type"
                 :event-more="false"
+                disabled
                 @click:event="showBookingTime"
                 locale="ko"
                 @change="updateRange"
@@ -423,6 +424,7 @@ export default {
       }
     },
     showBookingTime(event) {
+      console.log(event);
       this.timeTypesItem = [];
       this.form.date_times = [];
       for(let i = 0; i < event.eventParsed.input.times.length; i++) {

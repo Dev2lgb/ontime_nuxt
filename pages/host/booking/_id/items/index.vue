@@ -41,6 +41,7 @@
 </template>
 <script>
 import HostTabMenu from "../../../../../components/HostTabMenu";
+import {mapMutations} from "vuex";
 export default {
   components: {HostTabMenu},
   layout: 'host',
@@ -55,6 +56,7 @@ export default {
       const responseOptions = await this.$axios.get(urlOptions);
       this.bookingOptionItems = responseOptions.data;
       this.bookingOptionCount = responseOptions.data.length;
+      this.clearBookingOptionForm();
 
       console.log(response);
       this.loading = false;
@@ -126,6 +128,7 @@ export default {
         }
       }
     },
+    ...mapMutations("common",['clearBookingOptionForm']),
   },
 }
 </script>

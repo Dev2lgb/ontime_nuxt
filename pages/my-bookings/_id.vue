@@ -18,7 +18,7 @@
           <p class="font_small_text ma-0 mb-1">{{ item.option.desc }}</p>
           <p class="color_main ma-0">
             {{ item.booking_date }}
-            <span v-show="item.booking_time" class="ml-3">{{ item.booking_date }}</span>
+            <span v-show="item.booking_time" class="ml-3">{{ item.booking_time }}</span>
           </p>
           <p class="ma-0 font_small_text mt-1">({{ item.option.timezone }})</p>
         </div>
@@ -29,7 +29,7 @@
           <div>
             {{ booking.online_id }}
           </div>
-          <v-btn :href="booking.online_link">회의참여</v-btn>
+          <v-btn :href="booking.online_link" target="_blank">회의참여</v-btn>
         </div>
       </div>
 

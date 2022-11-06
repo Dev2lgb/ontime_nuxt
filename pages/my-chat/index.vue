@@ -10,11 +10,41 @@
 
       <div v-if="items.length > 0">
         <div class="pa-3 border_b card_action" v-for="(item, index) in items" :key="index" >
+          <div class="flex j_start a_center">
+            <div v-show="edit">
+              <v-checkbox multiple v-model="selectedIds" :value="item.id"></v-checkbox>
+            </div>
+            <div class="thumbnail_width">
+              <v-img
+                :src="getThumbnail(item.booking.title_images)"
+                :lazy-src="`https://picsum.photos/10/6?image=10`"
+                aspect-ratio="1"
+                width="80"
+                class="img_radius"
+              ></v-img>
+            </div>
+            <div class="ml-3 f_width">
+              <a class="non-deco pa-0 flex j_space a_center f_width">
+                <span class="font-weight-bold">{{ item.booking.title }}</span>
+                <span>
+                  {{ item.created_at.substr(0, 10) }}
+                </span>
+              </a>
+              <div class="flex j_space a_center">
+                <p class="ma-0 mt-1">{{ item.message }}</p>
+                <v-chip color="blue" dark v-show="item.unread_count > 0" small>{{ item.unread_count }}</v-chip>
+              </div>
+            </div>
+            <chat-dialog :partner-id="item.host_id" :booking-id="item.booking.id" :is-button="false"/>
+          </div>
         </div>
       </div>
       <div class="text-center pt-10 color_gray" v-else>
         진행중인 메세지가 없습니다.
       </div>
+    </div>
+    <div class="border_t pa-5">
+      <v-btn @click="deleteMessage">메세지 삭제</v-btn>
     </div>
   </div>
 </template>
@@ -25,15 +55,15 @@ export default {
     this.loading = true;
     try {
       // alert('test');
-      let url = '/my/bookings/bookmarks';
+      let url = '/chats';
       // url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
       const response = await this.$axios.get(url);
 
-      console.log(response);
+      this.items = response.data.chats;
       // this.pagination.page = response.data.meta.current_page;
       // this.pagination.last_page = response.data.meta.last_page;
       // this.pagination.total = response.data.meta.total;
-      this.items = response.data.bookingBookmarks;
+      // this.items = response.data.bookingBookmarks;
 
       this.loading = false;
     } catch (e) {
@@ -44,11 +74,43 @@ export default {
     }
   },
   data: () => ({
+    selectedIds: [],
+    dialog: false,
     edit: false,
     items: [],
     messageBtnText: '메세지창 편집',
   }),
   methods: {
+    async deleteMessage() {
+      this.loading = true;
+      try {
+        let url = '/chats/' + this.selectedIds.join();
+        let method = 'delete';
+
+        const response = await this.$axios({
+          url: url, method: method, data:''
+        })
+        if (response.data.result) {
+          this.$toast.success('메세지가 삭제되었습니다.');
+          this.$fetch();
+        }
+        this.loading = false;
+      } catch (e) {
+        if (e.response.status == '422') {
+          this.errors = e.response.data.errors;
+          this.$toast.error(e.response.data.message);
+        }
+        if (e.response.status == '401') {
+          // console.log(e);
+          this.$toast.error(e.response.data.message);
+        }
+      }
+    },
+    getThumbnail(files) {
+      if (files.length > 0) {
+        return files[0].url
+      }
+    },
     editMessage() {
       this.edit = !this.edit;
       if (this.edit) {

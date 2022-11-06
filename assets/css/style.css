@@ -207,7 +207,7 @@ a { text-decoration: none; color:#222; }
 .mv_left { margin-bottom:50px; }
 .mv_left h3 { font-size:40px; }
 .mv_left p { font-size:20px; margin:30px 0; color:#483dff; font-weight:bold; }
-.slider_item { background-color:#ddfdff; padding:80px 0 0; }
+.mv .slider_item { background-color:#ddfdff; padding:80px 0 0; }
 .mv_right img { width:100%; }
 
 .btn_spac span{letter-spacing: 0; font-size: 13px;}
