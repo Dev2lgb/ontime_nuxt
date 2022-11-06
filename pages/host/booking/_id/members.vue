@@ -304,6 +304,11 @@ export default {
       this.pagination.page = data;
     },
     async excelDownLoad() {
+      // /api/host/bookings/35/booked/excel/24,25
+      if (this.selectedIds.length == 0) {
+        this.$toast.success('예약건을 선택해주세요.');
+        return false;
+      }
       let url = process.env.BASEURL + '/api/host/bookings/' + this.$route.params.id + '/booked/excel/';
       const ids = this.selectedIds.join();
       if (ids) {
@@ -368,6 +373,7 @@ export default {
     async confirmBooked(id) {
       this.loading = true;
       try {
+
         let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/complete';
         let method = 'put';
 
@@ -391,8 +397,13 @@ export default {
       }
     },
     async checkedApprove() {
+      if (this.selectedIds.length == 0) {
+        this.$toast.success('예약건을 선택해주세요.');
+        return false;
+      }
       this.loading = true;
       try {
+
         let url = '/host/bookings/' + this.$route.params.id + '/booked/confirm/';
         const ids = this.selectedIds.join();
         if (ids) {
@@ -421,6 +432,11 @@ export default {
       }
     },
     sendNoticePop() {
+      if (this.selectedIds.length == 0) {
+        this.$toast.success('예약건을 선택해주세요.');
+        return false;
+      }
+
       this.isSendNoticePop = true;
     },
     dateTerm(searches) {

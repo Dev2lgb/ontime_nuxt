@@ -27,9 +27,9 @@
       <div v-show="booking.on_off_line == 'ONLINE'">
         <div class="flex j_space a_center">
           <div>
-            {{ booking.online_id }}
+            {{ getOnlineName(booking) }}
           </div>
-          <v-btn :href="booking.online_link">회의참여</v-btn>
+          <v-btn :href="booking.online_link" target="_blank">회의참여</v-btn>
         </div>
       </div>
 
@@ -50,8 +50,9 @@
 
       <div class="">
         <div class="mt-10">
-          <v-btn class="next_btn" x-large depressed dark block color="#28b487" outlined @click="">문의하기</v-btn>
-          <v-btn class="next_btn mt-3" x-large depressed dark block color="#28b487" @click="cancelBooked">예약취소</v-btn>
+          <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="openChatDialog(booking.id, booking.member_id)" outlined>문의하기</v-btn>
+          <v-btn class="next_btn mt-3" x-large depressed dark block color="#28b487" @click="cancelConfirm">예약취소</v-btn>
+          <chat-dialog ref="chatDialog" :is-button="false"/>
         </div>
       </div>
     </div>
@@ -68,12 +69,11 @@ export default {
       let bookedId = this.$route.query.id;
 
       let url = '/my/bookings/' + bookedId;
-      const response = await this.$axios.get(url);
-      console.log(response.data);
-      this.bookedBooking = response.data.data.bookedBooking;
-      this.booking = response.data.data.bookedBooking.booking;
-      this.items = response.data.data.bookedBooking.items;
+      const response = await this.$axios.$get(url);
 
+      this.bookedBooking = response.data.booked_booking;
+      this.booking = response.data.booked_booking.booking;
+      this.items = response.data.booked_booking.items;
       this.loading = false;
     } catch (e) {
       if (e.response.status == '401') {
@@ -98,13 +98,52 @@ export default {
         return '#222';
       }
     },
+    getOnlineName(item) {
+      if (item.on_off_line == 'ONLINE') {
+        if (item.online_text) {
+          return item.online_text;
+        }
+        if (item.hasOwnProperty('online_name')){
+          return item.online_name.name_ko;
+        }
+      }
+    },
+    openChatDialog(booking_id, host_id) {
+      this.$refs.chatDialog.openDialog(booking_id, host_id);
+    },
     getCategoryName(item) {
-      if (item.category_text) {
-        return item.category_text;
+      // return item;
+      if (item.category_id) {
+        if (item.hasOwnProperty('category_name')) {
+          if (item.category_name){
+            return item.category_name.name_ko;
+          }
+        }
+      } else {
+        if (item.category_text) {
+          return item.category_text;
+        }
       }
-      if (item.hasOwnProperty('category_name')){
-        return item.category_name.name_ko;
-      }
+    },
+    cancelConfirm() {
+      this.$confirm(
+        {
+          message: '예약을 취소시겠습니까? 예약취소후 복구는 불가능합니다.',
+          button: {
+            no: '닫기',
+            yes: '예약취소'
+          },
+          /**
+           * Callback Function
+           * @param {Boolean} confirm
+           */
+          callback: confirm => {
+            if (confirm) {
+              this.cancelBooked();
+            }
+          }
+        }
+      )
     },
     async cancelBooked() {
       this.loading = true;

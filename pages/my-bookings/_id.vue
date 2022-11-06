@@ -68,11 +68,11 @@ export default {
       let bookedId = this.$route.params.id;
 
       let url = '/my/bookings/' + bookedId;
-      const response = await this.$axios.get(url);
-      console.log(response.data);
-      this.bookedBooking = response.data.data.bookedBooking;
-      this.booking = response.data.data.bookedBooking.booking;
-      this.items = response.data.data.bookedBooking.items;
+      const response = await this.$axios.$get(url);
+
+      this.bookedBooking = response.data.booked_booking;
+      this.booking = response.data.booked_booking.booking;
+      this.items = response.data.booked_booking.items;
 
       this.loading = false;
     } catch (e) {
@@ -88,11 +88,13 @@ export default {
   }),
   methods: {
     getOnlineName(item) {
-      if (item.online_text) {
-        return item.online_text;
-      }
-      if (item.hasOwnProperty('online_name')){
-        return item.online_name.name_ko;
+      if (item.on_off_line == 'ONLINE') {
+        if (item.online_text) {
+          return item.online_text;
+        }
+        if (item.hasOwnProperty('online_name')){
+          return item.online_name.name_ko;
+        }
       }
     },
     openChatDialog(booking_id, host_id) {
@@ -110,11 +112,17 @@ export default {
       }
     },
     getCategoryName(item) {
-      if (item.category_text) {
-        return item.category_text;
-      }
-      if (item.hasOwnProperty('category_name')){
-        return item.category_name.name_ko;
+      // return item;
+      if (item.category_id) {
+        if (item.hasOwnProperty('category_name')) {
+          if (item.category_name){
+              return item.category_name.name_ko;
+          }
+        }
+      } else {
+        if (item.category_text) {
+          return item.category_text;
+        }
       }
     },
     cancelConfirm() {

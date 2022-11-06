@@ -224,7 +224,7 @@ export default {
     form: {
       deep: true,
       handler(val) {
-        this.$emit('form-data', val);
+        this.$emit('formData', val);
       }
     },
     date_personnel(val) {

@@ -84,6 +84,17 @@
           </div>
           <div class="area_line" v-show="isShow(booking.info_files)"></div>
         </div>
+        <div v-show="booking.on_off_line == 'ONLINE'">
+          <h3 class="font_sub_title my-6"><v-icon>mdi-map-marker-circle</v-icon> 예약 프로그램이 진행되는 장소를 안내드려요</h3>
+          <div class="border_a pa-3 mb-5 ">
+            <div class="flex j_space a_center">
+              <div>
+              {{ getOnlineName(booking) }}
+              </div>
+            </div>
+          </div>
+          <div class="area_line" v-show="isShow(booking.info_files)"></div>
+        </div>
         <h3 class="font_sub_title my-6" v-show="isShow(booking.info_files)"><v-icon>mdi-file-plus</v-icon> 첨부파일</h3>
         <div class="border_a pa-3 mb-5" v-show="isShow(booking.info_files)">
           <div v-for="(file, f) in booking.info_files">
@@ -148,6 +159,14 @@ export default {
     ],
   }),
   methods: {
+    getOnlineName(item) {
+      if (item.online_text) {
+        return item.online_text;
+      }
+      if (item.hasOwnProperty('online_name')){
+        return item.online_name.name_ko;
+      }
+    },
     openChatDialog(booking_id, host_id) {
       this.$refs.chatDialog.openDialog(booking_id, host_id);
     },

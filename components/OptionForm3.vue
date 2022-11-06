@@ -149,6 +149,7 @@
             </v-date-picker>
           </v-menu>
         </div>
+        {{ form }}
       </div>
     </div>
   </div>

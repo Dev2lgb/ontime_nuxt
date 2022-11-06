@@ -57,6 +57,7 @@ export default {
       this.bookingOptionItems = responseOptions.data;
       this.bookingOptionCount = responseOptions.data.length;
       this.clearBookingOptionForm();
+      this.clearBookingOptionEditForm();
 
       console.log(response);
       this.loading = false;
@@ -128,7 +129,7 @@ export default {
         }
       }
     },
-    ...mapMutations("common",['clearBookingOptionForm']),
+    ...mapMutations("common",['clearBookingOptionForm','clearBookingOptionEditForm']),
   },
 }
 </script>

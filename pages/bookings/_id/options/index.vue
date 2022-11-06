@@ -3,12 +3,12 @@
     <SubHeader :link="'/bookings'" :title="'예약하기'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
-        <p>예약옵션을 선택해주세요.</p>
-        <p v-show="booking.is_multiple_option == 'N' || booking.multiple_option_count == 1">해당 예약은 <span>1개의 옵션</span>만 선택 가능.</p>
-        <p v-show="booking.is_multiple_option == 'Y' || booking.multiple_option_count > 0">해당 예약은 <span>{{ booking.multiple_option_count }}개의 옵션</span>만 선택 가능.</p>
+        <p>예약상품을 선택해주세요.</p>
+        <p v-show="booking.is_multiple_option == 'N' || booking.multiple_option_count == 1">해당 예약은 <span>1개의 상품</span>만 선택 가능.</p>
+        <p v-show="booking.is_multiple_option == 'Y' || booking.multiple_option_count > 0"><span>{{ booking.multiple_option_count }}개의 예약상품</span>만 선택 가능.</p>
       </div>
       <div class="progrma_area">
-        <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 옵션이 대기중</p>
+        <p><v-icon>mdi-checkbox-marked-circle-outline</v-icon> <span class="font-weight-bold">{{ bookingOptionCount }}개</span>의 예약 상품</p>
         <v-select
           outlined
           v-model="selectedBookingOption"
@@ -16,7 +16,7 @@
           :items="bookingOptionItems"
           :item-text="getItemText"
           :item-value="getItemValue"
-          placeholder="예약 옵션 선택"
+          placeholder="예약 상품 선택"
         ></v-select>
       </div>
       <div class="select_hide_option">
@@ -105,7 +105,7 @@
           <div class="">
             <div>
               <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
-              <p class="mt-2">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
+              <p class="mt-2" v-show="selectedBookingOption.min_booking_number > 0">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
             </div>
             <div>
 <!--              <v-btn-toggle-->
@@ -131,7 +131,7 @@
                 v-model="form.date_times"
                 :error-messages="errors.date_times"
                 column
-                :max="selectedBookingOption.max_booking_number"
+                :max="getMaxNumber(selectedBookingOption.max_booking_number)"
                 multiple
               >
               <v-chip
@@ -326,6 +326,13 @@ export default {
     this.$refs.calendar.checkChange()
   },
   methods: {
+    getMaxNumber(no) {
+      if (no >0) {
+        return no;
+      } else {
+        return 100;
+      }
+    },
     getItemText(item) {
       return `${item.title} - ${item.desc}`;
     },
@@ -432,7 +439,7 @@ export default {
       }
     },
     addBookings(event) {
-      if (this.selectedBookingOption.max_booking_number) {
+      if (this.selectedBookingOption.max_booking_number > 0) {
         if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
           this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
           return false;
@@ -480,7 +487,7 @@ export default {
         }
       }
 
-      //todo : 기존에 등록된 옵션키가있으면 알러트
+      //todo : 기존에 등록된 상품키가있으면 알러트
 
       this.setUserBookingOptionForm(JSON.stringify(this.form));
       this.$router.push('/bookings/' + this.$route.params.id + '/options/second');

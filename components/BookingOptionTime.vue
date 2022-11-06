@@ -34,10 +34,10 @@
           hide-details="auto"
           row
         >
-          <v-radio label="30분" value="30"></v-radio>
-          <v-radio label="60분" value="60"></v-radio>
-          <v-radio label="120분" value="120"></v-radio>
-          <v-radio label="직접입력" value="0"></v-radio>
+          <v-radio label="30분" :value="30"></v-radio>
+          <v-radio label="60분" :value="60"></v-radio>
+          <v-radio label="120분" :value="120"></v-radio>
+          <v-radio label="직접입력" :value="0"></v-radio>
         </v-radio-group>
         <v-text-field v-show="form.interval_minute == '0'" @change="calcTimeTable" v-model="form.interval_minute_direct" type="number" suffix="분" outlined hide-details="auto" dense class="mt-3" height="50"></v-text-field>
       </div>
@@ -185,7 +185,7 @@
 
 <script>
 export default {
-  props: ['errors'],
+  props: ['res_form','errors','mode'],
   data: () => ({
     form: {
       no_limit: 'N',
@@ -198,7 +198,32 @@ export default {
       { text: '4', value: '4' },
       { text: '5', value: '5' },
     ],
-    timeItems: ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'],
+    timeItems: [
+      { text: '00:00', value:'00:00:00'},
+      { text: '01:00', value:'01:00:00'},
+      { text: '02:00', value:'02:00:00'},
+      { text: '03:00', value:'03:00:00'},
+      { text: '04:00', value:'04:00:00'},
+      { text: '05:00', value:'05:00:00'},
+      { text: '06:00', value:'06:00:00'},
+      { text: '07:00', value:'07:00:00'},
+      { text: '08:00', value:'08:00:00'},
+      { text: '09:00', value:'09:00:00'},
+      { text: '10:00', value:'10:00:00'},
+      { text: '11:00', value:'11:00:00'},
+      { text: '12:00', value:'12:00:00'},
+      { text: '13:00', value:'13:00:00'},
+      { text: '14:00', value:'14:00:00'},
+      { text: '15:00', value:'15:00:00'},
+      { text: '16:00', value:'16:00:00'},
+      { text: '17:00', value:'17:00:00'},
+      { text: '18:00', value:'18:00:00'},
+      { text: '19:00', value:'19:00:00'},
+      { text: '20:00', value:'20:00:00'},
+      { text: '21:00', value:'21:00:00'},
+      { text: '22:00', value:'22:00:00'},
+      { text: '23:00', value:'23:00:00'},
+    ],
     selectedMaxMinOption: '',
     MaxMinOptionItems: [
       { text:'제한없음', value:'1' },
@@ -207,20 +232,20 @@ export default {
     countAll: 1,
   }),
   watch: {
+    form: {
+      deep: true,
+      handler(val) {
+        this.$emit('formData', val);
+      }
+    },
     countAll(val) {
       _.forEach(this.form.time_personnels, function(value) {
         value.personnel = val;
       });
     },
-    // form(val) {
-    //   this.$emit('form-data', val);
-    // },
-    form: {
-      deep: true,
-      handler(val) {
-        this.$emit('form-data', val);
-      }
-    }
+  },
+  mounted() {
+    this.setBeforeData();
   },
   methods: {
     calcTimeTable() {
@@ -274,11 +299,17 @@ export default {
       }
       return setHour + ':' + setMin
     },
-  },
-  setBeforeData() {
-    if (localStorage.getItem('bookingOptionForm')) {
-      this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
-    }
+    setBeforeData() {
+      if (this.mode == 'edit') {
+        if (this.$store.state.common.bookingOptionEditForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionEditForm));
+        }
+      } else {
+        if (this.$store.state.common.bookingOptionForm) {
+          this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
+        }
+      }
+    },
   },
 
 }

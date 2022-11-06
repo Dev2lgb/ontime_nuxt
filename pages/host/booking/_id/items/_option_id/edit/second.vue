@@ -20,8 +20,8 @@
           </div>
         </div>
         <div class="">
-          <BookingOptionTime @form-data="getFormData" :errors="errors" :mode="'edit'" v-show="form.type == 'time'" />
-          <BookingOptionDate @form-data="getFormData" :errors="errors" :mode="'edit'" v-show="form.type == 'date'" />
+          <BookingOptionTime @formData="getFormData" :errors="errors" :mode="'edit'" v-show="form.type == 'time'" />
+          <BookingOptionDate @formData="getFormData" :errors="errors" :mode="'edit'" v-show="form.type == 'date'" />
           <div class="pt-10">
             <v-btn
               block
@@ -134,7 +134,7 @@ export default {
       }
     },
     getFormData(formData) {
-      this.form = _.merge({}, this.form, formData)
+      this.form = formData;
     },
 
   },
