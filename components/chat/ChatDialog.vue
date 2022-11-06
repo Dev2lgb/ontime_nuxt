@@ -4,7 +4,8 @@
       <!--v-btn color="primary" dark v-bind="attrs" v-on="on">메시지</v-btn-->
       <v-badge bordered icon="mdi-bell" overlap class="dashBtn" :content="unreadCount" :value="unreadCount > 0">
         <!-- <v-btn v-bind="attrs" v-on="on" small elevation="0" dark color="#d39046" class="snsFont2"><span>메시지</span></v-btn> -->
-        <v-btn v-bind="attrs" v-on="on" small depressed class="mt-3">문의하기</v-btn>
+<!--        <v-btn v-bind="attrs" v-on="on" small depressed class="mt-3">문의하기</v-btn>-->
+        <v-btn class="next_btn f_width" v-bind="attrs" v-on="on" x-large depressed dark block color="#28b487" outlined>문의하기</v-btn>
       </v-badge>
     </template>
 
@@ -17,7 +18,7 @@
         <v-avatar class="profile" color="grey">
           <v-img :src="(booking.title_images) ? booking.title_images[0].url: null"/>
         </v-avatar>
-        <h3>[{{ booking.category_text }}]{{ booking.title }}</h3>
+        <h3><span>[{{ getCategoryName(booking) }}]</span>{{ booking.title }}</h3>
         <br/>
         <v-card-subtitle> {{booking.content}} </v-card-subtitle>
       </div>
@@ -92,12 +93,18 @@ export default {
       return this.message.length > this.counter;
     },
     channelName() {
-      let result = [Number(this.$auth.user.id), Number(this.partnerId)].sort((a, b) => a - b).join('_');
-      result += '_' + this.bookingId;
+      let result = [Number(this.$auth.user.id), Number(this.partner_id)].sort((a, b) => a - b).join('_');
+      result += '_' + this.booking_id;
       return result;
     }
   },
   watch: {
+    // partnerId(val) {
+    //   this.partner_id = val;
+    // },
+    // bookingId(val) {
+    //   this.booking_id = val;
+    // },
     dialog: {
       immediate: false,
       handler(value) {
@@ -118,7 +125,9 @@ export default {
       dialog: false, counter: 1000,
       rules: {length: len => v => (v || '').length <= len || `메시지는 ${len}자 이하로 입력하여 주십시오.`},
       partner: {}, message: '', chats: [],
-      booking: {}
+      booking: {},
+      partner_id: '',
+      booking_id: '',
     }
   },
   methods: {
@@ -128,6 +137,19 @@ export default {
     test() {
       console.log('test');
     }*/
+    getCategoryName(item) {
+      if (item.category_text) {
+        return item.category_text;
+      }
+      if (item.hasOwnProperty('category_name')){
+        return item.category_name.name_ko;
+      }
+    },
+    openDialog(booking_id, host_id) {
+      this.dialog = true;
+      this.booking_id = booking_id;
+      this.partner_id = host_id;
+    },
     async init() {
       this.$echo.private('chat.' + this.channelName).listen('ChatSent', e => {
         //console.log(e.chat, this.$auth.user.id);
@@ -142,7 +164,14 @@ export default {
         }
       });
 
-      const data = await this.$axios.$get('/chats/' + this.partnerId + '/' + this.bookingId);
+      if (this.partnerId) {
+        this.partner_id = this.partnerId;
+      }
+      if (this.bookingId) {
+        this.booking_id = this.bookingId;
+      }
+
+      const data = await this.$axios.$get('/chats/' + this.partner_id + '/' + this.booking_id);
       this.partner = data.partner;
       this.chats = data.chats;
       this.booking = data.booking;
@@ -161,9 +190,9 @@ export default {
       if (!this.disabledSend) {
         const message = this.message.replace(/^\s+|\s+$/g, '');
         const chat = {
-          type: 'me', from_user_id: this.$auth.user.id, to_user_id: this.partnerId,
+          type: 'me', from_user_id: this.$auth.user.id, to_user_id: this.partner_id,
           created_at: new Date(), message: message,
-          booking_id: this.bookingId
+          booking_id: this.booking_id
         };
         this.chats.push(chat);
         this.message = '';

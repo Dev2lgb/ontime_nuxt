@@ -94,7 +94,7 @@
 
         <div class="flex j_space a_center mt-10 ">
           <div class="flex j_start a_center">
-            <v-btn depressed outlined large>문의하기</v-btn>
+            <v-btn depressed outlined large @click="openChatDialog(booking.id, booking.member_id)">문의하기</v-btn>
             <v-btn depressed dark class="ml-3" color="#28b487" :to="'/bookings/' + this.$route.params.id + '/options'" large>예약하기</v-btn>
           </div>
           <div class="flex j_end a_center">
@@ -104,6 +104,7 @@
       </div>
     </div>
     </div>
+    <chat-dialog ref="chatDialog" :is-button="false"/>
   </div>
 </template>
 <script>
@@ -147,6 +148,9 @@ export default {
     ],
   }),
   methods: {
+    openChatDialog(booking_id, host_id) {
+      this.$refs.chatDialog.openDialog(booking_id, host_id);
+    },
     getCategoryName(item) {
       if (item.category_text) {
         return item.category_text;

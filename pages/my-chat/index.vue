@@ -23,7 +23,7 @@
                 class="img_radius"
               ></v-img>
             </div>
-            <div class="ml-3 f_width">
+            <div class="ml-3 f_width" @click="openChatDialog(item.booking.id, item.booking.member_id)">
               <a class="non-deco pa-0 flex j_space a_center f_width">
                 <span class="font-weight-bold">{{ item.booking.title }}</span>
                 <span>
@@ -35,7 +35,6 @@
                 <v-chip color="blue" dark v-show="item.unread_count > 0" small>{{ item.unread_count }}</v-chip>
               </div>
             </div>
-            <chat-dialog :partner-id="item.host_id" :booking-id="item.booking.id" :is-button="false"/>
           </div>
         </div>
       </div>
@@ -43,6 +42,7 @@
         진행중인 메세지가 없습니다.
       </div>
     </div>
+    <chat-dialog ref="chatDialog" :is-button="false"/>
     <div class="border_t pa-5">
       <v-btn @click="deleteMessage">메세지 삭제</v-btn>
     </div>
@@ -81,6 +81,9 @@ export default {
     messageBtnText: '메세지창 편집',
   }),
   methods: {
+    openChatDialog(booking_id, host_id) {
+      this.$refs.chatDialog.openDialog(booking_id, host_id);
+    },
     async deleteMessage() {
       this.loading = true;
       try {

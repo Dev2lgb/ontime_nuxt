@@ -31,11 +31,6 @@
               <p class="ma-0 font_small_text">{{ item.booking.content}}</p>
               <v-chip v-for="option in item.items" small class="mr-1" :key="option.id">{{ option.booking_date }} <span class="ml-1" v-show="option.booking_time">{{ option.booking_time }}</span> ({{ option.personnel }}명)</v-chip>
             </router-link>
-            <div class="flex d_col j_center a_center">
-              <v-btn small depressed @click="cancelBooked(item.booking_id, item.id)">예약취소</v-btn>
-              <!--v-btn small depressed class="mt-3">문의하기</v-btn-->
-              <chat-dialog :partner-id="item.host_id" :booking-id="item.booking.id" :is-button="true"/>
-            </div>
           </div>
         </div>
       </div>

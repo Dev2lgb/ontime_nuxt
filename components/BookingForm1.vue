@@ -34,7 +34,7 @@
     </div>
     <div class="mb-7">
       <div class="font-weight-bold flex j_start a_center">
-        <span>3. 예약 프로그램 해쉬태그를 입력해주세요.</span>
+        <span>3. 예약 프로그램 해시태그를 입력해주세요.</span>
         <v-btn fab text small><v-icon>mdi-information</v-icon></v-btn>
       </div>
       <div>
@@ -42,7 +42,9 @@
           placeholder="태그 입력 구분 최대 3개"
           outlined
           v-model="tagInput"
-          @keydown.enter="updateTags"
+          prefix="#"
+          append-icon="mdi-plus-circle"
+          @click:append="updateTags"
           hide-details="auto"
         ></v-text-field>
         <p class="font_small_text mt-1">등록하시려는 예약 상품을 더욱 돋보이게 할 수 있습니다!</p>
@@ -98,7 +100,7 @@
             :value="i"
           >
             <div style="position:relative">
-              <v-btn icon class="deleteImageBtn" dark @click="deleteFile(i)">
+              <v-btn icon class="deleteImageBtn" dark @click="deleteFile(i, f.id)">
                 <v-icon>mdi-close-circle</v-icon>
               </v-btn>
               <v-img
@@ -236,7 +238,6 @@
         ></v-text-field>
       </div>
     </div>
-    {{ form }}
   </div>
 </template>
 
@@ -279,13 +280,14 @@ export default {
     errors: [],
     images: [],
     urls: [],
+    deleteImageIds: [],
     selectedItem: '',
   }),
   watch: {
     data(val) {
       this.form = val;
       for (let i=0; i < val.title_images.length; i++) {
-        this.urls.push({src: val.title_images[i].url});
+        this.urls.push({src: val.title_images[i].url, id: val.title_images[i].id });
       }
     },
     form(val){
@@ -337,9 +339,28 @@ export default {
         console.log(e);
       }
     },
-    deleteFile(index) {
-      this.urls.splice(index, 1)
-      this.images.splice(index, 1)
+    async deleteFile(index, id) {
+      try{
+        //1: 이미지 2: 안내파일
+      // DELETE http://{{host}}:{{port}}/api/files/1/1,2
+        if (id) {
+          this.deleteImageIds = id;
+          let url = '/files/1/' + this.deleteImageIds;
+          let method = 'delete';
+
+          const response = await this.$axios({
+            url: url, method: method, data:''
+          })
+          console.log(response);
+        }
+
+        this.urls.splice(index, 1)
+        this.images.splice(index, 1)
+
+      } catch(e) {
+        console.log(e);
+      }
+
     },
     classEnField() {
       if(this.form.is_en === 'Y') {
@@ -349,7 +370,7 @@ export default {
       }
     },
     updateTags() {
-      this.form.tags.push(this.tagInput);
+      this.form.tags.push('#' + this.tagInput);
       this.$nextTick(() => {
         this.tagInput = "";
       });

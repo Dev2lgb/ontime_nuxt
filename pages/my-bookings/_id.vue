@@ -6,7 +6,6 @@
         <v-chip dark color="#03a9f4" label small>{{ booking.on_off_line }}</v-chip>
         <v-chip dark :color="getStatusColor(bookedBooking.status_name)" label small>{{ bookedBooking.status_name }}</v-chip>
         <p class="mt-3">[{{ getCategoryName(booking) }}] {{ booking.title }}</p>
-
       </div>
       <p class="ma-0">예약이 완료되었습니다.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
@@ -27,7 +26,7 @@
       <div v-show="booking.on_off_line == 'ONLINE'">
         <div class="flex j_space a_center">
           <div>
-            {{ booking.online_id }}
+            {{ getOnlineName(booking) }}
           </div>
           <v-btn :href="booking.online_link" target="_blank">회의참여</v-btn>
         </div>
@@ -50,8 +49,9 @@
 
       <div class="">
         <div class="mt-10">
-          <v-btn class="next_btn" x-large depressed dark block color="#28b487" outlined @click="">문의하기</v-btn>
-          <v-btn class="next_btn mt-3" x-large depressed dark block color="#28b487" @click="cancelBooked">예약취소</v-btn>
+          <v-btn class="next_btn" x-large depressed dark block color="#28b487" @click="openChatDialog(booking.id, booking.member_id)" outlined>문의하기</v-btn>
+          <v-btn class="next_btn mt-3" x-large depressed dark block color="#28b487" @click="cancelConfirm">예약취소</v-btn>
+          <chat-dialog ref="chatDialog" :is-button="false"/>
         </div>
       </div>
     </div>
@@ -87,6 +87,17 @@ export default {
     bookedBooking: {},
   }),
   methods: {
+    getOnlineName(item) {
+      if (item.online_text) {
+        return item.online_text;
+      }
+      if (item.hasOwnProperty('online_name')){
+        return item.online_name.name_ko;
+      }
+    },
+    openChatDialog(booking_id, host_id) {
+      this.$refs.chatDialog.openDialog(booking_id, host_id);
+    },
     getStatusColor(status) {
       if (status == '취소') {
         return 'red';
@@ -106,6 +117,26 @@ export default {
         return item.category_name.name_ko;
       }
     },
+    cancelConfirm() {
+      this.$confirm(
+        {
+          message: '예약을 취소시겠습니까? 예약취소후 복구는 불가능합니다.',
+          button: {
+            no: '닫기',
+            yes: '예약취소'
+          },
+          /**
+           * Callback Function
+           * @param {Boolean} confirm
+           */
+          callback: confirm => {
+            if (confirm) {
+              this.cancelBooked();
+            }
+          }
+        }
+      )
+    },
     async cancelBooked() {
       this.loading = true;
       try {
@@ -117,7 +148,7 @@ export default {
         })
         if (response.data.result) {
           this.$toast.success('예약이 취소되었습니다.');
-          this.$router.push('/my-bookings');
+          this.$fetch();
         }
         this.loading = false;
       } catch (e) {

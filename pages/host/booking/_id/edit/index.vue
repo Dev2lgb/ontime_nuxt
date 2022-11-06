@@ -44,7 +44,7 @@ export default {
   async fetch() {
     this.loading = true;
     try {
-      let url = '/bookings/' + this.$route.params.id;
+      let url = '/host/bookings/' + this.$route.params.id;
       const response = await this.$axios.get(url);
       this.form = response.data.data.booking;
       this.clearBookingEditForm();
