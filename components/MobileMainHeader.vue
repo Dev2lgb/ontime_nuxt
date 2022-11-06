@@ -34,7 +34,7 @@
             <v-list-item-title>예약하기</v-list-item-title>
           </v-list-item>
           <v-list-item
-            to="/auth/modify"
+            to="/host/home"
           >
             <v-list-item-title>예약만들기</v-list-item-title>
           </v-list-item>

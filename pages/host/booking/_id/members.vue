@@ -106,9 +106,10 @@
               <div :class="'matching_state ' + getStatusColor(booked.status_name)">{{ booked.status_name }}</div>
               <p class="list_title">{{ booked.member.name }} <v-icon>mdi-message-text</v-icon></p>
             </div>
-            <div class="btn_group mt-3">
+            <div class="btn_group mt-3" v-show="booked.status_name != '취소'">
               <v-btn small depressed dark color="#c54a41" @click="cancelBooked(booked.id)" v-show="booked.status_name != '취소'">예약취소</v-btn>&nbsp;
-              <v-btn small depressed dark color="#4caf50" @click="confirmBooked(booked.id)" v-show="booked.status_name != '완료'">이용완료</v-btn>&nbsp;
+              <v-btn small depressed dark color="#4caf50" @click="checkedApprove(booked.id)" v-show="booked.status_name != '확정'">예약승인</v-btn>&nbsp;
+              <v-btn small depressed dark color="#4caf50" @click="confirmBooked(booked.id, booked.status_name)" v-show="booked.status_name != '완료'">이용완료</v-btn>&nbsp;
             </div>
           </div>
           <div class="matching_hidden">
@@ -165,6 +166,7 @@
             <div class="hidden_area">
               <textarea class="hidden_txtarea" readonly>{{ booked.memo }}</textarea>
             </div>
+
 
           </div>
         </div>
@@ -370,10 +372,13 @@ export default {
           }
         }
     },
-    async confirmBooked(id) {
+    async confirmBooked(id, status) {
+      if (status == '취소') {
+        this.$toast.success('이미 취소된 예약입니다.');
+        return false;
+      }
       this.loading = true;
       try {
-
         let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/complete';
         let method = 'put';
 
@@ -396,16 +401,23 @@ export default {
         }
       }
     },
-    async checkedApprove() {
-      if (this.selectedIds.length == 0) {
-        this.$toast.success('예약건을 선택해주세요.');
-        return false;
+    async checkedApprove(id) {
+
+      if (id == '') {
+        if (this.selectedIds.length == 0) {
+          this.$toast.success('예약건을 선택해주세요.');
+          return false;
+        }
       }
       this.loading = true;
       try {
-
+        let ids = '';
         let url = '/host/bookings/' + this.$route.params.id + '/booked/confirm/';
-        const ids = this.selectedIds.join();
+        if (id) {
+          ids = id;
+        } else {
+          ids = this.selectedIds.join();
+        }
         if (ids) {
           url += ids
         }
