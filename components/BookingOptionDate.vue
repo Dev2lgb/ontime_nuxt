@@ -13,6 +13,7 @@
     </div>
 
     <div class="mb-7">
+
       <p class="font-weight-bold ma-0 mb-3">1. 예약이 가능한 기간이 있나요?</p>
       <v-btn-toggle
         color="primary"
@@ -213,6 +214,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
