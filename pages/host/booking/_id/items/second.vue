@@ -54,7 +54,7 @@ export default {
       this.timezoneItems = response.data.timezoneItems;
       this.masterBooking = response.data.booking;
 
-      // this.setBeforeData();
+      this.setBeforeData();
       this.loading = false;
     } catch (e) {
       if (e.response.status == '401') {
@@ -126,14 +126,14 @@ export default {
       }
     },
     ...mapMutations("common",['setBookingOptionForm']),
-    // setBeforeData() {
-    //   if (this.$store.state.common.bookingOptionForm) {
-    //     this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
-    //   }
-    //   // if (localStorage.getItem('bookingOptionForm')) {
-    //   //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
-    //   // }
-    // },
+    setBeforeData() {
+      if (this.$store.state.common.bookingOptionForm) {
+        this.form = _.merge({}, this.form, JSON.parse(this.$store.state.common.bookingOptionForm));
+      }
+      // if (localStorage.getItem('bookingOptionForm')) {
+      //   this.form = _.merge({}, this.form, JSON.parse(localStorage.getItem('bookingOptionForm')))
+      // }
+    },
     classEnField() {
       if(this.masterBooking.is_en == 'Y') {
         return 'show_field';
