@@ -1,6 +1,6 @@
 <template>
   <div class="sizedbox layout_format">
-    <SubHeader :link="'/my-bookings'" :title="'나의 부킹내역'"/>
+    <SubHeader :link="'/my-bookings'" :title="'나의 예약 내역'"/>
     <div class="user_dashboard full_height j_start pa-5">
       <div class="user_nik">
         <v-chip dark color="#03a9f4" label small>{{ booking.on_off_line }}</v-chip>
