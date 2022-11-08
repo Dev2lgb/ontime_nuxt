@@ -1,4 +1,9 @@
 {
+  "_menu": {
+    "service" : "SERVICE",
+    "make_booking" : "예약만들기",
+    "make_booked" : "예약하기"
+  },
   "_code": {
     "sex": {
       "male": "Male",

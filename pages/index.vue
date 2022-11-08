@@ -9,21 +9,27 @@
           <div class="nav">
             <ul class="flex j_start a_center">
               <li>
-                <router-link to="">서비스</router-link>
+                <router-link to="">{{$t('_menu.service')}}</router-link>
               </li>
               <li>
-                <router-link to="/host/home">예약만들기</router-link>
+                <router-link to="/host/home">{{$t('_menu.make_booking')}}</router-link>
               </li>
               <li>
-                <router-link to="/home">예약하기</router-link>
+                <router-link to="/home">{{$t('_menu.make_booked')}}</router-link>
               </li>
             </ul>
           </div>
           <div class="header_auth flex j_space a_center">
-            <router-link to="/auth/login" class="header_btn" v-show="!this.$auth.loggedIn">로그인</router-link>
-            <router-link to="/auth/register" class="header_btn colored" v-show="!this.$auth.loggedIn">회원가입</router-link>
-            <a href="javascript:void(0)" class="header_btn" @click="logout" v-show="this.$auth.loggedIn">로그아웃</a>
-            <router-link to="/auth/modify" class="header_btn colored" v-show="this.$auth.loggedIn">프로필 수정</router-link>
+            <v-btn text @click="changeLocale('en')" v-show="this.$i18n.locale == 'ko'">
+              English
+            </v-btn>
+            <v-btn text @click="changeLocale('ko')" v-show="this.$i18n.locale == 'en'">
+              Korean
+            </v-btn>
+            <router-link to="/auth/login" class="header_btn" v-show="!this.$auth.loggedIn">{{$t('_common.login')}}</router-link>
+            <router-link to="/auth/register" class="header_btn colored" v-show="!this.$auth.loggedIn">{{$t('_common.register')}}</router-link>
+            <a href="javascript:void(0)" class="header_btn" @click="logout" v-show="this.$auth.loggedIn">{{$t('_common.logout')}}</a>
+            <router-link to="/auth/modify" class="header_btn colored" v-show="this.$auth.loggedIn">{{$t('_common.profile')}}</router-link>
           </div>
         </div>
       </div>
@@ -262,6 +268,8 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   name: 'IndexPage',
   data() {
@@ -271,7 +279,12 @@ export default {
   methods: {
     async logout(){
       await this.$auth.logout();
-    }
+    },
+    changeLocale(lan) {
+      this.$i18n.locale = lan;
+      this.setLocale(lan);
+    },
+    ...mapMutations("common",['setLocale']),
   },
 }
 </script>

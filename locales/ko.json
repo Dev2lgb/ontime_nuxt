@@ -1,4 +1,18 @@
 {
+  "_menu": {
+    "service" : "서비스",
+    "make_booking" : "예약만들기",
+    "make_booked" : "예약하기"
+  },
+  "_main": {
+    "main_banner_text1" : "누구나 자유롭게",
+    "main_banner_text2" : "가장 쉬운 무료 예약관리 서비스",
+    "main_banner_text3" : "간편한 예약 서비스를 찾고 계시나요?",
+    "main_banner_text4" : "지금 바로 온타임하세요!",
+    "main_banner_btn" : "서비스 시작하기"
+  },
+
+
   "_code": {
     "sex": {
       "male": "Male",
@@ -6,11 +20,14 @@
     }
   },
   "_common": {
+    "login": "로그인",
+    "register": "회원가입",
+    "logout": "로그아웃",
+    "profile": "프로필수정",
+
     "email": "이메일",
     "password": "비밀번호",
     "password_confirmation": "비밀번호 확인",
-    "login": "로그인",
-    "register": "회원가입",
     "name": "이름",
     "telephone": "연락처",
     "phone_number": "휴대전화번호",
@@ -32,7 +49,7 @@
     "cancel": "취소",
     "confirm": "확인",
     "status": "상태",
-    "logout": "로그아웃",
+
     "delete_confirm": "정말 삭제하시겠습니까? 삭제 후에는 복구가 불가능합니다.",
     "company_name": "회사명"
   },
