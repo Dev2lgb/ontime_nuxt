@@ -32,7 +32,6 @@
               </NuxtLink>
             </div>
           </div>
-
           <div class="reservation_slid pb-10" v-if="items.length > 0">
             <BookingSlider :items="items" />
           </div>
@@ -53,14 +52,13 @@ export default {
     try {
       let url = '/my/bookings';
       const response = await this.$axios.get(url);
-      console.log(response);
       this.items = response.data.data;
       this.loading = false;
     } catch (e) {
-      // if (e.response.status === '401') {
-      //   console.log(e);
-      //   //this.$toast.error(e.response.data.message);
-      // }
+      if (e.response.status == '401') {
+        console.log(e);
+        //this.$toast.error(e.response.data.message);
+      }
     }
   },
   data: () => ({

@@ -43,7 +43,7 @@
               <h3><v-icon>mdi-calendar-clock</v-icon> 날짜 선택하기</h3>
             </div>
             <div class="f_width flex j_space a_center mb-5">
-              <div class="flex j_center a_center mt-3">
+              <div class="h_width flex j_center a_center mt-3">
                 <v-btn
                   fab
                   text
@@ -70,7 +70,7 @@
                   </v-icon>
                 </v-btn>
               </div>
-              <div class="q_width" v-show="selectedBookingOption.is_use_timezone === 'Y'">
+              <div class="h_width" v-show="selectedBookingOption.is_use_timezone === 'Y'">
                 <v-select
                   :items="timezoneItems"
                   outlined

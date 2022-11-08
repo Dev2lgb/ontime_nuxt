@@ -109,6 +109,10 @@ export default {
             email: this.form.email,
             password : this.form.password,
           }
+        }).then(() => {
+          if (this.$auth.hasScope('admin')){
+            this.$router.push('/admin')
+          }
         })
       } catch (e) {
         if (e.response.status == '422') {
@@ -117,6 +121,7 @@ export default {
         this.$toast.error(e.response.data.message);
       }
     },
+
     changeLocale() {
       this.$i18n.locale = this.selectedLang;
       this.setLocale(this.selectedLang);

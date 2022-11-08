@@ -75,9 +75,15 @@
         item-key="id"
         show-select
       >
+        <template v-slot:item.sex_name="{ item }">
+          {{ item.sex_name.name_ko }}
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          {{ item.created_at.substr(0, 10) }}
+        </template>
         <template v-slot:item.actions="{ item }">
           <v-btn small dark depressed color="#888" @click="editMember(item)">수정</v-btn>
-          <v-btn small dark depressed color="#888">탈퇴</v-btn>
+          <v-btn small dark depressed color="#888" @click="submitDeleteMember(item.id)">탈퇴</v-btn>
         </template>
         <template v-slot:top>
           <v-dialog v-model="dialogDelete" max-width="500px">
@@ -284,13 +290,13 @@ export default {
         sortable: false,
         value: 'name',
       },
-      { text: '연락처', value: 'ccc_mobile' },
-      { text: '이메일', value: 'email' },
-      { text: '출생연도', value: 'birthday_year' },
-      { text: '성별', value: 'sex_name' },
-      { text: '국적', value: 'country' },
-      { text: '타임존', value: 'timezone' },
-      { text: '가입일시', value: 'created_at' },
+      { text: '연락처', sortable: false, value: 'ccc_mobile' },
+      { text: '이메일', sortable: false, value: 'email' },
+      { text: '출생연도', sortable: false, value: 'birthday_year' },
+      { text: '성별', sortable: false, value: 'sex_name' },
+      { text: '국적', sortable: false, value: 'country' },
+      { text: '타임존', sortable: false, value: 'timezone' },
+      { text: '가입일시', sortable: false, value: 'created_at' },
       { text: '수정/탈퇴', value: 'actions', width: '150' },
     ],
     menu: false,
@@ -351,6 +357,7 @@ export default {
         })
         if (response.data.result) {
           this.$toast.success('메시지가 발송되었습니다.');
+          this.dialog = false;
         }
         this.loading = false;
       } catch (e) {
@@ -395,21 +402,38 @@ export default {
         }
       }
     },
-    async submitDeleteMember(){
+    async submitDeleteMember(id){
       this.loading = true;
       try {
-        let url = '/admin/members/' + this.form.id;
-        let method = 'delete';
+        this.$confirm(
+          {
+            message: '탈퇴된 데이터는 복구가 불가합니다. 정말 탈퇴처리하시겠습니까?',
+            button: {
+              no: '취소',
+              yes: '탈퇴'
+            },
+            callback: async confirm => {
+              if (confirm) {
+                let deleteId = this.form.id;
+                if (id) {
+                  let deleteId = id;
+                }
+                let url = '/admin/members/' + this.form.id;
+                let method = 'delete';
 
-        const response = await this.$axios({
-          url: url, method: method, data:this.form
-        })
-        if (response.data.result) {
-          this.$toast.success('탈퇴 처리되었습니다.');
-          this.close();
-          this.$fetch();
-        }
-        this.loading = false;
+                const response = await this.$axios({
+                  url: url, method: method, data: ''
+                })
+                if (response.data.result) {
+                  this.$toast.success('탈퇴 처리되었습니다.');
+                  this.close();
+                  this.$fetch();
+                }
+                this.loading = false;
+              }
+            }
+          }
+        )
       } catch (e) {
         if (e.response.status == '422') {
           this.errors = e.response.data.errors;

@@ -77,6 +77,8 @@
   </div>
 </template>
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   layout: 'user',
   async fetch() {
@@ -97,6 +99,7 @@ export default {
       this.pagination.total = response.data.meta.total;
       this.items = response.data.data;
 
+      this.clearUserBookingOptionForm();
       this.setBeforeData();
       this.loading = false;
     } catch (e) {
@@ -127,6 +130,7 @@ export default {
     pagination: { handler() { this.$fetch(); }, deep: true },
   },
   methods: {
+    ...mapMutations("common",['clearUserBookingOptionForm']),
     getCategoryName(item) {
       if (item.category_text) {
         return item.category_text;

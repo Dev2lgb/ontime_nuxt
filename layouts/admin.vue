@@ -3,13 +3,14 @@
     <vue-confirm-dialog></vue-confirm-dialog>
     <div>
       <div class="admin_header">
-        <div class="inner">
+        <div class="inner flex j_space a_center">
           <h3 class="flex j_start a_center">
             <router-link to="/">
             <img src="~/assets/images/logo.png" alt="">
             </router-link>
             <span class="font_title">시스템 관리자</span>
           </h3>
+          <v-btn @click="logout" depressed dark color="#555">로그아웃</v-btn>
         </div>
       </div>
       <div class="admin_gnb">
@@ -41,6 +42,9 @@ export default {
   watch: {
   },
   methods: {
+    async logout() {
+      await this.$auth.logout();
+    },
   },
 }
 </script>

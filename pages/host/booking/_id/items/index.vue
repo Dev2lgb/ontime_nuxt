@@ -14,7 +14,7 @@
     <div class="user_dashboard full_height j_start layout_format">
       <div class="pa-5">
         <h3>등록된 예약 상품 ({{ bookingOptionItems.length }})</h3>
-        <v-btn dark color="#4487fa" class="mt-5" :to="'/host/booking/' + this.$route.params.id + '/items/create'" elevation="0">+ 예약상품 등록</v-btn>
+        <v-btn dark color="#4487fa" class="mt-5" :to="'/host/booking/' + $route.params.id + '/items/create'" elevation="0">+ 예약상품 등록</v-btn>
 
         <div class="mt-5">
           <div class="mb-5 border_a pa-3" v-for="item in bookingOptionItems" :key="item.id">
@@ -22,7 +22,7 @@
             <p>{{ item.desc }}</p>
             <div class="flex j_start a_center">
               <v-btn depressed class="mr-3" @click="deleteOption(item.id)">삭제</v-btn>
-              <v-btn depressed :to="'items/' + item.id + '/edit/'">정보수정</v-btn>
+              <v-btn depressed :to="'/host/booking/' + $route.params.id + '/items/' + item.id + '/edit/'">정보수정</v-btn>
               <v-spacer></v-spacer>
               <v-switch
                 v-model="item.is_display"

@@ -29,7 +29,6 @@
       >
         <v-list-item-group
           v-model="group"
-
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item
@@ -65,7 +64,6 @@
           >
             <v-list-item-title>예약자로 전환</v-list-item-title>
           </v-list-item>
-
           <v-list-item @click="changeLocale('en')" v-show="this.$i18n.locale == 'ko'">
             <v-list-item-title>English</v-list-item-title>
           </v-list-item>

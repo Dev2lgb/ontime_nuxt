@@ -74,9 +74,20 @@
         item-key="id"
         show-select
       >
+        <template v-slot:item.title="{ item }">
+          <router-link :to="'/bookings/' + item.id" class="non-deco">
+            {{ item.title }}
+          </router-link>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          {{ item.created_at.substr(0, 10) }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn small dark depressed color="#888" @click="editMember(item)">로그인</v-btn>
+          <v-btn small dark depressed color="#888" @click="submitDeleteBooking(item.id)">삭제</v-btn>
+        </template>
       </v-data-table>
     </div>
-    {{ items }}
   </div>
 </template>
 <script>
@@ -131,14 +142,15 @@ export default {
         text: '예약명',
         align: 'start',
         sortable: false,
-        value: 'name',
+        value: 'title',
       },
-      { text: '상품개수', value: 'calories' },
-      { text: '예약자수', value: 'fat' },
-      { text: '예약관리자', value: 'carbs' },
-      { text: '연락처', value: 'protein' },
-      { text: '이메일', value: 'iron' },
-      { text: '생성일시', value: 'iron' },
+      { text: '상품개수', value: 'options_count' },
+      { text: '예약자수', value: 'personnels_count' },
+      { text: '예약관리자', value: 'host_name' },
+      { text: '연락처', value: 'telephone' },
+      { text: '이메일', value: 'email' },
+      { text: '생성일시', value: 'created_at' },
+      { text: '로그인/삭제', value: 'actions' },
     ],
     menu: false,
   }),
@@ -147,6 +159,40 @@ export default {
       let url = process.env.BASEURL + '/api/admin/bookings/export';
       if (Object.keys(this.search).length > 0) url += '?search=' + JSON.stringify(this.search);
       location.href = url;
+    },
+    submitDeleteBooking(id){
+      this.loading = true;
+      try {
+        this.$confirm(
+          {
+            message: '삭제된 데이터는 복구가 불가합니다. 정말 삭제하시겠습니까?',
+            button: {
+              no: '취소',
+              yes: '삭제'
+            },
+             callback: async confirm => {
+              if (confirm) {
+                let url = '/admin/bookings/' + id;
+                let method = 'delete';
+
+                const response = await this.$axios({
+                  url: url, method: method, data:''
+                })
+                if (response.data.result) {
+                  this.$toast.success('삭제되었습니다.');
+                  this.close();
+                  this.$fetch();
+                } else {
+                  this.$toast.error(response.data.message);
+                }
+                this.loading = false;
+              }
+            }
+          }
+        )
+      } catch (e) {
+        console.log(e);
+      }
     },
     dateTerm(searches) {
       this.search.dates = [];
