@@ -22,7 +22,6 @@
     <div class="">
       <BookingOptionTime @formData="getFormData" :errors="errors" v-show="form.type == 'time'" />
       <BookingOptionDate @formData="getFormData" :errors="errors" v-show="form.type == 'date'" />
-<!--      <BookingOptionTerm @form-data="getFormData" :errors="errors" v-show="form.type == 'term'" />-->
       <div class="pt-10">
         <v-btn
           block

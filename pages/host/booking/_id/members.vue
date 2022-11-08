@@ -161,6 +161,26 @@
             </div>
 
             <div class="hidden_title">
+              <p>추가입력정보</p>
+            </div>
+            <div class="hidden_table">
+              <table>
+                <tr v-for="collect in booked.collect_user_infos1" :key="collect.question">
+                  <td>{{ collect.question }}</td>
+                  <td>
+                    {{ collect.answer }}
+                  </td>
+                </tr>
+                <tr v-for="collect in booked.collect_user_infos2" :key="collect.question">
+                  <td>{{ collect.question }}</td>
+                  <td>
+                    {{ collect.answer.join() }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="hidden_title">
               <p>요청사항</p>
             </div>
             <div class="hidden_area">
@@ -350,16 +370,29 @@ export default {
     async cancelBooked(id) {
       this.loading = true;
         try {
-          let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/revoke';
-          let method = 'put';
+          this.$confirm(
+            {
+              message: '정말 예약을 취소하시겠습니까?',
+              button: {
+                no: '아니오',
+                yes: '네'
+              },
+              callback: async confirm => {
+                if (confirm) {
+                  let url = '/host/bookings/' + this.$route.params.id + '/booked/' + id + '/revoke';
+                  let method = 'put';
 
-          const response = await this.$axios({
-            url: url, method: method, data:''
-          })
-          if (response.data.result) {
-            this.$toast.success('예약이 취소되었습니다.');
-            this.$fetch();
-          }
+                  const response = await this.$axios({
+                    url: url, method: method, data:''
+                  })
+                  if (response.data.result) {
+                    this.$toast.success('예약이 취소되었습니다.');
+                    this.$fetch();
+                  }
+                }
+              }
+            }
+          )
           this.loading = false;
         } catch (e) {
           if (e.response.status == '422') {

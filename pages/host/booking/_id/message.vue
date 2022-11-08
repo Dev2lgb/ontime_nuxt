@@ -68,7 +68,7 @@ export default {
     this.loading = true;
     try {
       // alert('test');
-      let url = '/chats';
+      let url = '/chats/booking/' + this.$route.params.id;
       // url += '?itemsPerPage=' + this.pagination.per_page + '&page=' + this.pagination.page;
       const response = await this.$axios.get(url);
 

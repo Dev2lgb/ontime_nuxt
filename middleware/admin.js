@@ -1,5 +1,5 @@
 export default function ({ store, redirect, error, $auth }) {
-  if ($auth.user.scope != 'admin') {
+  if (!$auth.hasScope('admin')) {
     redirect('/home');
   }
 }

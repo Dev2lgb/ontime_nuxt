@@ -10,7 +10,10 @@
       </div>
       <p class="ma-0">예약이 완료되었습니다.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
-      <router-link to="/home">홈으로 이동</router-link>
+      <div class="flex j_start a_center">
+        <router-link to="/home">홈으로 이동</router-link>
+        <v-btn outlined class="ml-3" @click="addGoogleCalendar">구글캘린더 연동</v-btn>
+      </div>
       <div class="mt-5 border_t">
         <div v-for="(item, index) in items" :key="index" class="border_a mb-3 pa-5 position_rel">
 
@@ -29,7 +32,7 @@
           <div>
             {{ getOnlineName(booking) }}
           </div>
-          <v-btn :href="booking.online_link" target="_blank">회의참여</v-btn>
+          <v-btn :href="booking.online_link" depressed target="_blank">회의참여</v-btn>
         </div>
       </div>
 
@@ -87,6 +90,19 @@ export default {
     bookedBooking: {},
   }),
   methods: {
+    addGoogleCalendar() {
+      this.$axios.$post('/my/bookings/google-calendar', {bookedId: this.$route.query.id, redirect: this.$route.path})
+        .then(data => {
+          if (data.result) {
+            if (data.data.authUrl) {
+              window.location.href = data.data.authUrl
+            }
+            if (data.data.events) {
+              this.$toast.success('구글 캘린더 연동이 완료되었습니다.');
+            }
+          }
+        });
+    },
     getStatusColor(status) {
       if (status == '취소') {
         return 'red';
