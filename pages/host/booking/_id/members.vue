@@ -1,6 +1,5 @@
 <template>
   <div class="sizedbox">
-    <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
       <div class="host_area layout_format">
@@ -13,7 +12,7 @@
       </div>
     </div>
 
-<div class="user_dashboard full_height j_start layout_format">
+<div class="user_dashboard full_height j_start layout_format" v-show="!loading">
       <div class="pa-5">
 
         <div>

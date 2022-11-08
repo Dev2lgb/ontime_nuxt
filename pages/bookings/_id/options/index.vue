@@ -90,6 +90,7 @@
                 :type="type"
                 :event-more="false"
                 disabled
+                @click:date="showBookingTimeDate"
                 @click:event="showBookingTime"
                 locale="ko"
                 @change="updateRange"
@@ -103,30 +104,11 @@
           </div>
           <div class="area_line"></div>
           <div class="">
-            <div>
-              <h3><v-icon>mdi-clock</v-icon> 예약시간 선택하기</h3>
-              <p class="mt-2" v-show="selectedBookingOption.min_booking_number > 0">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
+            <div class="mb-3">
+              <h3><v-icon>mdi-clock</v-icon>[{{ selectedDate }}] 예약시간 선택하기</h3>
+              <p class="mt-3" v-show="selectedBookingOption.min_booking_number > 0">최소 {{ selectedBookingOption.min_booking_number }}타임 / 최대 {{ selectedBookingOption.max_booking_number }}타임 선택 가능해요.</p>
             </div>
             <div>
-<!--              <v-btn-toggle-->
-<!--                color="primary"-->
-<!--                v-model="form.date_times"-->
-<!--                :error-messages="errors.type"-->
-<!--                group-->
-<!--                outlined-->
-<!--                multiple-->
-<!--                dense-->
-<!--                class="d-flex flex-wrap justify-start align-center"-->
-<!--              >-->
-<!--                <v-btn-->
-<!--                  style="border:1px solid #ccc; border-radius:10px"-->
-<!--                  class="ma-1 col_content_btn"-->
-<!--                  v-for="(date, d) in timeTypesItem" :key="d"-->
-<!--                  :value="date.date + ' ' + date.time"-->
-<!--                >-->
-<!--                  {{ date.time }}-->
-<!--                </v-btn>-->
-<!--              </v-btn-toggle>-->
               <v-chip-group
                 v-model="form.date_times"
                 :error-messages="errors.date_times"
@@ -212,6 +194,7 @@
                 color="primary"
                 :events="events"
                 :type="type"
+                @click:date="addBookingsDate"
                 @click:event="addBookings"
                 locale="ko"
                 :event-more="false"
@@ -275,6 +258,8 @@ export default {
     }
   },
   data: () => ({
+    loading:false,
+    selectedDate: '',
     errors: [],
     timezoneItems:[],
     selectedTimezone: '',
@@ -430,13 +415,45 @@ export default {
         }
       }
     },
-    showBookingTime(event) {
-      console.log(event);
+    showBookingTimeDate(date) {
       this.timeTypesItem = [];
       this.form.date_times = [];
+      this.selectedDate = date.date;
+      let thisDateEvents = _.filter(this.events, {date: date.date});
+      if (thisDateEvents[0]) {
+        let thisDateTimes = thisDateEvents[0].times;
+        if (Array.isArray(thisDateTimes)) {
+          for(let i = 0; i < thisDateTimes.length; i++) {
+            this.timeTypesItem.push({
+              date: date.date,
+              time: thisDateTimes[i].time,
+              timezone_time: thisDateTimes[i].timezone_time,
+              is_available: thisDateTimes[i].is_available,
+              is_on:thisDateTimes[i].is_on });
+          }
+        }
+      }
+    },
+    showBookingTime(event) {
+      this.timeTypesItem = [];
+      this.form.date_times = [];
+      this.selectedDate = event.day.date;
       for(let i = 0; i < event.eventParsed.input.times.length; i++) {
         this.timeTypesItem.push({date: event.day.date, time: event.eventParsed.input.times[i].time, timezone_time: event.eventParsed.input.times[i].timezone_time,is_available: event.eventParsed.input.times[i].is_available, is_on:event.eventParsed.input.times[i].is_on });
       }
+    },
+    addBookingsDate(date) {
+      if (this.selectedBookingOption.max_booking_number > 0) {
+        if ((this.form.date_times.length + 1) > this.selectedBookingOption.max_booking_number) {
+          this.$toast.error('최대 예약 갯수를 초과할수 없습니다.');
+          return false;
+        }
+      }
+      if (this.form.date_times.indexOf(date.date) >= 0) {
+        this.$toast.error('이미 추가한 날짜입니다.');
+        return false;
+      }
+      this.form.date_times.push(date.date);
     },
     addBookings(event) {
       if (this.selectedBookingOption.max_booking_number > 0) {

@@ -10,7 +10,7 @@
         <p><span class="font-weight-bold">{{ count }}개</span>의 프로그램</p>
       </div>
 
-      <div v-if="items.length > 0">
+      <div v-if="items.length > 0" v-show="!loading">
         <div class="pa-3 border_b card_action" v-for="(item, i) in items" :key="i">
           <div class="mb-3">
             <v-chip dark color="#03a9f4" label small>{{ item.booking.on_off_line }}</v-chip>
@@ -76,6 +76,7 @@ export default {
     }
   },
   data: () => ({
+    loading: false,
     items:[],
     count: 0,
     pagination: {

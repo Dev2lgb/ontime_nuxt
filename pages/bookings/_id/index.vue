@@ -1,7 +1,7 @@
 <template>
   <div class="sizedbox layout_format">
     <SubHeader :link="'/bookings'" :title="'예약상세'"/>
-    <div class="user_dashboard full_height j_start pa-5">
+    <div class="user_dashboard full_height j_start pa-5" v-show="!loading">
       <div>
         <BookingDetailSlider :items="booking.title_images"/>
       </div>
@@ -41,7 +41,10 @@
         </p>
         <div class="area_line"></div>
         <h3 class="font_sub_title mt-5"><v-icon>mdi-whatsapp</v-icon> 예약에 대한 문의사항이 있으신가요?</h3>
-        <p class="call_time" v-show="booking.is_operating_time == 'Y'">담당문의 가능 및 운영시간 : {{ booking.operating_start_time }} ~ {{ booking.operating_end_time }}</p>
+        <p class="call_time" v-show="booking.is_operating_time == 'Y'">
+          담당문의 가능 및 운영시간 :
+          {{ substrTime(booking.operating_start_time)}} ~ {{ substrTime(booking.operating_end_time) }}
+        </p>
 
         <div class="flex j_space a_center wrap progrma_call">
           <div class="flex j_start a_center h_width pa-2">
@@ -146,6 +149,7 @@ export default {
     }
   },
   data: () => ({
+    loading: false,
     url: '',
     searchCategory: '',
     booking: {},
@@ -159,6 +163,11 @@ export default {
     ],
   }),
   methods: {
+    substrTime(time) {
+      if (time) {
+        return time.substr(0, 5);
+      }
+    },
     getOnlineName(item) {
       if (item.online_text) {
         return item.online_text;

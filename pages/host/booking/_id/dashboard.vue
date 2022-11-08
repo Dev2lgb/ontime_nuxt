@@ -1,6 +1,5 @@
 <template>
   <div class="sizedbox">
-    <Loading :loading="loading"/>
     <HostSubHeader :title="'예약프로그램 상세보기'" :link="'/host/home'"/>
     <div class="host_head px-5 pt-5">
       <div class="host_area layout_format">
@@ -8,15 +7,11 @@
           <p><span>관리자</span> 님, 예약내역<br>프로그램을 확인해 주세요.</p>
         </div>
         <div class="host_create">
-
           <HostTabMenu />
         </div>
       </div>
     </div>
-
-<div class="user_dashboard full_height j_start layout_format">
-
-
+    <div class="user_dashboard full_height j_start layout_format" v-show="!loading">
     <div class="pa-5">
       <h3>[{{ getCategoryName(booking) }}] {{ booking.title }}</h3>
       <v-btn text small class="pa-0 mt-1" @click="copySomething(booking.url)"> {{ booking.url }} <v-icon small class="ml-1">mdi-content-copy</v-icon></v-btn>

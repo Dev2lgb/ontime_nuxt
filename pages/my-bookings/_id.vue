@@ -1,11 +1,11 @@
 <template>
   <div class="sizedbox layout_format">
     <SubHeader :link="'/my-bookings'" :title="'나의 예약 내역'"/>
-    <div class="user_dashboard full_height j_start pa-5">
+    <div class="user_dashboard full_height j_start pa-5" v-show="!loading">
       <div class="user_nik">
         <v-chip dark color="#03a9f4" label small>{{ booking.on_off_line }}</v-chip>
         <v-chip dark :color="getStatusColor(bookedBooking.status_name)" label small>{{ bookedBooking.status_name }}</v-chip>
-        <p class="mt-3">[{{ getCategoryName(booking) }}] {{ booking.title }}</p>
+        <p class="mt-3">{{ getCategoryName(booking) }} {{ booking.title }}</p>
       </div>
       <p class="ma-0">예약이 완료되었습니다.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
@@ -86,6 +86,7 @@ export default {
     }
   },
   data: () => ({
+    loading: false,
     booking: {},
     bookedBooking: {},
   }),
@@ -132,12 +133,12 @@ export default {
       if (item.category_id) {
         if (item.hasOwnProperty('category_name')) {
           if (item.category_name){
-              return item.category_name.name_ko;
+              return '[' + item.category_name.name_ko + ']';
           }
         }
       } else {
         if (item.category_text) {
-          return item.category_text;
+          return '[' + item.category_text + ']';
         }
       }
     },
