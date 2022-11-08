@@ -10,9 +10,9 @@
       </div>
       <p class="ma-0">예약이 완료되었습니다.</p>
       <p class="ma-0 mb-3">예약 취소규정에 따라 취소 시 추후 불이익이 발생될 수 있습니다.</p>
-      <div class="flex j_start a_center">
+      <div class="flex j_space my-5 a_center">
         <router-link to="/home">홈으로 이동</router-link>
-        <v-btn outlined class="ml-3" @click="addGoogleCalendar">구글캘린더 연동</v-btn>
+        <v-btn outlined class="ml-3" @click="addGoogleCalendar"><img src="~/assets/images/google_cal.svg" class="mr-2">구글캘린더 연동</v-btn>
       </div>
       <div class="mt-5 border_t">
         <div v-for="(item, index) in items" :key="index" class="border_a mb-3 pa-5 position_rel">
