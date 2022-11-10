@@ -118,8 +118,8 @@
                     <v-icon class="iconMa3">mdi-checkbox-marked-outline</v-icon><span>약관정보</span>
                   </div>
                   <div class="checBox">
-                    <v-checkbox append-icon="mdi-magnify" @click:append="policy = true" v-model="form.is_agree_terms" label="(필수) 이용약관 동의" hide-details />
-                    <v-checkbox append-icon="mdi-magnify" @click:append="privacy = true" v-model="form.is_agree_privacy" required label="(필수) 개인정보 취급방침 동의" hide-details />
+                    <v-checkbox append-icon="mdi-magnify" @click:append="$router.push('/policy')" v-model="form.is_agree_terms" label="(필수) 이용약관 동의" hide-details />
+                    <v-checkbox append-icon="mdi-magnify" @click:append="$router.push('/privacy')" v-model="form.is_agree_privacy" required label="(필수) 개인정보 취급방침 동의" hide-details />
                   </div>
               </v-card-text>
 
@@ -133,20 +133,6 @@
             </v-form>
           </v-card>
         </v-col>
-        <v-dialog v-model="policy" max-width="320">
-          <v-card class="py-10">
-            <v-card-text>
-              <Policy />
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="privacy" max-width="320">
-          <v-card class="py-10">
-            <v-card-text>
-              <Privacy />
-            </v-card-text>
-          </v-card>
-        </v-dialog>
       </div>
     </v-row>
   </v-container>

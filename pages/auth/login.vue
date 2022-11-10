@@ -44,24 +44,10 @@
             <span>or</span>
           </div>
           <div class="snsSetting">
-            <v-btn text small @click="policy = true">이용약관</v-btn>
+            <v-btn text small to="/policy">이용약관</v-btn>
             <span class="mx-1">&nbsp;I&nbsp;</span>
-            <v-btn text small @click="privacy = true">개인정보처리방침</v-btn>
+            <v-btn text small  to="/privacy">개인정보처리방침</v-btn>
           </div>
-          <v-dialog v-model="policy" max-width="320">
-            <v-card class="py-10">
-              <v-card-text>
-                <Policy />
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="privacy" max-width="320">
-            <v-card class="py-10">
-              <v-card-text>
-                <Privacy />
-              </v-card-text>
-            </v-card>
-          </v-dialog>
         </v-col>
       </div>
     </v-row>

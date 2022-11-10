@@ -244,8 +244,8 @@
             <img src="~/assets/images/f_logo.png" alt="">
           </div>
           <div class="f_menu flex j_end a_center">
-            <a href="">이용약관</a>
-            <a href="">개인정보처리방침</a>
+            <router-link to="/policy">이용약관</router-link>
+            <router-link to="/privacy">개인정보처리방침</router-link>
           </div>
         </div>
       </div>
